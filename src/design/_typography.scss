@@ -1,0 +1,52 @@
+@mixin newFont($name, $path, $weight) {
+    @font-face {
+        font-family: "#{$name}";
+        src: url($path) format('truetype');
+        font-weight: $weight;
+    }
+}
+
+@mixin google-font($family, $weight) {
+    @import url("http://fonts.googleapis.com/css?family=#{$family}:#{$weight}");
+}
+
+// // Roboto
+@include google-font("Roboto",
+"100,200,400,900");
+// KoHo
+// @include google-font("KoHo",
+// "100,200,400,900");
+// Material-Icons
+@include google-font("Material+Icons",
+"400");
+%typo-roboto {
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+%typo-koho {
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+%typo-tiny {
+    font-size: .7rem;
+}
+
+%typo-small {
+    font-size: .8rem;
+}
+
+%typo-medium {
+    font-size: 1.2rem;
+}
+
+%typo-normal {
+    font-size: 1rem;
+}
+
+%typo-header {
+    font-size: 1.35rem;
+}
+
+%typo-big {
+    font-size: 2rem;
+}
