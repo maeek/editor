@@ -79,9 +79,6 @@ export default {
   .vue-codemirror {
     width: 100%;
     height: 100%;
-    .CodeMirror .cm-s-base16-dark {
-      height: 100%;
-    }
   }
   .fixedLabel {
     position: fixed;
