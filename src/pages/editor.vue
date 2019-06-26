@@ -4,6 +4,9 @@
     <panelFiles />
     <editor />
     <panelBottom />
+    <transition name="from-up" mode="out-in">
+      <newFile v-if="newFileModal" />
+    </transition>
   </div>
 </template>
 
@@ -12,6 +15,8 @@ import panelTop from "@/components/panel-top.vue";
 import panelFiles from "@/components/panel-files.vue";
 import editor from "@/components/editor.vue";
 import panelBottom from "@/components/panel-bottom.vue";
+import newFile from "@/components/modals/newfile.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "app",
@@ -22,7 +27,11 @@ export default {
     panelTop,
     panelFiles,
     editor,
-    panelBottom
+    panelBottom,
+    newFile
+  },
+  computed: {
+    ...mapGetters(["newFileModal"])
   }
 };
 </script>

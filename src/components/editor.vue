@@ -1,20 +1,38 @@
 <template>
   <main class="editor">
-    <div class="fixedLabel"></div>
-    <div class="editorFields">
-      <codemirror v-model="code" :options="cmOption"></codemirror>
+    <div class="editorFields" v-if="files.length > 0">
+      <codemirror
+        :key="activeFile"
+        :value="code"
+        :options="cmOption"
+        @ready="onready"
+        @input="save_file"
+      >
+      </codemirror>
+    </div>
+    <div class="addFile" v-else>
+      <i class="material-icons" @click="openFile">note_add</i>
+      <span>Open local file</span>
     </div>
   </main>
 </template>
 
 <script>
-// import newLine from "@/components/editor/line.vue";
+import { mapGetters, mapActions } from "vuex";
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";
+//Languages
 import "codemirror/mode/javascript/javascript.js";
+import "codemirror/mode/htmlmixed/htmlmixed.js";
+import "codemirror/mode/css/css.js";
+import "codemirror/mode/markdown/markdown.js";
+
+// import "codemirror/addon/mode/loadmode.js";
+
 // theme css
 import "codemirror/theme/base16-dark.css";
-import "codemirror/theme/shadowfox.css";
+// import "codemirror/theme/shadowfox.css";
+
 // active-line.js
 import "codemirror/addon/selection/active-line.js";
 // styleSelectedText
@@ -55,7 +73,7 @@ export default {
         line: true,
         foldGutter: true,
         styleSelectedText: true,
-        mode: "text/javascript",
+        mode: "text/plain",
         keyMap: "sublime",
         matchBrackets: true,
         showCursorWhenSelecting: true,
@@ -69,6 +87,23 @@ export default {
   },
   components: {
     codemirror
+  },
+  computed: {
+    ...mapGetters(["fileMode", "activeFile", "files"])
+  },
+  methods: {
+    ...mapActions(["saveFile"]),
+    save_file(newcode) {
+      this.code = newcode;
+      this.saveFile(newcode);
+    },
+    onready() {
+      this.$data.code = this.$store.getters.fileData();
+      this.$data.cmOption.mode = this.fileMode;
+    },
+    openFile() {
+      document.querySelector("input[type='file']").click();
+    }
   }
 };
 </script>
@@ -80,15 +115,6 @@ export default {
     width: 100%;
     height: 100%;
   }
-  .fixedLabel {
-    position: fixed;
-    left: 0;
-    top: 40px;
-    width: 3.5rem;
-    height: 100%;
-    background: $lines-bg;
-    z-index: -1;
-  }
   flex: 1 1 auto;
   overflow: auto;
   width: 100%;
@@ -96,8 +122,6 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  // @extend %typo-normal;
-  // @extend %typo-roboto;
   .editorFields {
     display: flex;
     height: 100%;
@@ -105,25 +129,30 @@ export default {
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
-    // .line {
-    //   display: flex;
-    //   width: 100%;
-    //   justify-content: flex-start;
-    //   align-items: flex-start;
-    //   flex-direction: row;
-    //   .lineEdit {
-    //     height: auto;
-    //     width: calc(100% - 4.5rem);
-    //     line-height: 1.2rem;
-    //     color: #fff;
-    //     padding: 0.5rem;
-    //     outline: none;
-    //     -webkit-user-modify: read-write-plaintext-only;
-    //   }
-    //   .lineEdit:focus {
-    //     background: #272727;
-    //   }
-    // }
+  }
+  .addFile {
+    width: 100%;
+    height: 100%;
+    @extend %flex-center;
+    @extend %typo-roboto;
+    @extend %typo-normal;
+    flex-direction: column;
+    color: #272727;
+    i {
+      margin: 0 0 0.5rem 0;
+      font-size: 10rem;
+      cursor: pointer;
+      transition: color 0.1s;
+    }
+    span {
+      color: $comment--description;
+    }
+    i:hover {
+      color: $comment--header;
+    }
+    i:hover ~ span {
+      color: $lines-color;
+    }
   }
 }
 </style>

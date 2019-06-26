@@ -3,14 +3,23 @@
     <span class="name">
       <slot></slot>
     </span>
-    <i class="material-icons close">close</i>
+    <i class="material-icons close" @click.stop="deleteFile(name)">close</i>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "file",
-  components: {}
+  props: {
+    name: String
+  },
+  methods: {
+    ...mapActions(["removeFile"]),
+    deleteFile(name) {
+      this.removeFile(name);
+    }
+  }
 };
 </script>
 

@@ -11,6 +11,10 @@ body {
     height: 100%;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 %flex-center {
     display: flex;
     justify-content: center;
@@ -31,6 +35,32 @@ body {
     border: 2px solid #0000;
 }
 
+::-moz-scrollbar {
+    display: block;
+    width: 10px;
+    height: 10px;
+    padding: 5px;
+    overflow: auto;
+    background-color: #1d1d1d;
+}
+
+::-moz-scrollbar-thumb {
+    background: #3D3D3D;
+    border: 2px solid #0000;
+}
+
 .CodeMirror {
     height: 100%;
+    transform: translate3d(0, 0, 0);
 }
+.CodeMirror-linenumber {
+    min-width: 2rem;
+}
+
+.from-up-enter-active, .from-up-leave-active {
+    transition: transform .2s, opacity .2s;
+  }
+  .from-up-enter, .from-up-leave-to {
+    transform: scale(1.7);
+    opacity: 0;
+  }

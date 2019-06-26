@@ -1,11 +1,17 @@
 <template>
   <div class="bar bar--bottom">
     <div>
-      <bottomButton>All saved, last save - 24.06.2019</bottomButton>
+      <div class="connectivity">
+        <i class="material-icons">signal_wifi_4_bar</i> Connected
+      </div>
+      <bottomButton>
+        {{ fileIsSaved() ? "All saved" : "Not saved" }}, last save -
+        {{ fileLastSaved() }}
+      </bottomButton>
     </div>
     <div>
-      <bottomButton>{{ mode }}</bottomButton>
-      <bottomButton>Ln: {{ lines }}</bottomButton>
+      <bottomButton>{{ fileMode }}</bottomButton>
+      <bottomButton>Ln: {{ fileLines }}</bottomButton>
       <bottomButton :class="'interactive'">
         <a href="https://github.com/maeek/">Github</a>
       </bottomButton>
@@ -23,7 +29,13 @@ export default {
     bottomButton
   },
   computed: {
-    ...mapGetters(["mode", "lines"])
+    ...mapGetters([
+      "fileMode",
+      "fileLines",
+      "fileIsSaved",
+      "fileLastSaved",
+      "activeFile"
+    ])
   }
 };
 </script>
@@ -44,6 +56,20 @@ export default {
     justify-content: flex-start;
     align-items: center;
     align-content: center;
+  }
+  .connectivity {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background: $bottom--button-bg;
+    color: $bottom--button-color;
+    @extend %typo-roboto;
+    @extend %typo-tiny;
+    padding: 0 0.5rem;
+    i {
+      font-size: inherit;
+      margin: 0 0.3rem 0 0;
+    }
   }
 }
 </style>

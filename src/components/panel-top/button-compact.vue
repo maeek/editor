@@ -37,6 +37,7 @@ button {
     height: 100%;
     color: #fefefe;
     @extend %typo-tiny;
+    @extend %flex-center;
   }
   @media screen and (max-width: 768px) {
     i {

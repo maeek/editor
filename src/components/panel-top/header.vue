@@ -19,6 +19,7 @@ h1 {
   font-weight: 400;
   margin: 0 0.5rem;
   i {
+    color: $comment--header;
     margin-right: 0.3rem;
   }
 }
