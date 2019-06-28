@@ -18,24 +18,21 @@ export default {
 
 <style scoped lang="scss">
 button {
-  // width: 1.8rem;
-  height: 1.5rem;
-  background: $compact--button-bg;
-  outline: none;
-  border: 0;
   border-radius: 5px;
-  color: $compact--button-color;
   margin: 0 0.2rem;
-  cursor: pointer;
+  color: $compact--button-color;
+  background: $compact--button-bg;
+  @include rectangle(auto, 1.5rem);
+  @extend %pointer;
   @extend %flex-center;
   i {
-    @extend %typo-normal;
-    color: $compact--button--bg-hover;
     margin: 0 0.2rem 0 0;
+    color: $compact--button--bg-hover;
+    @extend %typo-normal;
   }
   span {
-    height: 100%;
     color: #fefefe;
+    @include rectangle(auto, 100%);
     @extend %typo-tiny;
     @extend %flex-center;
   }
@@ -50,8 +47,8 @@ button {
   }
 }
 button:hover {
-  background: $compact--button--bg-hover;
   color: $compact--button--color-hover;
+  background: $compact--button--bg-hover;
   i {
     color: $compact--button-bg;
   }

@@ -4,8 +4,11 @@
     <panelFiles />
     <editor />
     <panelBottom />
-    <transition name="from-up" mode="out-in">
+    <transition name="scale" mode="out-in">
       <newFile v-if="newFileModal" />
+    </transition>
+    <transition name="from-up" mode="out-in">
+      <settings v-if="showSettings" />
     </transition>
   </div>
 </template>
@@ -16,6 +19,7 @@ import panelFiles from "@/components/panel-files.vue";
 import editor from "@/components/editor.vue";
 import panelBottom from "@/components/panel-bottom.vue";
 import newFile from "@/components/modals/newfile.vue";
+import settings from "@/components/modals/settings.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -28,21 +32,17 @@ export default {
     panelFiles,
     editor,
     panelBottom,
-    newFile
+    newFile,
+    settings
   },
-  computed: {
-    ...mapGetters(["newFileModal"])
-  }
+  computed: mapGetters(["newFileModal", "showSettings"])
 };
 </script>
 
 <style scoped lang="scss">
 .page-editor {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
   flex-direction: column;
+  @include rectangle(100%, 100%);
+  @extend %flex-start;
 }
 </style>

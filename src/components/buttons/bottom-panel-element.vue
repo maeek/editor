@@ -12,24 +12,24 @@ export default {
 
 <style scoped lang="scss">
 div {
-  width: auto;
-  height: 100%;
   padding: 0 1rem;
   background: $bottom--button-bg;
   color: $bottom--button-color;
+  @include rectangle(auto, 100%);
   @extend %flex-center;
   @extend %typo-tiny;
   @extend %typo-roboto;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 .interactive:hover {
   background: $compact--button--bg-hover;
-  color: #000;
-  cursor: pointer;
+  color: $bottom--button-hover-color;
+  @extend %pointer;
 }
-a {
-  color: inherit;
-  text-decoration: none;
-}
+
 @media screen and (max-width: 768px) {
   div {
     padding: 0 0.3rem;

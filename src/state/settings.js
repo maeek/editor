@@ -1,5 +1,6 @@
 export default {
   state: {
+    settingsModal: false,
     numLines: true,
     fontSize: 16,
     fontSizesArray: [14, 16, 18, 20, 22, 24, 26, 28]
@@ -10,6 +11,9 @@ export default {
     },
     FONT_SIZE(state, size) {
       state.fontSize = size;
+    },
+    SHOW_SETTINGS(state, val) {
+      state.settingsModal = val;
     }
   },
   actions: {
@@ -18,11 +22,15 @@ export default {
     },
     setFontSize({ commit }, size) {
       commit("FONT_SIZE", parseInt(size, 10));
+    },
+    toggleSettings({ commit }, val) {
+      commit("SHOW_SETTINGS", val);
     }
   },
   getters: {
     numLines: state => state.numLines,
     fontSize: state => state.fontSize,
-    fontSizeArray: state => state.fontSizeArray
+    fontSizeArray: state => state.fontSizeArray,
+    showSettings: state => state.settingsModal
   }
 };

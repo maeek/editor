@@ -1,0 +1,75 @@
+@import url("http://fonts.googleapis.com/css?family=Roboto:100,200,400,900");
+@import url("http://fonts.googleapis.com/css?family=Material+Icons:400");
+html {
+  font-size: 1rem;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #1D1D1D;
+  height: 100%;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  display: block;
+  width: 10px;
+  height: 10px;
+  padding: 5px;
+  overflow: auto;
+  background-color: #1d1d1d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3D3D3D;
+  border: 2px solid #0000;
+}
+
+::-moz-scrollbar {
+  display: block;
+  width: 10px;
+  height: 10px;
+  padding: 5px;
+  overflow: auto;
+  background-color: #1d1d1d;
+}
+
+::-moz-scrollbar-thumb {
+  background: #3D3D3D;
+  border: 2px solid #0000;
+}
+
+.CodeMirror {
+  height: 100%;
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+}
+
+.CodeMirror-linenumber {
+  min-width: 2rem;
+}
+
+.from-up-enter-active, .from-up-leave-active {
+  -webkit-transition: opacity .2s, -webkit-transform .2s;
+  transition: opacity .2s, -webkit-transform .2s;
+  transition: transform .2s, opacity .2s;
+  transition: transform .2s, opacity .2s, -webkit-transform .2s;
+}
+
+.from-up-enter, .from-up-leave-to {
+  -webkit-transform: scale(1.7);
+          transform: scale(1.7);
+  opacity: 0;
+}
+
+button, input {
+  border: 0;
+  outline: none;
+}
+/*# sourceMappingURL=index.css.map */

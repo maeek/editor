@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <panelTop />
-    <panelFiles />
     <editor />
-    <panelBottom />
   </div>
 </template>
 

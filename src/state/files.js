@@ -7,56 +7,50 @@ const getTime = () =>
 export default {
   state: {
     newFile: false,
-    activeFile: "file.html",
-    files: [
-      {
-        name: "file.html",
-        mode: "text/html",
-        save: {
-          last: getTime(),
-          is: true
-        },
-        data: "yeeeeeeeeeeeeeeee"
-      },
-      {
-        name: "index.js",
-        mode: "application/javascript",
-        save: {
-          last: "",
-          is: false
-        },
-        data: "hahahhahahahh"
-      }
+    activeFile: "",
+    files: [],
+    modes: [
+      "text/plain",
+      "text/markdown",
+      "text/html",
+      "application/json",
+      "application/javascript",
+      "text/x-ini",
+      "text/x-scheme",
+      "text/x-spreadsheet",
+      "text/x-lua"
     ]
   },
   mutations: {
     ADD_FILE(state, fileObj) {
-      state.files.push(fileObj);
+      if (!state.files.find(el => el.name == fileObj.name))
+        state.files.push(fileObj);
     },
     REMOVE_FILE(state, name) {
       let index = -1;
       state.files = state.files.filter((el, i) => {
-        if (el.name != name) {
+        if (el && el.name != name) {
           return el;
         } else {
           index = i;
         }
       });
-      if (name == state.activeFile) {
-        if (index != -1 && index < 2) {
-          state.activeFile = state.files[0].name;
-        } else {
-          if (state.files.length - 1 > index) {
-            state.activeFile = state.files[index + 1].name;
-          } else if (state.files.length - 1 < index) {
-            state.activeFile = state.files[index - 1].name;
+      if (state.files.length != 0) {
+        if (name == state.activeFile) {
+          if (index != -1 && index < 2) {
+            state.activeFile = state.files[0].name;
           } else {
-            state.activeFile = state.files[index - 1].name;
+            if (state.files.length - 1 > index) {
+              state.activeFile = state.files[index + 1].name;
+            } else if (state.files.length - 1 < index) {
+              state.activeFile = state.files[index - 1].name;
+            } else {
+              state.activeFile = state.files[index - 1].name;
+            }
           }
         }
-        if (state.files.length == 0) {
-          state.activeFile = "";
-        }
+      } else {
+        state.activeFile = null;
       }
     },
     CHANGE_NAME(state, name, newName) {
@@ -86,15 +80,15 @@ export default {
   },
   actions: {
     addFile({ commit }, newFile) {
-      const { name, data, mode } = newFile;
+      const { name, data, mode, last } = newFile;
       const fileObj = {
         name: name,
-        mode: mode,
+        mode: mode ? mode : "text/markdown",
         save: {
-          last: getTime(),
+          last: last ? last : getTime(),
           is: true
         },
-        data: data
+        data: data ? data : ""
       };
       commit("ADD_FILE", fileObj);
       commit("ACTIVE_FILE", name);
@@ -120,19 +114,27 @@ export default {
       return getters.files.find(el => el.name === name);
     },
     fileIsSaved: (state, getters) => name => {
-      return getters.fileByName(name ? name : state.activeFile).save.is;
+      return state.activeFile && state.files
+        ? getters.fileByName(name ? name : state.activeFile).save.is
+        : null;
     },
     fileLastSaved: (state, getters) => name => {
-      return getters.fileByName(name ? name : state.activeFile).save.last;
+      return (state.activeFile && state.files) || name
+        ? getters.fileByName(name ? name : state.activeFile).save.last
+        : "never";
     },
     fileMode: (state, getters) => {
-      return getters.fileByName(state.activeFile).mode;
+      return state.activeFile && state.files
+        ? getters.fileByName(state.activeFile).mode
+        : "none";
     },
     fileData: (state, getters) => name => {
       return getters.fileByName(name ? name : state.activeFile).data;
     },
     fileLines: (state, getters) => {
-      return getters.fileData(state.activeFile).split("\n").length;
+      return state.activeFile && state.files
+        ? getters.fileData(state.activeFile).split("\n").length
+        : 0;
     },
     fileStringified: (state, getters) => name =>
       JSON.stringify(getters.fileByName(name))

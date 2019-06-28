@@ -1,29 +1,19 @@
 <template>
-  <div class="modal" @click="newFileModal(false)">
+  <div class="modal" @click="toggleSettings(false)">
     <div class="wrap" @click.stop>
       <h3>
-        <i class="material-icons">insert_drive_file</i>
-        Create new file
+        <i class="material-icons">settings</i>
+        Settings
       </h3>
-      <input
-        ref="input"
-        name="newfile"
-        v-model="filename"
-        placeholder="Type file name, ie. README.md"
-        @keyup="createFileEnter"
-      />
-      <div class="options">
-        <compact
-          :title="'Cancel'"
-          name="Cancel"
-          @click.native="newFileModal(false)"
-        >
-          close
-        </compact>
-        <compact :title="'Add file'" name="Add" @click.native="createFile">
-          add
-        </compact>
-      </div>
+      <compact
+        :class="'close'"
+        :title="'Close'"
+        name="Close"
+        @click.native="toggleSettings(false)"
+      >
+        close
+      </compact>
+      <div class="options"></div>
     </div>
   </div>
 </template>
@@ -42,23 +32,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["newFileModal", "addFile"]),
-    createFile() {
-      const name = document.querySelector("input[name='newfile']").value;
-      if (name.length > 0) {
-        this.addFile({ name: name, mode: "text/plain" });
-        this.newFileModal(false);
-      } else {
-        this.$refs.input.focus();
-      }
-    },
-    createFileEnter(e) {
-      if (e.code == "Enter") {
-        this.createFile();
-      } else if (e.code == "Escape") {
-        this.newFileModal(false);
-      }
-    }
+    ...mapActions(["toggleSettings", "addFile"])
   },
   mounted() {
     this.$refs.input.focus();
@@ -77,11 +51,14 @@ export default {
   @extend %flex-center;
   @extend %typo-roboto;
   .wrap {
-    max-width: 97%;
-    border-radius: 5px;
-    padding: 1rem 0.5rem;
+    padding: 0.5rem;
     background: $panel-files-bg;
-    @include rectangle(500px, auto);
+    @include rectangle(100%, 100%);
+    .close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+    }
     .options {
       margin: 1rem 0 0 0;
       @extend %flex-end-center;

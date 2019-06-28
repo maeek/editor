@@ -3,7 +3,7 @@
     <span class="name">
       <slot></slot>
     </span>
-    <i class="material-icons close" @click.stop="deleteFile(name)">close</i>
+    <i class="material-icons close" @click.stop="removeFile(name)">close</i>
   </div>
 </template>
 
@@ -14,12 +14,7 @@ export default {
   props: {
     name: String
   },
-  methods: {
-    ...mapActions(["removeFile"]),
-    deleteFile(name) {
-      this.removeFile(name);
-    }
-  }
+  methods: mapActions(["removeFile"])
 };
 </script>
 
@@ -27,28 +22,26 @@ export default {
 .file {
   height: calc(100% - 2px);
   padding: 0 0.3rem 0 0.8rem;
-  @extend %flex-center;
-  justify-content: space-between;
-  cursor: pointer;
   transition: backround 0.15s;
   border: 1px solid $panel-files-bg;
+  @extend %pointer;
+  @extend %flex-btw-center;
   .name {
-    @extend %typo-small;
-    @extend %typo-roboto;
-    color: $file-name-color;
     font-weight: 400;
+    color: $file-name-color;
+    @extend %typo-roboto;
+    @extend %typo-small;
   }
   .close {
-    color: $file-exit-color;
-    background: $file-exit-bg;
     border-radius: 50%;
-    width: 1rem;
-    height: 1rem;
     margin: 0 0 0 0.4rem;
-    @extend %flex-center;
-    @extend %typo-small;
     opacity: 0;
     transition: opacity 0.15s;
+    color: $file-exit-color;
+    background: $file-exit-bg;
+    @include rectangle(1rem, 1rem);
+    @extend %flex-center;
+    @extend %typo-small;
   }
 }
 .file:hover {

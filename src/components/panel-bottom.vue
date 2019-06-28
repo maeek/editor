@@ -5,12 +5,17 @@
         <i class="material-icons">signal_wifi_4_bar</i> Connected
       </div>
       <bottomButton>
-        {{ fileIsSaved() ? "All saved" : "Not saved" }}, last save -
-        {{ fileLastSaved() }}
+        {{ saveStatus }}
       </bottomButton>
     </div>
     <div>
-      <bottomButton>{{ fileMode }}</bottomButton>
+      <div class="list">
+        <ul>
+        </ul>
+      </div>
+      <bottomButton>
+        {{ fileMode }}
+      </bottomButton>
       <bottomButton>Ln: {{ fileLines }}</bottomButton>
       <bottomButton :class="'interactive'">
         <a href="https://github.com/maeek/">Github</a>
@@ -21,7 +26,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import bottomButton from "@/components/panel-bottom/bottom-panel-element.vue";
+import bottomButton from "@/components/buttons/bottom-panel-element.vue";
 
 export default {
   name: "barBottom",
@@ -35,37 +40,35 @@ export default {
       "fileIsSaved",
       "fileLastSaved",
       "activeFile"
-    ])
+    ]),
+    saveStatus: function() {
+      return `${
+        this.fileIsSaved()
+          ? "All saved , last save - " + this.fileLastSaved()
+          : "No file selected"
+      }`;
+    }
   }
 };
 </script>
 
 <style scoped lang="scss">
 .bar--bottom {
-  width: 100%;
-  height: 1.3rem;
-  background: $panel-bottom;
   flex: 0 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  align-content: flex-end;
+  background: $panel-bottom;
+  @include rectangle(100%, 1.3rem);
+  @extend %flex-btw-end;
   div {
-    height: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    align-content: center;
+    @include rectangle(auto, 100%);
+    @extend %flex-start-center;
   }
   .connectivity {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    background: $bottom--button-bg;
+    padding: 0 0.5rem;
     color: $bottom--button-color;
+    background: $bottom--button-bg;
+    @extend %flex-start-center;
     @extend %typo-roboto;
     @extend %typo-tiny;
-    padding: 0 0.5rem;
     i {
       font-size: inherit;
       margin: 0 0.3rem 0 0;

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import file from "@/components/panel-files/file.vue";
+import file from "@/components/buttons/file.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -30,12 +30,11 @@ export default {
     file
   },
   computed: {
-    ...mapGetters(["files", "activeFile", "files"])
+    ...mapGetters(["files", "activeFile"])
   },
   methods: {
     ...mapActions(["switchFile"]),
     openFile(ev, name) {
-      // this.$forceUpdate();
       this.switchFile(name);
     }
   }
@@ -44,14 +43,11 @@ export default {
 
 <style scoped lang="scss">
 .bar--files {
-  background: $panel-files-bg;
-  width: 100%;
-  height: calc(2rem + 2px);
-  flex: 0 0 auto;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding: 0;
   position: relative;
+  flex: 0 0 auto;
+  padding: 0;
+  background: $panel-files-bg;
+  @include rectangle(100%, calc(2rem + 2px));
+  @extend %flex-start;
 }
 </style>

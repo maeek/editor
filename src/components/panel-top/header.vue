@@ -12,15 +12,15 @@ export default {
 
 <style scoped lang="scss">
 h1 {
+  font-weight: 400;
+  margin: 0 0.5rem;
+  color: $panel-top--header;
   @extend %typo-roboto;
   @extend %typo-normal;
   @extend %flex-center;
-  color: $panel-top--header;
-  font-weight: 400;
-  margin: 0 0.5rem;
   i {
-    color: $comment--header;
     margin-right: 0.3rem;
+    color: $comment--header;
   }
 }
 </style>
