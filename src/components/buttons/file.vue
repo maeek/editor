@@ -20,10 +20,10 @@ export default {
 
 <style scoped lang="scss">
 .file {
-  height: calc(100% - 2px);
+  height: 100%;
   padding: 0 0.3rem 0 0.8rem;
-  transition: backround 0.15s;
-  border: 1px solid $panel-files-bg;
+  transition: background 0.15s;
+  border: 1px solid #4a4a4a;
   @extend %pointer;
   @extend %flex-btw-center;
   .name {

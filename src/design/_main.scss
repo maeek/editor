@@ -1,8 +1,6 @@
 @import "colors";
-
 $material-icons-font-path: '~material-icons/iconfont/';
 @import '~material-icons/iconfont/material-icons.scss';
-
 .material-icons {
     @include material-icons();
     font-size: inherit;
@@ -142,6 +140,7 @@ body {
     height: 100%;
     transform: translate3d(0, 0, 0);
 }
+
 .CodeMirror-linenumber {
     min-width: 2rem;
 }
@@ -150,18 +149,24 @@ body {
     color: #ababab;
 }
 
-.from-up-enter-active, .from-up-leave-active {
+.from-up-enter-active,
+.from-up-leave-active {
     transition: transform .2s, opacity .2s;
 }
-.from-up-enter, .from-up-leave-to {
+
+.from-up-enter,
+.from-up-leave-to {
     transform: translateY(-15rem);
     opacity: 0;
 }
 
-.scale-enter-active, .scale-leave-active {
+.scale-enter-active,
+.scale-leave-active {
     transition: transform .2s, opacity .2s;
 }
-.scale-enter, .scale-leave-to {
+
+.scale-enter,
+.scale-leave-to {
     transform: scale(1.7);
     opacity: 0;
 }
@@ -170,14 +175,15 @@ body {
     cursor: pointer;
 }
 
-button, input {
+button,
+input {
     border: 0;
     outline: none;
 }
 
 input[type="file"] {
     display: none;
-  }
+}
 
 @mixin rectangle($w, $h) {
     width: #{$w};

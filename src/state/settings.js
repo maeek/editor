@@ -1,13 +1,19 @@
 export default {
   state: {
     settingsModal: false,
-    numLines: true,
+    tabSize: 2,
+    closeBrackets: true,
+    lineNumbers: true,
+    keyMap: "sublime",
+    keyMaps: ["sublime", "vim"],
+    lineWrapping: false,
+    scrollPastEnd: true,
     fontSize: 16,
     fontSizesArray: [14, 16, 18, 20, 22, 24, 26, 28]
   },
   mutations: {
     NUM_LINES(state, enabled) {
-      state.numLines = enabled;
+      state.lineNumbers = enabled;
     },
     FONT_SIZE(state, size) {
       state.fontSize = size;
@@ -17,7 +23,7 @@ export default {
     }
   },
   actions: {
-    setNumLines({ commit }, enabled) {
+    setlineNumbers({ commit }, enabled) {
       commit("NUM_LINES", !!enabled);
     },
     setFontSize({ commit }, size) {
@@ -28,7 +34,7 @@ export default {
     }
   },
   getters: {
-    numLines: state => state.numLines,
+    lineNumbers: state => state.lineNumbers,
     fontSize: state => state.fontSize,
     fontSizeArray: state => state.fontSizeArray,
     showSettings: state => state.settingsModal

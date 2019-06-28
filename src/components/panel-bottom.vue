@@ -10,13 +10,14 @@
     </div>
     <div>
       <div class="list">
-        <ul>
-        </ul>
+        <ul></ul>
       </div>
       <bottomButton>
         {{ fileMode }}
       </bottomButton>
-      <bottomButton>Ln: {{ fileLines }}</bottomButton>
+      <bottomButton
+        >Ln: {{ fileMode.includes("image/") ? 0 : fileLines }}</bottomButton
+      >
       <bottomButton :class="'interactive'">
         <a href="https://github.com/maeek/">Github</a>
       </bottomButton>
@@ -45,7 +46,7 @@ export default {
       return `${
         this.fileIsSaved()
           ? "All saved , last save - " + this.fileLastSaved()
-          : "No file selected"
+          : "No file"
       }`;
     }
   }

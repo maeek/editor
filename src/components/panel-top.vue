@@ -83,7 +83,12 @@ export default {
               .replace("T", " ")
           });
         };
-        fileR.readAsText(file, "utf-8");
+        if (!file.type.includes("image/")) {
+          fileR.readAsText(file, "utf-8");
+        } else {
+          console.log("image");
+          fileR.readAsDataURL(file);
+        }
       }
     },
     toggleFullscreen() {

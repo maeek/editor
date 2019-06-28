@@ -2,14 +2,14 @@
   <div class="modal" @click="newFileModal(false)">
     <div class="wrap" @click.stop>
       <h3>
-        <i class="material-icons">insert_drive_file</i>
+        <i class="material-icons">note_add</i>
         Create new file
       </h3>
       <input
         ref="input"
         name="newfile"
         v-model="filename"
-        placeholder="Type file name, ie. README.md"
+        placeholder="Type file name, i.e. README.md"
         @keyup="createFileEnter"
       />
       <div class="options">
@@ -46,7 +46,7 @@ export default {
     createFile() {
       const name = document.querySelector("input[name='newfile']").value;
       if (name.length > 0) {
-        this.addFile({ name: name, mode: "text/plain" });
+        this.addFile({ name: name });
         this.newFileModal(false);
       } else {
         this.$refs.input.focus();

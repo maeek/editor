@@ -4,6 +4,9 @@ const getTime = () =>
     .substring(0, 19)
     .replace("T", " ");
 
+import CodeMirror from "codemirror";
+import "codemirror/mode/meta.js";
+
 export default {
   state: {
     newFile: false,
@@ -81,9 +84,12 @@ export default {
   actions: {
     addFile({ commit }, newFile) {
       const { name, data, mode, last } = newFile;
+      let detectMode = CodeMirror.findModeByFileName(name)
+        ? CodeMirror.findModeByFileName(name).mime
+        : "text/plain";
       const fileObj = {
         name: name,
-        mode: mode ? mode : "text/markdown",
+        mode: mode ? mode : detectMode,
         save: {
           last: last ? last : getTime(),
           is: true
