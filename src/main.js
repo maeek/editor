@@ -29,7 +29,7 @@ window.addEventListener(
       const fileName = store.getters.fileByIndex(i);
       store.dispatch("switchFile", fileName);
       store.dispatch("showFilesDialog", true);
-    } else if (e.metaKey && e.code == "ArrowDown") {
+    } else if (store.getters.filesDialog && e.code == "ArrowDown") {
       e.preventDefault();
       let i = store.getters.activeFileIndex;
       const filesLength = store.getters.files.length;
@@ -37,7 +37,7 @@ window.addEventListener(
       else if (i == filesLength - 1) i = 0;
       const fileName = store.getters.fileByIndex(i);
       store.dispatch("switchFile", fileName);
-    } else if (e.metaKey && e.code == "ArrowUp") {
+    } else if (store.getters.filesDialog && e.code == "ArrowUp") {
       e.preventDefault();
       let i = store.getters.activeFileIndex;
       const filesLength = store.getters.files.length;

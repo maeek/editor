@@ -16,7 +16,7 @@
         v-for="(file, i) in files"
         :key="file.name"
         :class="file.name == activeFile ? 'isActive' : ''"
-        @click="opnFile(file.name)"
+        @click.stop="opnFile(file.name)"
         :tabindex="i"
       >
         <div>{{ file.name }}</div>
@@ -61,6 +61,12 @@ export default {
       this.switchFile(name);
       this.showFilesDialog(false);
     }
+  },
+  mounted() {
+    const $this = this;
+    window.addEventListener("click", function() {
+      $this.showFilesDialog(false);
+    });
   }
 };
 </script>

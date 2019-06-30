@@ -16,13 +16,13 @@
       <i class="material-icons" @click="scrollRight">
         keyboard_arrow_right
       </i>
-      <i class="material-icons showMore" @click="showMore(!moreDialog)">
+      <i class="material-icons showMore" @click.stop="showMore(!moreDialog)">
         more_horiz
       </i>
     </div>
     <div class="more" v-if="moreDialog">
       <div class="moreBtn" @click="returnToPrevious">Load last save</div>
-      <div class="moreBtn" @click="showFilesDialog(!filesDialog)">
+      <div class="moreBtn" @click.stop="showFilesDialog(!filesDialog)">
         Show Opened
       </div>
       <div class="moreBtn">Remove All</div>
