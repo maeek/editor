@@ -1,10 +1,17 @@
 <template>
   <div class="bar bar--bottom">
     <div>
-      <div class="connectivity">
-        <i class="material-icons">signal_wifi_4_bar</i> Connected
-      </div>
       <bottomButton>
+        <i class="material-icons">signal_wifi_4_bar</i> Connected
+      </bottomButton>
+      <bottomButton>
+        <i
+          class="material-icons"
+          title="Waiting for save"
+          v-if="!fileIsSaved() && fileIsSaved() != null"
+        >
+          lens
+        </i>
         {{ saveStatus }}
       </bottomButton>
     </div>
@@ -43,11 +50,10 @@ export default {
       "activeFile"
     ]),
     saveStatus: function() {
-      return `${
-        this.fileIsSaved()
-          ? "All saved , last save - " + this.fileLastSaved()
-          : "No file"
-      }`;
+      if (this.fileIsSaved())
+        return `All saved , last save - ${this.fileLastSaved()}`;
+      else if (this.fileIsSaved() == null) return "No file";
+      else return "Not saved , last save - " + this.fileLastSaved();
     }
   }
 };
@@ -59,21 +65,12 @@ export default {
   background: $panel-bottom;
   @include rectangle(100%, 1.3rem);
   @extend %flex-btw-end;
+  .list {
+    display: none;
+  }
   div {
     @include rectangle(auto, 100%);
     @extend %flex-start-center;
-  }
-  .connectivity {
-    padding: 0 0.5rem;
-    color: $bottom--button-color;
-    background: $bottom--button-bg;
-    @extend %flex-start-center;
-    @extend %typo-roboto;
-    @extend %typo-tiny;
-    i {
-      font-size: inherit;
-      margin: 0 0.3rem 0 0;
-    }
   }
 }
 </style>

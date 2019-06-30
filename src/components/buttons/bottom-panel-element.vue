@@ -15,13 +15,19 @@ div {
   padding: 0 1rem;
   background: $bottom--button-bg;
   color: $bottom--button-color;
+  text-align: center;
   @include rectangle(auto, 100%);
   @extend %flex-center;
   @extend %typo-tiny;
   @extend %typo-roboto;
+  @extend %noselect;
   a {
     color: inherit;
     text-decoration: none;
+  }
+  i {
+    font-size: inherit;
+    margin: 0 0.3rem 0 0;
   }
 }
 .interactive:hover {

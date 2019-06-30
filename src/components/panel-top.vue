@@ -2,6 +2,9 @@
   <nav class="bar bar--top">
     <siteHeader><i class="material-icons">waves</i> NOTE</siteHeader>
     <div class="options">
+      <compact :title="'Save file'" name="Save" @click.native="saveFile">
+        save
+      </compact>
       <compact
         :title="'Add file'"
         name="New file"
@@ -62,7 +65,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["addFile", "newFileModal", "toggleSettings"]),
+    ...mapActions(["addFile", "newFileModal", "toggleSettings", "saveFile"]),
     openFile() {
       document.querySelector("input[type='file']").click();
     },
@@ -86,7 +89,6 @@ export default {
         if (!file.type.includes("image/")) {
           fileR.readAsText(file, "utf-8");
         } else {
-          console.log("image");
           fileR.readAsDataURL(file);
         }
       }
@@ -94,13 +96,7 @@ export default {
     toggleFullscreen() {
       let elem = document.querySelector("#app");
       if (!document.fullscreenElement) {
-        elem.requestFullscreen().catch(err => {
-          console.log(
-            `Error attempting to enable full-screen mode: ${err.message} (${
-              err.name
-            })`
-          );
-        });
+        elem.requestFullscreen();
       } else {
         document.exitFullscreen();
       }

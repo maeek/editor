@@ -18,6 +18,7 @@ h1 {
   @extend %typo-roboto;
   @extend %typo-normal;
   @extend %flex-center;
+  @extend %noselect;
   i {
     margin-right: 0.3rem;
     color: $comment--header;

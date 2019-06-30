@@ -59,6 +59,13 @@ body {
     align-content: flex-end;
 }
 
+%flex-start-end {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    align-content: flex-end;
+}
+
 %flex-start-center {
     display: flex;
     justify-content: flex-start;
@@ -106,6 +113,10 @@ body {
     justify-content: space-between;
     align-items: flex-end;
     align-content: flex-end;
+}
+
+%noselect {
+    user-select: none;
 }
 
 ::-webkit-scrollbar {

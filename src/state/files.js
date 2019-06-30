@@ -10,19 +10,11 @@ import "codemirror/mode/meta.js";
 export default {
   state: {
     newFile: false,
-    activeFile: "",
-    files: [],
-    modes: [
-      "text/plain",
-      "text/markdown",
-      "text/html",
-      "application/json",
-      "application/javascript",
-      "text/x-ini",
-      "text/x-scheme",
-      "text/x-spreadsheet",
-      "text/x-lua"
-    ]
+    activeFile: {
+      name: "",
+      data: ""
+    },
+    files: []
   },
   mutations: {
     ADD_FILE(state, fileObj) {
@@ -39,21 +31,21 @@ export default {
         }
       });
       if (state.files.length != 0) {
-        if (name == state.activeFile) {
+        if (name == state.activeFile.name) {
           if (index != -1 && index < 2) {
-            state.activeFile = state.files[0].name;
+            state.activeFile.name = state.files[0].name;
           } else {
             if (state.files.length - 1 > index) {
-              state.activeFile = state.files[index + 1].name;
+              state.activeFile.name = state.files[index + 1].name;
             } else if (state.files.length - 1 < index) {
-              state.activeFile = state.files[index - 1].name;
+              state.activeFile.name = state.files[index - 1].name;
             } else {
-              state.activeFile = state.files[index - 1].name;
+              state.activeFile.name = state.files[index].name;
             }
           }
         }
       } else {
-        state.activeFile = null;
+        state.activeFile.name = null;
       }
     },
     CHANGE_NAME(state, name, newName) {
@@ -62,9 +54,10 @@ export default {
         return el;
       });
     },
-    SAVE(state, val) {
-      let obj = state.files.find(el => el.name == state.activeFile);
-      obj.data = val;
+    SAVE(state) {
+      let obj = state.files.find(el => el.name == state.activeFile.name);
+      obj.data = state.activeFile.data;
+      obj.hash = state.activeFile.data.hashCode();
       obj.save.is = true;
       obj.save.last = getTime();
     },
@@ -75,10 +68,17 @@ export default {
       });
     },
     ACTIVE_FILE(state, name) {
-      state.activeFile = name;
+      state.activeFile.name = name;
+    },
+    ACTIVE_FILE_DATA(state, value) {
+      state.activeFile.data = value;
     },
     NEW_FILE_MODAL(state, val) {
       state.newFile = val;
+    },
+    NOT_SAVED(state) {
+      let obj = state.files.find(el => el.name == state.activeFile.name);
+      obj.save.is = false;
     }
   },
   actions: {
@@ -94,7 +94,8 @@ export default {
           last: last ? last : getTime(),
           is: true
         },
-        data: data ? data : ""
+        data: data ? data : "",
+        hash: data ? data.hashCode() : "".hashCode()
       };
       commit("ADD_FILE", fileObj);
       commit("ACTIVE_FILE", name);
@@ -102,8 +103,13 @@ export default {
     removeFile({ commit }, name) {
       commit("REMOVE_FILE", name);
     },
-    saveFile({ commit }, value) {
-      commit("SAVE", value);
+    activeFileData({ commit, getters, dispatch }, value, dispName) {
+      if (value.hashCode() != getters.fileHash) commit("NOT_SAVED");
+      commit("ACTIVE_FILE_DATA", value);
+      if (dispName) dispatch(`${dispName}`);
+    },
+    saveFile({ commit }) {
+      commit("SAVE");
     },
     switchFile({ commit }, name) {
       commit("ACTIVE_FILE", name);
@@ -113,33 +119,43 @@ export default {
     }
   },
   getters: {
-    activeFile: state => state.activeFile,
+    activeFile: state => state.activeFile.name,
+    activeFileData: state => state.activeFile.data,
+    activeFileIndex: state =>
+      state.files.findIndex(el => {
+        return el.name == state.activeFile.name;
+      }),
     newFileModal: state => state.newFile,
     files: state => state.files,
+    fileByIndex: state => index =>
+      state.files[index] ? state.files[index].name : null,
     fileByName: (state, getters) => name => {
       return getters.files.find(el => el.name === name);
     },
     fileIsSaved: (state, getters) => name => {
-      return state.activeFile && state.files
-        ? getters.fileByName(name ? name : state.activeFile).save.is
+      return state.activeFile.name && state.files
+        ? getters.fileByName(name ? name : state.activeFile.name).hash ==
+            state.activeFile.data.hashCode()
         : null;
     },
     fileLastSaved: (state, getters) => name => {
-      return (state.activeFile && state.files) || name
-        ? getters.fileByName(name ? name : state.activeFile).save.last
+      return (state.activeFile.name && state.files) || name
+        ? getters.fileByName(name ? name : state.activeFile.name).save.last
         : "never";
     },
     fileMode: (state, getters) => {
-      return state.activeFile && state.files
-        ? getters.fileByName(state.activeFile).mode
+      return state.activeFile.name && state.files
+        ? getters.fileByName(state.activeFile.name).mode
         : "none";
     },
     fileData: (state, getters) => name => {
-      return getters.fileByName(name ? name : state.activeFile).data;
+      return getters.fileByName(name ? name : state.activeFile.name).data;
     },
+    fileHash: (state, getters) => name =>
+      getters.fileByName(name ? name : state.activeFile.name).hash,
     fileLines: (state, getters) => {
-      return state.activeFile && state.files
-        ? getters.fileData(state.activeFile).split("\n").length
+      return state.activeFile.name && state.files
+        ? getters.fileData(state.activeFile.name).split("\n").length
         : 0;
     },
     fileStringified: (state, getters) => name =>

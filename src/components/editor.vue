@@ -2,9 +2,11 @@
   <main class="editor">
     <div class="editorFields" v-if="files.length > 0">
       <codemirror
+        ref="codeMrr"
         :key="activeFile"
-        :value="code"
+        :value="activeFileData"
         :options="cmOption"
+        placeholder="Type here..."
         @ready="onReady"
         @input="triggerSave"
         v-if="!isImage"
@@ -41,6 +43,7 @@ export default {
       cmOption: {
         autofocus: true,
         tabSize: 2,
+        smartIndent: true,
         styleActiveLine: true,
         lineNumbers: true,
         lineWrapping: false,
@@ -62,7 +65,13 @@ export default {
     codemirror
   },
   computed: {
-    ...mapGetters(["fileMode", "fileData", "activeFile", "files"]),
+    ...mapGetters([
+      "fileMode",
+      "fileData",
+      "activeFile",
+      "files",
+      "activeFileData"
+    ]),
     editor() {
       return this.$refs.editor.codemirror;
     },
@@ -71,21 +80,24 @@ export default {
     },
     image() {
       if (this.isImage) {
-        console.log(this.fileData);
         return this.fileData();
       } else {
         return "";
       }
+    },
+    codeMrr() {
+      return this.$refs.codeMrr.codemirror;
     }
   },
   methods: {
     ...mapActions(["saveFile", "addFile"]),
     triggerSave(newcode) {
       this.code = newcode;
-      this.saveFile(newcode);
+      this.$store.dispatch("activeFileData", newcode);
     },
     onReady() {
       if (!this.isImage) {
+        this.$store.dispatch("activeFileData", this.$store.getters.fileData());
         this.$data.code = this.$store.getters.fileData();
       }
       this.$data.cmOption.mode = this.fileMode;
@@ -143,7 +155,22 @@ export default {
           fileR.readAsDataURL(file);
         }
       }
+    },
+    saveS(e) {
+      if (e.ctrlKey && e.keyCode == 83 && !this.fileMode.includes("image/")) {
+        e.preventDefault();
+        this.saveFile();
+      }
     }
+  },
+  updated() {
+    const $this = this;
+    window.addEventListener("keydown", $this.saveS);
+    // console.log('this is codemirror A instance object', this.codeMrr);
+  },
+  beforeUpdate() {
+    const $this = this;
+    window.removeEventListener("keydown", $this.saveS);
   }
 };
 </script>
@@ -173,6 +200,7 @@ export default {
     @extend %flex-center;
     @extend %typo-roboto;
     @extend %typo-normal;
+    @extend %noselect;
     i {
       margin: 0 0 0.5rem 0;
       font-size: 10rem;

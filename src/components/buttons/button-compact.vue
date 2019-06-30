@@ -24,6 +24,7 @@ button {
   background: $compact--button-bg;
   @include rectangle(auto, 1.5rem);
   @extend %pointer;
+  @extend %noselect;
   @extend %flex-center;
   i {
     margin: 0 0.2rem 0 0;
@@ -38,7 +39,6 @@ button {
   }
   @media screen and (max-width: 768px) {
     i {
-      color: inherit;
       margin: 0;
     }
     span {

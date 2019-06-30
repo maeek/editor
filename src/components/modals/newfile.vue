@@ -91,6 +91,7 @@ export default {
       font-weight: 400;
       color: $panel-top--header;
       @extend %typo-big;
+      @extend %noselect;
       @extend %flex-start-center;
       i {
         font-size: inherit;

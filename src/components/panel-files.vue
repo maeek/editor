@@ -9,7 +9,24 @@
     @drop="drop"
     ref="panelFiles"
   >
-    <div class="blank"></div>
+    <div class="scroller">
+      <i class="material-icons" @click="scrollLeft">
+        keyboard_arrow_left
+      </i>
+      <i class="material-icons" @click="scrollRight">
+        keyboard_arrow_right
+      </i>
+      <i class="material-icons showMore" @click="showMore(!moreDialog)">
+        more_horiz
+      </i>
+    </div>
+    <div class="more" v-if="moreDialog">
+      <div class="moreBtn" @click="returnToPrevious">Load last save</div>
+      <div class="moreBtn" @click="showFilesDialog(!filesDialog)">
+        Show Opened
+      </div>
+      <div class="moreBtn">Remove All</div>
+    </div>
     <file
       :class="activeFile == file.name ? 'file-active' : ''"
       v-for="(file, i) in files"
@@ -39,12 +56,29 @@ export default {
     file
   },
   computed: {
-    ...mapGetters(["files", "activeFile"])
+    ...mapGetters([
+      "files",
+      "activeFile",
+      "fileIsSaved",
+      "fileMode",
+      "fileData",
+      "moreDialog",
+      "filesDialog"
+    ])
   },
   methods: {
-    ...mapActions(["switchFile", "addFile"]),
+    ...mapActions([
+      "switchFile",
+      "addFile",
+      "activeFileData",
+      "saveFile",
+      "showMore",
+      "showFilesDialog"
+    ]),
     openFile(ev, name) {
-      this.switchFile(name);
+      if (this.fileIsSaved || this.fileMode().includes("image/"))
+        this.switchFile(name);
+      else alert("yee");
     },
     dragEnt(ev) {
       ev.preventDefault();
@@ -84,10 +118,49 @@ export default {
         if (!file.type.includes("image/")) {
           fileR.readAsText(file, "utf-8");
         } else {
-          console.log("image");
           fileR.readAsDataURL(file);
         }
       }
+    },
+    scrollLeft() {
+      this.$refs.panelFiles.scrollBy({
+        top: 0,
+        left: -100,
+        behavior: "smooth"
+      });
+    },
+    scrollRight() {
+      this.$refs.panelFiles.scrollBy({
+        top: 0,
+        left: 100,
+        behavior: "smooth"
+      });
+    },
+    scrollHoriz(e) {
+      e.preventDefault();
+      const delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
+      this.$refs.panelFiles.scrollLeft -= delta * 25;
+    },
+    returnToPrevious() {
+      this.activeFileData(this.fileData(), "saveFile");
+    },
+    removeAll() {
+      // Show modal;
+    }
+  },
+  updated() {
+    const $this = this;
+    if (this.files.length > 0) {
+      this.$refs.panelFiles.addEventListener(
+        "mousewheel",
+        $this.scrollHoriz,
+        false
+      );
+      this.$refs.panelFiles.addEventListener(
+        "DOMMouseScroll",
+        $this.scrollHoriz,
+        false
+      );
     }
   }
 };
@@ -98,22 +171,65 @@ export default {
   position: relative;
   flex: 0 0 auto;
   padding: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
   transition: background 0.2s;
   background: $panel-files-bg;
-  @include rectangle(100%, calc(2rem + 2px));
+  @include rectangle(calc(100% - 5rem), calc(2rem + 2px));
   @extend %flex-start;
-  ::-webkit-scrollbar {
-    display: block;
-    width: 10px;
-    height: 10px;
-    padding: 5px;
-    overflow: auto;
-    background-color: #1d1d1d;
+  .scroller {
+    position: fixed;
+    right: 0;
+    width: 5rem;
+    height: calc(2rem + 2px);
+    background: #1d1d1d;
+    @extend %flex-center;
+    @extend %noselect;
+    i {
+      margin: 0 0.1rem;
+      color: #ababab;
+      @extend %pointer;
+      @extend %typo-medium;
+    }
+    i:hover {
+      color: #fefefe;
+    }
   }
+}
+.more {
+  position: fixed;
+  top: calc(4.5rem + 2px);
+  right: 0;
+  background: #0e0e0e;
+  z-index: 2;
+  @include rectangle(auto, auto);
+  .moreBtn {
+    color: #a0a0a0;
+    padding: 0.5rem 1rem;
+    transition: color 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    @extend %typo-roboto;
+    @extend %typo-small;
+    @extend %pointer;
+    @extend %noselect;
+  }
+  .moreBtn:last-child {
+    margin-top: 1rem;
+  }
+  .moreBtn:hover {
+    color: $panel-top--header;
+  }
+}
+.bar--files::-webkit-scrollbar {
+  display: block;
+  width: 2px;
+  height: 2px;
+  padding: 5px;
+  overflow: auto;
+  background-color: #1d1d1d;
+}
 
-  ::-webkit-scrollbar-thumb {
-    background: #3d3d3d;
-    border: 2px solid #0000;
-  }
+.bar--files::-webkit-scrollbar-thumb {
+  background: $panel-top--header;
+  border: 2px solid #0000;
 }
 </style>
