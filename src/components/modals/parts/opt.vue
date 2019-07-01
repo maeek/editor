@@ -3,14 +3,17 @@
     <span class="name">
       <slot></slot>
     </span>
-    <input type="checkbox" />
+    <input type="checkbox" :checked="checked" />
     <div class="checkbox--wrapper"></div>
   </label>
 </template>
 
 <script>
 export default {
-  name: "opt"
+  name: "opt",
+  props: {
+    checked: Boolean
+  }
 };
 </script>
 

@@ -10,7 +10,7 @@ const modes = CodeMirror.modeInfo.filter(el => {
 
 export default {
   state: {
-    version: "0.5.0",
+    version: "0.6.0",
     offline: false,
     moreDialog: false,
     filesDialog: false,
@@ -29,6 +29,21 @@ export default {
     modes: modes
   },
   mutations: {
+    TAB_SIZE(state, size) {
+      state.tabSize = size;
+    },
+    LINE_WRAP(state, val) {
+      state.lineWrapping = val;
+    },
+    SCROLL_PAST(state, val) {
+      state.scrollPastEnd = val;
+    },
+    SMART_INDENT(state, val) {
+      state.smartIndent = val;
+    },
+    AUTO_CLOSE_BRACKETS(state, val) {
+      state.autoCloseBrackets = val;
+    },
     NUM_LINES(state, enabled) {
       state.lineNumbers = enabled;
     },
@@ -44,6 +59,9 @@ export default {
     FILES_DIALOG(state, val) {
       state.filesDialog = !!val;
     },
+    KEY_MAP(state, val) {
+      state.keyMap = val;
+    },
     HELP_MODAL(state, val) {
       state.helpModal = !!val;
     },
@@ -52,7 +70,7 @@ export default {
     }
   },
   actions: {
-    setlineNumbers({ commit }, enabled) {
+    setLineNumbers({ commit }, enabled) {
       commit("NUM_LINES", !!enabled);
     },
     setFontSize({ commit }, size) {
@@ -75,6 +93,24 @@ export default {
     },
     changeOffline({ commit }, val) {
       commit("OFFLINE", val);
+    },
+    setKeyMap({ commit }, val) {
+      commit("KEY_MAP", val);
+    },
+    setTabSize({ commit }, val) {
+      commit("TAB_SIZE", val ? val : 2);
+    },
+    setLineWrap({ commit }, val) {
+      commit("LINE_WRAP", val);
+    },
+    setScrollPast({ commit }, val) {
+      commit("SCROLL_PAST", val);
+    },
+    setAutoClose({ commit }, val) {
+      commit("AUTO_CLOSE_BRACKETS", val);
+    },
+    setSmartIndent({ commit }, val) {
+      commit("SMART_INDENT", val);
     }
   },
   getters: {
@@ -86,6 +122,14 @@ export default {
     filesDialog: state => state.filesDialog,
     helpModal: state => state.helpModal,
     offline: state => state.offline,
-    version: state => state.version
+    version: state => state.version,
+    keyMap: state => state.keyMap,
+    keyMaps: state => state.keyMaps,
+    scrollPastEnd: state => state.scrollPastEnd,
+    tabSize: state => state.tabSize,
+    smartIndent: state => state.smartIndent,
+    autoClose: state => state.autoCloseBrackets,
+    lineWrap: state => state.lineWrapping,
+    modes: state => state.modes
   }
 };

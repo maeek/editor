@@ -39,26 +39,7 @@ export default {
   name: "editor",
   data() {
     return {
-      code: "",
-      cmOption: {
-        autofocus: true,
-        tabSize: 2,
-        smartIndent: true,
-        styleActiveLine: true,
-        lineNumbers: true,
-        lineWrapping: false,
-        line: true,
-        foldGutter: true,
-        lineWiseCopyCut: true,
-        styleSelectedText: true,
-        mode: "text/plain",
-        keyMap: "sublime",
-        matchBrackets: true,
-        autoCloseBrackets: true,
-        showCursorWhenSelecting: true,
-        theme: "base16-dark",
-        scrollPastEnd: true
-      }
+      code: ""
     };
   },
   components: {
@@ -70,8 +51,36 @@ export default {
       "fileData",
       "activeFile",
       "files",
-      "activeFileData"
+      "activeFileData",
+      "keyMap",
+      "autoClose",
+      "scrollPastEnd",
+      "smartIndent",
+      "lineWrap",
+      "lineNumbers",
+      "tabSize"
     ]),
+    cmOption() {
+      return {
+        autofocus: true,
+        tabSize: this.tabSize ? this.tabSize : 2,
+        smartIndent: this.smartIndent,
+        styleActiveLine: true,
+        lineNumbers: this.lineNumbers,
+        lineWrapping: this.lineWrap,
+        line: true,
+        foldGutter: true,
+        lineWiseCopyCut: true,
+        styleSelectedText: true,
+        mode: this.fileMode ? this.fileMode : "text/plain",
+        keyMap: this.keyMap,
+        matchBrackets: true,
+        autoCloseBrackets: this.autoClose,
+        showCursorWhenSelecting: true,
+        theme: "base16-dark",
+        scrollPastEnd: this.scrollPastEnd
+      };
+    },
     editor() {
       return this.$refs.editor.codemirror;
     },
@@ -100,7 +109,7 @@ export default {
         this.$store.dispatch("activeFileData", this.$store.getters.fileData());
         this.$data.code = this.$store.getters.fileData();
       }
-      this.$data.cmOption.mode = this.fileMode;
+      this.cmOption.mode = this.fileMode;
     },
     openFile() {
       document.querySelector("input[type='file']").click();

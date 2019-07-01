@@ -17,13 +17,55 @@
         <div class="region">
           <h5>Editor</h5>
           <div class="options">
-            <optionCheck :key="'scrollPastEnd'">Auto save</optionCheck>
-            <optionCheck :key="'lineNums'">Line numbers</optionCheck>
-            <optionCheck :key="'lineWrap'">Line wrapping</optionCheck>
-            <optionCheck :key="'closeBrackets'">
+            <optionCheck :key="'autoSave'" :checked="false">
+              Auto save
+            </optionCheck>
+            <optionCheck
+              :key="'lineNums'"
+              :checked="lineNumbers"
+              @input.native="setLineNumbers(!lineNumbers)"
+            >
+              Line numbers
+            </optionCheck>
+            <optionCheck
+              :key="'lineWrap'"
+              :checked="lineWrap"
+              @input.native="setLineWrap(!lineWrap)"
+            >
+              Line wrapping
+            </optionCheck>
+            <optionCheck
+              :key="'smartIndent'"
+              :checked="smartIndent"
+              @input.native="setSmartIndent(!smartIndent)"
+            >
+              Smart indent
+            </optionCheck>
+            <optionCheck
+              :key="'closeBrackets'"
+              :checked="autoClose"
+              @input.native="setAutoClose(!autoClose)"
+            >
               Auto close brackets
             </optionCheck>
-            <optionCheck :key="'scrollPastEnd'">Scroll past end</optionCheck>
+            <optionCheck
+              :key="'scrollPastEnd'"
+              :checked="scrollPastEnd"
+              @input.native="setScrollPast(!scrollPastEnd)"
+            >
+              Scroll past end
+            </optionCheck>
+            <selectList
+              ref="keyMap"
+              :key="'keyMap'"
+              :show="showList1"
+              :activeOpt="keyMap"
+              :optList="keyMaps"
+              @click.native="shList1(!showList1)"
+            >
+              Select keyMap
+            </selectList>
+            <number>Tab size</number>
           </div>
         </div>
       </div>
@@ -34,80 +76,82 @@
 <script>
 import compact from "@/components/buttons/button-compact.vue";
 import optionCheck from "@/components/modals/parts/opt.vue";
-import { mapActions } from "vuex";
+import selectList from "@/components/modals/parts/selectList.vue";
+import number from "@/components/modals/parts/number.vue";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "modal",
   components: {
     compact,
-    optionCheck
+    optionCheck,
+    selectList,
+    number
+  },
+  data() {
+    return {
+      showList1: false
+    };
+  },
+  computed: {
+    ...mapGetters([
+      "keyMaps",
+      "keyMap",
+      "autoClose",
+      "scrollPastEnd",
+      "smartIndent",
+      "lineWrap",
+      "lineNumbers"
+    ])
   },
   methods: {
-    ...mapActions(["toggleSettings"])
+    ...mapActions([
+      "toggleSettings",
+      "setAutoClose",
+      "setSmartIndent",
+      "setLineNumbers",
+      "setScrollPast",
+      "setLineWrap",
+      "setTabSize"
+    ]),
+    shList1(val) {
+      this.showList1 = val;
+    }
   }
 };
 </script>
 
 <style scoped lang="scss">
-
+.close {
+  position: absolute;
+  width: 4.3rem;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+.modal {
   .wrap {
-    padding: 0.5rem;
-    background: rgba(41, 41, 41, 0.75);
-    position: relative;
-    @include rectangle(100%, 100%);
     .data {
-      margin: 1rem 0 0 0;
-      padding: 1rem;
-      flex-wrap: wrap;
-      @extend %flex-center-start;
+      max-width: 100%;
+      margin: 0 auto;
+      width: 800px;
+      @extend %flex-center;
       .region {
-        margin: 1rem 3rem;
-        flex-direction: column;
-        flex: 1 0 auto;
-        @extend %flex-start;
-        display: inline-flex;
         .options {
-          @extend %flex-start;
-          margin: 1rem 0 0 0;
-          padding: 0 0.5rem;
-          width: 450px;
-          max-width: 100%;
-          max-height: 600px;
-          flex-direction: column;
-          flex-wrap: wrap;
-        }
-        h5 {
-          color: $comment--header;
+          width: 100%;
+          margin: 0 auto;
         }
       }
-    }
-    .close {
-      position: absolute;
-      width: 4.3rem;
-      top: 0.5rem;
-      right: 0.5rem;
-    }
-
-    h3 {
-      margin: 0 0 0.7rem 0;
-      font-weight: 400;
-      color: $panel-top--header;
-      @extend %typo-header;
-      @extend %flex-start-center;
-      i {
-        font-size: inherit;
-        margin: 0 0.3rem 0 0;
-      }
-    }
-    input {
-      border-radius: 5px;
-      margin-top: 1rem;
-      padding: 0.6rem 0.8rem;
-      color: $file-name-color;
-      background: $compact--button-bg;
-      @include rectangle("100%", "auto");
-      @extend %typo-normal;
     }
   }
+}
+input {
+  border-radius: 5px;
+  margin-top: 1rem;
+  padding: 0.6rem 0.8rem;
+  color: $file-name-color;
+  background: $compact--button-bg;
+  @include rectangle("100%", "auto");
+  @extend %typo-normal;
+}
 @media screen and (max-width: 768px) {
   .modal {
     .wrap {

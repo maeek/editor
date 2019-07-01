@@ -1,6 +1,6 @@
 <template>
-  <div class="modal modal--fullscreen" @click="showHelpModal(false)">
-    <div class="wrap" @click.stop>
+  <div class="modal" @click="showHelpModal(false)">
+    <div class="wrap modal-wrap--full" @click.stop>
       <h3>
         <i class="material-icons">keyboard</i>
         Keybinds
@@ -156,60 +156,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.modal {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.4);
-  @include rectangle(100%, 100%);
-  @extend %flex-center;
-  @extend %typo-roboto;
-  .wrap {
-    background: rgba(41, 41, 41, 0.75);
-    padding: 0.5rem;
-    overflow-y: auto;
-    position: relative;
-    @include rectangle(100%, 100%);
-    .close {
-      position: absolute;
-      top: 0.5rem;
-      right: 4.55rem;
-      width: 4.65rem;
-    }
-    .data {
-      margin: 1rem 0 0 0;
-      padding: 1rem;
-      flex-wrap: wrap;
-      @extend %flex-center-start;
-      .region {
-        margin: 1rem 3rem;
-        flex-direction: column;
-        flex: 1 0 auto;
-        @extend %flex-start;
-        display: inline-flex;
-        .binds {
-          @extend %flex-start;
-          flex-direction: column;
-          flex-wrap: wrap;
-        }
-      }
-    }
-    h3 {
-      margin: 0 0 0.7rem 0;
-      font-weight: 400;
-      color: $panel-top--header;
-      @extend %typo-header;
-      @extend %flex-start-center;
-      i {
-        font-size: inherit;
-        margin: 0 0.3rem 0 0;
-      }
-    }
-    h5 {
-      color: $comment--header;
-    }
-  }
+.close {
+  position: absolute;
+  top: 0.5rem;
+  right: 4.55rem;
+  width: 4.65rem;
 }
 @media screen and (max-width: 768px) {
   .modal {
@@ -223,16 +174,6 @@ export default {
         span {
           display: none;
           width: 1rem !important;
-        }
-      }
-      .data {
-        .region {
-          margin: 1rem 0;
-          width: 100%;
-          .binds {
-            max-height: initial;
-            flex-wrap: nowrap;
-          }
         }
       }
     }
