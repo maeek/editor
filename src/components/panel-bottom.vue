@@ -29,7 +29,7 @@
         >Ln: {{ fileMode.includes("image/") ? 0 : fileLines }}</bottomButton
       >
       <bottomButton :class="'interactive'">
-        <a href="https://github.com/maeek/editor">{{ version }}</a>
+        <a href="https://github.com/maeek/editor">v{{ version }}</a>
       </bottomButton>
     </div>
   </div>
