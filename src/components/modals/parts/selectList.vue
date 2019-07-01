@@ -42,7 +42,7 @@ label {
   flex-wrap: nowrap;
   background: #282828;
   width: 100%;
-  padding: 0 0.5rem;
+  padding: 0 1rem;
   @extend %flex-btw-center;
   &:nth-of-type(odd) {
     background: #2f2f2f;

@@ -132,6 +132,9 @@
             <helpElement :keys="'/<text>'">
               Search
             </helpElement>
+            <helpElement :keys="'?<text>'">
+              Search
+            </helpElement>
           </div>
         </div>
       </div>
