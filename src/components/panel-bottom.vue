@@ -22,12 +22,15 @@
       <div class="list">
         <ul></ul>
       </div>
+      <bottomButton v-if="activeFileSize">
+        {{ activeFileSize }}
+      </bottomButton>
       <bottomButton>
         {{ fileMode }}
       </bottomButton>
-      <bottomButton
-        >Ln: {{ fileMode.includes("image/") ? 0 : fileLines }}</bottomButton
-      >
+      <bottomButton>
+        {{ lines }}
+      </bottomButton>
       <bottomButton :class="'interactive'">
         <a href="https://github.com/maeek/editor">v{{ version }}</a>
       </bottomButton>
@@ -51,6 +54,8 @@ export default {
       "fileIsSaved",
       "fileLastSaved",
       "activeFile",
+      "activeFileSize",
+      "activeFileMediaSize",
       "offline",
       "version"
     ]),
@@ -67,6 +72,11 @@ export default {
       else if (this.fileIsSaved() == null) return "No file";
       else if (this.fileMode.includes("image/")) return "Save not possible";
       else return "Not saved , last save - " + this.fileLastSaved();
+    },
+    lines() {
+      return this.fileMode.includes("image/")
+        ? this.activeFileMediaSize
+        : `Ln: ${this.fileLines}`;
     }
   },
   methods: mapActions(["changeOffline"]),

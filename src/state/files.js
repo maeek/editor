@@ -4,6 +4,16 @@ const getTime = () =>
     .substring(0, 19)
     .replace("T", " ");
 
+function getImageDimensions(file) {
+  return new Promise(function(resolved) {
+    var i = new Image();
+    i.onload = function() {
+      resolved({ w: i.width, h: i.height });
+    };
+    i.src = file;
+  });
+}
+
 import CodeMirror from "codemirror";
 import "codemirror/mode/meta.js";
 
@@ -12,7 +22,9 @@ export default {
     newFile: false,
     activeFile: {
       name: "",
-      data: ""
+      data: "",
+      size: "",
+      mediaSize: ""
     },
     files: []
   },
@@ -46,6 +58,9 @@ export default {
         }
       } else {
         state.activeFile.name = null;
+        state.activeFile.data = null;
+        state.activeFile.mediaSize = null;
+        state.activeFile.size = null;
       }
     },
     CHANGE_NAME(state, name, newName) {
@@ -57,6 +72,8 @@ export default {
     SAVE(state) {
       let obj = state.files.find(el => el.name == state.activeFile.name);
       obj.data = state.activeFile.data;
+      let len = new TextEncoder("utf-8").encode(state.activeFile.data).length;
+      obj.size = len;
       obj.hash = state.activeFile.data.hashCode();
       obj.save.is = true;
       obj.save.last = getTime();
@@ -69,6 +86,18 @@ export default {
     },
     ACTIVE_FILE(state, name) {
       state.activeFile.name = name;
+      const el = state.files.filter(el => el.name == name)[0];
+      const data = el ? el.data : "";
+      const len = el ? el.size : 0;
+      const size =
+        len > 999
+          ? len / 1000 > 999
+            ? Math.round((len / 1000 / 1000) * 100) / 100 + " MB"
+            : Math.round((len / 1000) * 100) / 100 + " KB"
+          : Math.round(len * 100) / 100 + "B";
+      state.activeFile.data = data;
+      state.activeFile.size = size;
+      state.activeFile.mediaSize = el ? el.mediaSize : "";
     },
     ACTIVE_FILE_DATA(state, value) {
       state.activeFile.data = value;
@@ -98,10 +127,20 @@ export default {
           is: true
         },
         data: data ? data : "",
+        size: data ? new TextEncoder("utf-8").encode(data).length : "",
+        mediaSize: "",
         hash: data ? data.hashCode() : "".hashCode()
       };
-      commit("ADD_FILE", fileObj);
-      commit("ACTIVE_FILE", name);
+      if (mode && mode.includes("image/")) {
+        getImageDimensions(data).then(size => {
+          fileObj.mediaSize = `${size.w}x${size.h}`;
+          commit("ADD_FILE", fileObj);
+          commit("ACTIVE_FILE", name);
+        });
+      } else {
+        commit("ADD_FILE", fileObj);
+        commit("ACTIVE_FILE", name);
+      }
     },
     removeFile({ commit }, name) {
       commit("REMOVE_FILE", name);
@@ -129,6 +168,8 @@ export default {
   getters: {
     activeFile: state => state.activeFile.name,
     activeFileData: state => state.activeFile.data,
+    activeFileSize: state => state.activeFile.size,
+    activeFileMediaSize: state => state.activeFile.mediaSize,
     activeFileIndex: state =>
       state.files.findIndex(el => {
         return el.name == state.activeFile.name;
