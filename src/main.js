@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import store from "./store";
-Vue.config.productionTip = false;
+Vue.config.productionTip = true;
 
 new Vue({
   store,
@@ -13,12 +13,13 @@ window.addEventListener(
   function(e) {
     if (e.ctrlKey && e.code == "KeyS") {
       e.preventDefault();
+    } else if (e.ctrlKey && e.code == "KeyR") {
+      e.preventDefault();
+      store.dispatch("activeFileData", store.getters.fileData(), "saveFile");
+    } else if (e.ctrlKey && e.code == "KeyO") {
+      e.preventDefault();
+      document.querySelector("input[type='file']").click();
     }
-    // } else if (e.ctrlKey && e.code == "KeyP") {
-    //   e.preventDefault();
-    // } else if (e.ctrlKey && e.code == "KeyO") {
-    //   e.preventDefault();
-    // }
 
     if (e.metaKey && e.code == "Tab") {
       e.preventDefault();
@@ -29,6 +30,9 @@ window.addEventListener(
       const fileName = store.getters.fileByIndex(i);
       store.dispatch("switchFile", fileName);
       store.dispatch("showFilesDialog", true);
+      document
+        .querySelector(".opened")
+        .scrollTo(0, document.querySelector(".isActive").offsetTop);
     } else if (store.getters.filesDialog && e.code == "ArrowDown") {
       e.preventDefault();
       let i = store.getters.activeFileIndex;
@@ -37,6 +41,9 @@ window.addEventListener(
       else if (i == filesLength - 1) i = 0;
       const fileName = store.getters.fileByIndex(i);
       store.dispatch("switchFile", fileName);
+      document
+        .querySelector(".opened")
+        .scrollTo(0, document.querySelector(".isActive").offsetTop);
     } else if (store.getters.filesDialog && e.code == "ArrowUp") {
       e.preventDefault();
       let i = store.getters.activeFileIndex;
@@ -45,6 +52,9 @@ window.addEventListener(
       else if (i == 0) i = filesLength - 1;
       const fileName = store.getters.fileByIndex(i);
       store.dispatch("switchFile", fileName);
+      document
+        .querySelector(".opened")
+        .scrollTo(0, document.querySelector(".isActive").offsetTop);
     }
   },
   false

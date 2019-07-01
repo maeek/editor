@@ -8,7 +8,7 @@
         <i
           class="material-icons"
           title="Waiting for save"
-          v-if="!fileIsSaved() && fileIsSaved() != null"
+          v-if="displayNotSaved"
         >
           lens
         </i>
@@ -49,10 +49,18 @@ export default {
       "fileLastSaved",
       "activeFile"
     ]),
+    displayNotSaved() {
+      return (
+        !this.fileIsSaved() &&
+        this.fileIsSaved() != null &&
+        !this.fileMode.includes("image/")
+      );
+    },
     saveStatus: function() {
       if (this.fileIsSaved())
         return `All saved , last save - ${this.fileLastSaved()}`;
       else if (this.fileIsSaved() == null) return "No file";
+      else if (this.fileMode.includes("image/")) return "Save not possible";
       else return "Not saved , last save - " + this.fileLastSaved();
     }
   }

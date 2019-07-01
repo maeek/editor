@@ -133,18 +133,9 @@ body {
     border: 2px solid #0000;
 }
 
-::-moz-scrollbar {
-    display: block;
-    width: 10px;
-    height: 10px;
-    padding: 5px;
-    overflow: auto;
-    background-color: #1d1d1d;
-}
-
-::-moz-scrollbar-thumb {
-    background: #3D3D3D;
-    border: 2px solid #0000;
+::-webkit-scrollbar-corner,
+::-webkit-resizer {
+    background: #0e0e0e !important;
 }
 
 .CodeMirror {
@@ -158,6 +149,11 @@ body {
 
 .CodeMirror-activeline .CodeMirror-linenumber {
     color: #ababab;
+}
+
+.CodeMirror-scrollbar-filler,
+.CodeMirror-gutter-filler {
+    background: #0e0e0e;
 }
 
 .from-up-enter-active,
@@ -182,6 +178,17 @@ body {
     opacity: 0;
 }
 
+.scale-w-center-enter-active,
+.scale-w-center-leave-active {
+    transition: transform .2s, opacity .2s;
+}
+
+.scale-w-center-enter,
+.scale-w-center-leave-to {
+    transform: translateX(-50%) scale(1.7);
+    opacity: 0;
+}
+
 %pointer {
     cursor: pointer;
 }
@@ -192,7 +199,7 @@ input {
     outline: none;
 }
 
-input[type="file"] {
+input[name="openFile"] {
     display: none;
 }
 

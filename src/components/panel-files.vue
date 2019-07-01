@@ -20,13 +20,6 @@
         more_horiz
       </i>
     </div>
-    <div class="more" v-if="moreDialog">
-      <div class="moreBtn" @click="returnToPrevious">Load last save</div>
-      <div class="moreBtn" @click.stop="showFilesDialog(!filesDialog)">
-        Show Opened
-      </div>
-      <div class="moreBtn">Remove All</div>
-    </div>
     <file
       :class="activeFile == file.name ? 'file-active' : ''"
       v-for="(file, i) in files"
@@ -43,17 +36,20 @@
           : file.name
       }}
     </file>
+    <moreDialog />
   </div>
 </template>
 
 <script>
 import file from "@/components/buttons/file.vue";
+import moreDialog from "@/components/modals/more.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "barFiles",
   components: {
-    file
+    file,
+    moreDialog
   },
   computed: {
     ...mapGetters([

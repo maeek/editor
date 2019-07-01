@@ -33,7 +33,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { codemirror } from "vue-codemirror";
-import "@/editorLoader.js";
+import(/* webpackPrefetch: true, webpackChunkName: "codemirror-modules" */ "@/editorLoader.js");
 
 export default {
   name: "editor",
@@ -176,6 +176,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../../node_modules/codemirror/lib/codemirror.css";
 @import "../../node_modules/codemirror/theme/base16-dark.css";
 .editor {
   .vue-codemirror {
@@ -209,7 +210,7 @@ export default {
     }
     span {
       transition: color 0.2s;
-      color: $comment--description;
+      color: $compact--button-color;
     }
     i:hover {
       color: $panel-top--header;

@@ -13,6 +13,7 @@ export default {
     moreDialog: false,
     filesDialog: false,
     settingsModal: false,
+    helpModal: false,
     tabSize: 2,
     lineNumbers: true,
     keyMap: "sublime",
@@ -40,6 +41,9 @@ export default {
     },
     FILES_DIALOG(state, val) {
       state.filesDialog = !!val;
+    },
+    HELP_MODAL(state, val) {
+      state.helpModal = !!val;
     }
   },
   actions: {
@@ -60,6 +64,9 @@ export default {
     showFilesDialog({ commit }, val) {
       commit("FILES_DIALOG", val);
       commit("SHOW_MORE", false);
+    },
+    showHelpModal({ commit }, val) {
+      commit("HELP_MODAL", val);
     }
   },
   getters: {
@@ -68,6 +75,7 @@ export default {
     fontSizeArray: state => state.fontSizeArray,
     showSettings: state => state.settingsModal,
     moreDialog: state => state.moreDialog,
-    filesDialog: state => state.filesDialog
+    filesDialog: state => state.filesDialog,
+    helpModal: state => state.helpModal
   }
 };

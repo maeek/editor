@@ -1,6 +1,3 @@
-// Main css
-import "codemirror/lib/codemirror.css";
-
 //Languages
 import "codemirror/mode/javascript/javascript.js";
 import "codemirror/mode/htmlmixed/htmlmixed.js";
@@ -43,7 +40,7 @@ import "codemirror/addon/search/searchcursor.js";
 import "codemirror/addon/search/search.js";
 import "codemirror/addon/search/match-highlighter.js";
 
-// import "codemirror/keymap/vim.js";
+import "codemirror/keymap/vim.js";
 import "codemirror/keymap/sublime.js";
 
 // foldGutter

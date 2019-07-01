@@ -26,16 +26,8 @@ export default {
   components: {
     compact
   },
-  data() {
-    return {
-      filename: ""
-    };
-  },
   methods: {
-    ...mapActions(["toggleSettings", "addFile"])
-  },
-  mounted() {
-    this.$refs.input.focus();
+    ...mapActions(["toggleSettings"])
   }
 };
 </script>
@@ -52,7 +44,7 @@ export default {
   @extend %typo-roboto;
   .wrap {
     padding: 0.5rem;
-    background: $panel-files-bg;
+    background: rgba(41, 41, 41, 0.75);
     @include rectangle(100%, 100%);
     .close {
       position: absolute;

@@ -15,7 +15,7 @@
       <compact :title="'Open file'" name="Open file" @click.native="openFile">
         file_copy
       </compact>
-      <input type="file" @input="loadFile" multiple />
+      <input type="file" name="openFile" @input="loadFile" multiple />
       <compact :title="'Download file'" name="Download">
         save_alt
       </compact>
@@ -28,8 +28,12 @@
       >
         fullscreen
       </compact>
-      <compact :title="'Show help'" name="Help">
-        help
+      <compact
+        :title="'Show Keybinds'"
+        name="Keybinds"
+        @click.native="showHelpModal(true)"
+      >
+        keyboard
       </compact>
       <compact
         :title="'Open settings'"
@@ -65,9 +69,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["addFile", "newFileModal", "toggleSettings", "saveFile"]),
+    ...mapActions([
+      "addFile",
+      "newFileModal",
+      "toggleSettings",
+      "saveFile",
+      "showHelpModal"
+    ]),
     openFile() {
-      document.querySelector("input[type='file']").click();
+      document.querySelector("input[name='openFile']").click();
     },
     loadFile(ev) {
       const $this = this;
@@ -92,6 +102,10 @@ export default {
           fileR.readAsDataURL(file);
         }
       }
+      document.querySelector("input[name='openFile']").removeAttribute("type");
+      document
+        .querySelector("input[name='openFile']")
+        .setAttribute("type", "file");
     },
     toggleFullscreen() {
       let elem = document.querySelector("#app");

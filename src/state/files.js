@@ -79,6 +79,9 @@ export default {
     NOT_SAVED(state) {
       let obj = state.files.find(el => el.name == state.activeFile.name);
       obj.save.is = false;
+    },
+    FILES(state, files) {
+      state.files = files;
     }
   },
   actions: {
@@ -116,6 +119,11 @@ export default {
     },
     newFileModal({ commit }, value) {
       commit("NEW_FILE_MODAL", value);
+    },
+    removeAll({ commit }) {
+      commit("FILES", []);
+      commit("ACTIVE_FILE", null);
+      commit("ACTIVE_FILE_DATA", null);
     }
   },
   getters: {
