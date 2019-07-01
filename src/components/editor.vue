@@ -18,10 +18,10 @@
       class="addFile"
       v-else
       ref="dropArea"
-      @dragenter="dragEnt"
-      @dragleave="dragLv"
-      @dragend="dragEn"
-      @dragover="dragOvr"
+      @dragenter="dropActive"
+      @dragover="dropActive"
+      @dragleave="dropInactive"
+      @dragend="dropInactive"
       @drop="drop"
     >
       <i class="material-icons" ref="addFile" @click="openFile">note_add</i>
@@ -105,25 +105,13 @@ export default {
     openFile() {
       document.querySelector("input[type='file']").click();
     },
-    dragEnt(ev) {
+    dropActive(ev) {
       ev.preventDefault();
       this.$refs.addFile.style.color = "#24B474";
       this.$refs.dropArea.style.background = "#232323";
       this.$refs.addFile.innerText = "file_copy";
     },
-    dragLv(ev) {
-      ev.preventDefault();
-      this.$refs.addFile.removeAttribute("style");
-      this.$refs.dropArea.removeAttribute("style");
-      this.$refs.addFile.innerText = "note_add";
-    },
-    dragOvr(ev) {
-      ev.preventDefault();
-      this.$refs.addFile.innerText = "file_copy";
-      this.$refs.addFile.style.color = "#24B474";
-      this.$refs.dropArea.style.background = "#232323";
-    },
-    dragEn(ev) {
+    dropInactive(ev) {
       ev.preventDefault();
       this.$refs.addFile.removeAttribute("style");
       this.$refs.dropArea.removeAttribute("style");

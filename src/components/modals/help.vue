@@ -169,11 +169,13 @@ export default {
     background: rgba(41, 41, 41, 0.75);
     padding: 0.5rem;
     overflow-y: auto;
+    position: relative;
     @include rectangle(100%, 100%);
     .close {
       position: absolute;
       top: 0.5rem;
-      right: 0.5rem;
+      right: 4.55rem;
+      width: 4.65rem;
     }
     .data {
       margin: 1rem 0 0 0;
@@ -212,6 +214,17 @@ export default {
 @media screen and (max-width: 768px) {
   .modal {
     .wrap {
+      .close {
+        right: 1.85rem;
+        width: auto;
+        i {
+          margin: 0;
+        }
+        span {
+          display: none;
+          width: 1rem !important;
+        }
+      }
       .data {
         .region {
           margin: 1rem 0;

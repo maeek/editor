@@ -45,9 +45,11 @@ export default {
   .wrap {
     padding: 0.5rem;
     background: rgba(41, 41, 41, 0.75);
+    position: relative;
     @include rectangle(100%, 100%);
     .close {
       position: absolute;
+      width: 4.3rem;
       top: 0.5rem;
       right: 0.5rem;
     }
@@ -74,6 +76,23 @@ export default {
       background: $compact--button-bg;
       @include rectangle("100%", "auto");
       @extend %typo-normal;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .modal {
+    .wrap {
+      .close {
+        right: 0.5rem;
+        width: auto;
+        i {
+          margin: 0;
+        }
+        span {
+          display: none;
+          width: 1rem !important;
+        }
+      }
     }
   }
 }

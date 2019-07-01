@@ -10,6 +10,8 @@ const modes = CodeMirror.modeInfo.filter(el => {
 
 export default {
   state: {
+    version: "0.5.0",
+    offline: false,
     moreDialog: false,
     filesDialog: false,
     settingsModal: false,
@@ -44,6 +46,9 @@ export default {
     },
     HELP_MODAL(state, val) {
       state.helpModal = !!val;
+    },
+    OFFLINE(state, val) {
+      state.offline = val;
     }
   },
   actions: {
@@ -67,6 +72,9 @@ export default {
     },
     showHelpModal({ commit }, val) {
       commit("HELP_MODAL", val);
+    },
+    changeOffline({ commit }, val) {
+      commit("OFFLINE", val);
     }
   },
   getters: {
@@ -76,6 +84,8 @@ export default {
     showSettings: state => state.settingsModal,
     moreDialog: state => state.moreDialog,
     filesDialog: state => state.filesDialog,
-    helpModal: state => state.helpModal
+    helpModal: state => state.helpModal,
+    offline: state => state.offline,
+    version: state => state.version
   }
 };

@@ -2,7 +2,10 @@
   <div class="bar bar--bottom">
     <div>
       <bottomButton>
-        <i class="material-icons">signal_wifi_4_bar</i> Connected
+        <i class="material-icons">
+          {{ offline ? "signal_wifi_off" : "signal_wifi_4_bar" }}
+        </i>
+        Connected
       </bottomButton>
       <bottomButton>
         <i
@@ -26,14 +29,14 @@
         >Ln: {{ fileMode.includes("image/") ? 0 : fileLines }}</bottomButton
       >
       <bottomButton :class="'interactive'">
-        <a href="https://github.com/maeek/">Github</a>
+        <a href="https://github.com/maeek/editor">{{ version }}</a>
       </bottomButton>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import bottomButton from "@/components/buttons/bottom-panel-element.vue";
 
 export default {
@@ -47,7 +50,9 @@ export default {
       "fileLines",
       "fileIsSaved",
       "fileLastSaved",
-      "activeFile"
+      "activeFile",
+      "offline",
+      "version"
     ]),
     displayNotSaved() {
       return (
@@ -63,6 +68,21 @@ export default {
       else if (this.fileMode.includes("image/")) return "Save not possible";
       else return "Not saved , last save - " + this.fileLastSaved();
     }
+  },
+  methods: mapActions(["changeOffline"]),
+  mounted() {
+    const $this = this;
+    window.addEventListener("offline", function(e) {
+      console.log("You're offline", e);
+      if (e.type == "offline") $this.changeOffline("offline", true);
+      else if (e.type == "online") $this.changeOffline("offline", false);
+    });
+
+    window.addEventListener("online", function(e) {
+      console.log("You're online", e);
+      if (e.type == "offline") $this.changeOffline("offline", true);
+      else if (e.type == "online") $this.changeOffline("offline", false);
+    });
   }
 };
 </script>

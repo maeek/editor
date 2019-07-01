@@ -1,6 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import store from "./store";
+import "./service-worker";
 Vue.config.productionTip = true;
 
 new Vue({
@@ -33,7 +34,9 @@ window.addEventListener(
       document
         .querySelector(".opened")
         .scrollTo(0, document.querySelector(".isActive").offsetTop);
-    } else if (store.getters.filesDialog && e.code == "ArrowDown") {
+    }
+
+    if (store.getters.filesDialog && e.code == "ArrowDown") {
       e.preventDefault();
       let i = store.getters.activeFileIndex;
       const filesLength = store.getters.files.length;
@@ -44,7 +47,9 @@ window.addEventListener(
       document
         .querySelector(".opened")
         .scrollTo(0, document.querySelector(".isActive").offsetTop);
-    } else if (store.getters.filesDialog && e.code == "ArrowUp") {
+    }
+
+    if (store.getters.filesDialog && e.code == "ArrowUp") {
       e.preventDefault();
       let i = store.getters.activeFileIndex;
       const filesLength = store.getters.files.length;
@@ -69,6 +74,22 @@ window.addEventListener(
   },
   false
 );
+
+// window.addEventListener(
+//   "offline",
+//   function(e) {
+//     console.log(e);
+//     store.dispatch("offline", true);
+//   },
+//   false
+// );
+// window.addEventListener(
+//   "online",
+//   function() {
+//     store.dispatch("offline", false);
+//   },
+//   false
+// );
 
 String.prototype.hashCode = function() {
   var hash = 0;
