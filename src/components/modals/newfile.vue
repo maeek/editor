@@ -90,7 +90,7 @@ export default {
       margin: 0 0 0.7rem 0;
       font-weight: 400;
       color: $panel-top--header;
-      @extend %typo-big;
+      @extend %typo-header;
       @extend %noselect;
       @extend %flex-start-center;
       i {

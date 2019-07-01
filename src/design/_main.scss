@@ -207,3 +207,17 @@ input[name="openFile"] {
     width: #{$w};
     height: #{$h};
 }
+
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.4);
+    @extend %flex-center;
+    @extend %typo-roboto;
+    @include rectangle(100%, 100%);
+    .wrap {
+        &.modal-wrap--full {}
+    }
+}

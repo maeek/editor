@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import siteHeader from "@/components/panel-top/header.vue";
+import siteHeader from "@/components/panel-top/siteHeader.vue";
 import compact from "@/components/buttons/button-compact.vue";
 import { mapActions } from "vuex";
 
