@@ -4,6 +4,7 @@ $material-icons-font-path: '~material-icons/iconfont/';
 .material-icons {
     @include material-icons();
     font-size: inherit;
+    font-display: swap;
 }
 
 html {
@@ -139,7 +140,7 @@ body {
 }
 
 .CodeMirror {
-    height: 100%;
+    height: 100% !important;
     transform: translate3d(0, 0, 0);
 }
 
@@ -178,6 +179,18 @@ body {
     opacity: 0;
 }
 
+.width-to-left-enter-active,
+.width-to-left-leave-active {
+    transition: transform 0.2s 0.15s, opacity .1s 0.15s;
+    transform-origin: bottom right;
+}
+
+.width-to-left-enter,
+.width-to-left-leave-to {
+    transform: scale(0.3) translateY(5rem);
+    opacity: 0;
+}
+
 .scale-w-center-enter-active,
 .scale-w-center-leave-active {
     transition: transform .2s, opacity .2s;
@@ -208,6 +221,10 @@ input[name="openFile"] {
     height: #{$h};
 }
 
+.editor {
+    background-color: #1D1D1D;
+}
+
 .modal {
     position: fixed;
     left: 0;
@@ -223,7 +240,7 @@ input[name="openFile"] {
         overflow-y: auto;
         position: relative;
         &.modal-wrap--full {
-            @include rectangle(100%, 100%);        
+            @include rectangle(100%, 100%);
         }
         h3 {
             margin: 0 0 0.7rem 0;
@@ -243,33 +260,34 @@ input[name="openFile"] {
             flex-wrap: wrap;
             @extend %flex-center-start;
             .region {
-              margin: 1rem 3rem;
-              flex-direction: column;
-              flex: 1 0 auto;
-              @extend %flex-start;
-              display: inline-flex;
-              .options {
-                @extend %flex-start;
-                margin: 1rem 0 0 0;
-                padding: 0 0.5rem;
-                width: 450px;
-                max-width: 100%;
-                max-height: 600px;
+                margin: 1rem 3rem;
                 flex-direction: column;
-                flex-wrap: wrap;
-              }
-              .binds {
+                flex: 1 0 auto;
                 @extend %flex-start;
-                flex-direction: column;
-                flex-wrap: wrap;
-              }
-              h5 {
-                color: $comment--header;
-              }
+                display: inline-flex;
+                .options {
+                    @extend %flex-start;
+                    margin: 1rem 0 0 0;
+                    padding: 0 0.5rem;
+                    width: 450px;
+                    max-width: 100%;
+                    max-height: 600px;
+                    flex-direction: column;
+                    flex-wrap: wrap;
+                }
+                .binds {
+                    @extend %flex-start;
+                    flex-direction: column;
+                    flex-wrap: wrap;
+                }
+                h5 {
+                    color: $comment--header;
+                }
             }
-          }
+        }
     }
 }
+
 @media screen and (max-width: 768px) {
     .modal {
         .wrap {

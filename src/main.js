@@ -1,10 +1,14 @@
 import Vue from "vue";
 import App from "./App.vue";
 import store from "./store";
-import "./service-worker";
+import router from "./router";
+// import "./service-worker";
+import "oauthio-web";
+
 Vue.config.productionTip = true;
 
 new Vue({
+  router,
   store,
   render: h => h(App)
 }).$mount("#app");
@@ -16,7 +20,8 @@ window.addEventListener(
       e.preventDefault();
     } else if (e.ctrlKey && e.code == "KeyR") {
       e.preventDefault();
-      store.dispatch("activeFileData", store.getters.fileData(), "saveFile");
+      store.dispatch("activeFileData", store.getters.fileData());
+      store.dispatch("saveFile");
     } else if (e.ctrlKey && e.code == "KeyO") {
       e.preventDefault();
       document.querySelector("input[type='file']").click();
@@ -74,22 +79,6 @@ window.addEventListener(
   },
   false
 );
-
-// window.addEventListener(
-//   "offline",
-//   function(e) {
-//     console.log(e);
-//     store.dispatch("offline", true);
-//   },
-//   false
-// );
-// window.addEventListener(
-//   "online",
-//   function() {
-//     store.dispatch("offline", false);
-//   },
-//   false
-// );
 
 String.prototype.hashCode = function() {
   var hash = 0;

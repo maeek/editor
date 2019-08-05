@@ -1,20 +1,42 @@
 <template>
-  <div class="file" :title="name">
-    <span class="name">
+  <div
+    class="file"
+    :class="{ obj, 'file-name': name }"
+    :title="obj || name"
+    v-if="fileByName(name) || fileById(obj)"
+  >
+    <span
+      :class="{
+        name: true,
+        'name-side': obj,
+        'name-name': !obj
+      }"
+    >
       <slot></slot>
     </span>
-    <i class="material-icons close" @click.stop="removeFile(name)">delete</i>
+    <i class="material-icons close" @click.stop="remove">{{
+      name ? "delete" : "close"
+    }}</i>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "file",
   props: {
-    name: String
+    name: String,
+    obj: String,
+    id: String
   },
-  methods: mapActions(["removeFile"])
+  computed: mapGetters(["fileByName", "fileById"]),
+  methods: {
+    ...mapActions(["removeFile", "closeById"]),
+    remove() {
+      (this.name && this.removeFile({ name: this.name, id: this.id })) ||
+        (this.obj && this.closeById(this.obj));
+    }
+  }
 };
 </script>
 
@@ -31,19 +53,30 @@ export default {
   border: 1px solid #4a4a4a;
   @extend %pointer;
   @extend %flex-btw-center;
+  &.obj {
+    white-space: wrap !important;
+  }
+  &-name {
+    white-space: nowrap;
+  }
   .name {
     word-break: keep-all;
-    white-space: nowrap;
     width: auto;
     z-index: 2;
     font-weight: 400;
     color: $file-name-color;
+    &-side {
+      word-break: break-all;
+      white-space: wrap;
+    }
     @extend %typo-roboto;
     @extend %typo-small;
     @extend %noselect;
   }
+
   .close {
     border-radius: 50%;
+    flex: 0 0 1rem;
     margin: 0 0 0 0.4rem;
     opacity: 0;
     z-index: 2;

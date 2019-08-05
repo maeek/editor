@@ -2,9 +2,9 @@
   <div class="more" v-if="moreDialog">
     <div class="moreBtn" @click="returnToPrevious">Load last save</div>
     <div class="moreBtn" @click.stop="showFilesDialog(!filesDialog)">
-      Show Opened
+      Show opened
     </div>
-    <div class="moreBtn" @click="removeAll">Remove All</div>
+    <div class="moreBtn" @click="removeAll">Close all</div>
   </div>
 </template>
 

@@ -40,9 +40,6 @@ import "codemirror/addon/search/searchcursor.js";
 import "codemirror/addon/search/search.js";
 import "codemirror/addon/search/match-highlighter.js";
 
-import "codemirror/keymap/vim.js";
-import "codemirror/keymap/sublime.js";
-
 // foldGutter
 import "codemirror/addon/fold/foldgutter.js";
 import "codemirror/addon/fold/foldgutter.css";
@@ -52,3 +49,10 @@ import "codemirror/addon/fold/foldcode.js";
 import "codemirror/addon/fold/indent-fold.js";
 import "codemirror/addon/fold/markdown-fold.js";
 import "codemirror/addon/fold/xml-fold.js";
+
+// hint
+
+import "codemirror/addon/hint/show-hint.js";
+import "codemirror/addon/hint/show-hint.css";
+import "codemirror/addon/hint/javascript-hint.js";
+import "codemirror/addon/selection/active-line.js";

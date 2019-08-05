@@ -7,18 +7,12 @@
 }
 
 @mixin google-font($family, $weight) {
-    @import url("https://fonts.googleapis.com/css?family=#{$family}:#{$weight}");
+    @import url("https://fonts.googleapis.com/css?family=#{$family}:#{$weight}&display=swap");
 }
 
 // // Roboto
 @include google-font("Roboto",
 "100,200,400,900");
-// KoHo
-// @include google-font("KoHo",
-// "100,200,400,900");
-// Material-Icons
-@include google-font("Material+Icons",
-"400");
 %typo-roboto {
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
 }

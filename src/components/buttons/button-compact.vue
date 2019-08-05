@@ -1,9 +1,9 @@
 <template>
   <button>
-    <i class="material-icons">
+    <i :class="{ hidden: hide }" class="material-icons">
       <slot></slot>
     </i>
-    <span>{{ name }}</span>
+    <span :class="{ hide }">{{ name }}</span>
   </button>
 </template>
 
@@ -11,7 +11,14 @@
 export default {
   name: "buttonCompact",
   props: {
-    name: String
+    name: {
+      default: "",
+      type: String
+    },
+    hide: {
+      default: true,
+      type: Boolean
+    }
   }
 };
 </script>
@@ -37,11 +44,18 @@ button {
     @extend %typo-tiny;
     @extend %flex-center;
   }
-  @media screen and (max-width: 768px) {
+  &.active {
+    color: $compact--button--color-hover;
+    background: $compact--button--bg-hover;
     i {
+      color: $compact--button-bg;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .hidden {
       margin: 0;
     }
-    span {
+    .hide {
       display: none;
     }
   }

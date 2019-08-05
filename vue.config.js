@@ -6,5 +6,8 @@ module.exports = {
         data: `@import "@/design/index.scss";`
       }
     }
+  },
+  devServer: {
+    disableHostCheck: true
   }
 };

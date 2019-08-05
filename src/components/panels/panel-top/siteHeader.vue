@@ -1,5 +1,5 @@
 <template>
-  <h1>
+  <h1 @click="$router.push('/')">
     <slot></slot>
   </h1>
 </template>

@@ -1,7 +1,10 @@
 <template>
   <div class="modals">
     <transition name="scale" mode="out-in">
-      <newFile v-if="newFileModal" />
+      <new-file v-if="newFileModal" />
+    </transition>
+    <transition name="scale" mode="out-in">
+      <remove-file v-if="removeFileModal" />
     </transition>
     <transition name="scale" mode="out-in">
       <help v-if="helpModal" />
@@ -17,23 +20,27 @@
 
 <script>
 import newFile from "@/components/modals/newfile.vue";
+import removeFile from "@/components/modals/removeFile.vue";
 import settings from "@/components/modals/settings.vue";
 import help from "@/components/modals/help.vue";
 import opened from "@/components/modals/openedDialog.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  name: "app",
-  page: {
-    title: "Note"
-  },
+  name: "Modals",
   components: {
     newFile,
     settings,
     help,
-    opened
+    opened,
+    removeFile
   },
-  computed: mapGetters(["newFileModal", "showSettings", "helpModal"]),
+  computed: mapGetters([
+    "removeFileModal",
+    "newFileModal",
+    "showSettings",
+    "helpModal"
+  ]),
   methods: mapActions(["showFilesDialog"]),
   mounted() {
     const $this = this;

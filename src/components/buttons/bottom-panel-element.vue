@@ -22,6 +22,7 @@ div {
   @extend %typo-roboto;
   @extend %noselect;
   a {
+    @extend %flex-center;
     color: inherit;
     text-decoration: none;
   }

@@ -26,7 +26,8 @@
       :key="file.name"
       :index="i"
       :name="file.name"
-      @click.native="openFile($event, file.name)"
+      @click.native="openFile($event, file)"
+      :id="file.gistId"
     >
       {{
         activeFile == file.name
@@ -69,12 +70,24 @@ export default {
       "activeFileData",
       "saveFile",
       "showMore",
-      "showFilesDialog"
+      "showFilesDialog",
+      "newFileModal"
     ]),
-    openFile(ev, name) {
-      if (this.fileIsSaved || this.fileMode().includes("image/"))
-        this.switchFile(name);
-      else alert("yee");
+    openFile(ev, file) {
+      if (
+        this.fileIsSaved ||
+        (this.activeFile && this.fileMode().includes("image/"))
+      ) {
+        this.switchFile(file.name);
+        this.$router.push({
+          path: `/edit/${file.gistId}`,
+          query: {
+            target: file.name
+          }
+        });
+      }
+      // else alert("yee");
+      // file
     },
     dragEnt(ev) {
       ev.preventDefault();
@@ -92,31 +105,63 @@ export default {
       ev.preventDefault();
       this.$refs.panelFiles.removeAttribute("style");
     },
+    readFileAsync(file) {
+      return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+        reader.onerror = reject;
+        reader.readAsText(file, "utf-8");
+      });
+    },
+    async file(files) {
+      const $this = this;
+      const prepFiles = {
+        files: {},
+        uploaded_at: "",
+        owner: {
+          login: $this.alias
+        },
+        id: $this.$route.params.id || "",
+        description: ""
+      };
+      if (!$this.$route.params.id && $this.authorized) {
+        $this.newFileModal(true);
+      } else {
+        await Object.keys(files).forEach(async (file, i) => {
+          let loadedFile = await $this.readFileAsync(files[file]);
+          const text = loadedFile;
+          prepFiles.files[files[file].name] = {
+            filename: files[file].name,
+            content: text,
+            type: files[file].type,
+            size: files[file].size
+          };
+          prepFiles.uploaded_at = new Date(files[file].lastModified)
+            .toJSON()
+            .substring(0, 19)
+            .replace("T", " ");
+          await $this.addFile(prepFiles);
+          $this.$store.commit("SAVE");
+          if (i == files.length - 1) {
+            $this.$router.push({
+              path: `/edit/${$this.$route.params.id || ""}`,
+              query: {
+                target: files[file].name
+              }
+            });
+            await $this.switchFile(files[file].name);
+            $this.authorized && $this.saveFile();
+          }
+        });
+      }
+    },
     drop(ev) {
       ev.preventDefault();
-      const $this = this;
       this.$refs.panelFiles.removeAttribute("style");
       const files = ev.dataTransfer.files;
-      for (let file of files) {
-        const fileR = new FileReader();
-        fileR.onloadend = function(e) {
-          const text = e.target.result;
-          $this.addFile({
-            name: file.name,
-            data: text,
-            mode: file.type,
-            last: new Date(file.lastModified)
-              .toJSON()
-              .substring(0, 19)
-              .replace("T", " ")
-          });
-        };
-        if (!file.type.includes("image/")) {
-          fileR.readAsText(file, "utf-8");
-        } else {
-          fileR.readAsDataURL(file);
-        }
-      }
+      this.file(files);
     },
     scrollLeft() {
       this.$refs.panelFiles.scrollBy({
@@ -179,6 +224,7 @@ export default {
     width: 5rem;
     height: calc(2rem + 2px);
     background: #1d1d1d;
+    z-index: 5;
     @extend %flex-center;
     @extend %noselect;
     i {
@@ -190,6 +236,11 @@ export default {
     i:hover {
       color: #fefefe;
     }
+  }
+}
+.file {
+  .name {
+    white-space: nowrap;
   }
 }
 .more {
