@@ -26,7 +26,7 @@
     </panel-top>
     <div class="wrapper">
       <panel-left v-if="authorized && files.length > 0"></panel-left>
-      <div class="wrapper wrapper-column">
+      <div class="wrapper wrapper-column" ref="wrapper">
         <user-panel v-if="user || (authorized && !shwPublic)" :user="user" />
         <div class="switch" v-if="authorized">
           <compact
@@ -103,6 +103,15 @@ export default {
   },
   methods: {
     ...mapActions(["toggleSettings", "logout"])
+  },
+  mounted() {
+    const $this = this;
+    $this.$refs.wrapper.addEventListener("scroll", function() {
+      console.log($this.$refs.wrapper.scrollTop ,$this.$refs.wrapper.clientHeight);
+      if($this.$refs.wrapper.scrollHeight - $this.$refs.wrapper.scrollTop <= $this.$refs.wrapper.clientHeight + 50){
+        console.log("YEEEE");
+      }
+    });
   }
 };
 </script>
@@ -115,7 +124,9 @@ export default {
   .wrapper {
     @extend %flex-start;
     @include rectangle(100%, 100%);
+    overflow: auto;
     &-column {
+      padding-top: 2rem;
       flex-direction: column;
     }
     .panelLeft {
@@ -139,6 +150,10 @@ export default {
     }
     .switch {
       width: 100%;
+      position: fixed;
+      top: 2.5rem;
+      left:0;
+      z-index: 7;
       background: $option--bg;
       padding: 0.3rem;
       @extend %flex-start;
@@ -180,6 +195,10 @@ export default {
 @media screen and (max-width: 768px) {
   .page-editor {
     .wrapper {
+      padding-top: 2.2rem;
+      &-column {
+        padding-top: 0;
+      }
       flex-direction: column;
     }
   }

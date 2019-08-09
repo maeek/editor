@@ -100,12 +100,12 @@ export default {
   color: #ababab;
   img {
     margin-left: 0.6rem;
-    width: 45px;
+    width: 64px;
   }
   h5 {
     color: $lines-focused;
     margin: 0 1rem;
-    @extend %typo-header;
+    @extend %typo-big;
     span {
       margin: 0 0.3rem 0 0;
     }
