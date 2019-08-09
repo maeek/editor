@@ -105,13 +105,13 @@ export default {
     ...mapActions(["toggleSettings", "logout"])
   },
   mounted() {
-    const $this = this;
-    $this.$refs.wrapper.addEventListener("scroll", function() {
-      console.log($this.$refs.wrapper.scrollTop ,$this.$refs.wrapper.clientHeight);
-      if($this.$refs.wrapper.scrollHeight - $this.$refs.wrapper.scrollTop <= $this.$refs.wrapper.clientHeight + 50){
-        console.log("YEEEE");
-      }
-    });
+    // const $this = this;
+    // $this.$refs.wrapper.addEventListener("scroll", function() {
+    //   console.log($this.$refs.wrapper.scrollTop ,$this.$refs.wrapper.clientHeight);
+    //   if($this.$refs.wrapper.scrollHeight - $this.$refs.wrapper.scrollTop <= $this.$refs.wrapper.clientHeight + 50){
+    //     console.log("YEEEE");
+    //   }
+    // });
   }
 };
 </script>
@@ -152,7 +152,7 @@ export default {
       width: 100%;
       position: fixed;
       top: 2.5rem;
-      left:0;
+      left: 0;
       z-index: 7;
       background: $option--bg;
       padding: 0.3rem;

@@ -1,6 +1,6 @@
 <template>
   <main class="editor" :key="gistDir" ref="main">
-    <ul class="editorFields" v-if="!queryFailed && !queryActive" ref="gists">
+    <ul class="editorFields" v-if="!queryFailed && !queryActive">
       <gist
         v-for="gist in gists"
         :key="gist.id"
@@ -11,12 +11,12 @@
         @reload="refresh"
       ></gist>
     </ul>
-    <!-- <page-changer
+    <page-changer
       @prev="Older"
       @next="Newer"
       :shwPublic="shwPublic"
       :pages="pages"
-    ></page-changer> -->
+    ></page-changer>
     <no-gists v-if="gistsLength < 1 && !queryActive && !queryFailed"></no-gists>
     <failed-request></failed-request>
     <load-placeholder :count="10"></load-placeholder>
