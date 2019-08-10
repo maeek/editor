@@ -18,7 +18,7 @@ export default {
     key() {
       return `${this.user}+${this.authorized ? "ac" : "nac"} ${
         this.id ? this.id : "nid"
-      }`;
+      } ${this.$route.query.target || "notarget"}`;
     }
   },
   props: ["user", "focus", "id"],

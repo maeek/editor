@@ -31,7 +31,9 @@ export default {
       state.publicGists = arr;
     },
     ADD_FILE(state, data) {
-      if (!state.files.find(el => el.name == data.name)) state.files.push(data);
+      if (!state.files.find(el => el.name == data.name)) {
+        state.files.push(data);
+      }
     },
     REMOVE_FILE(state, name) {
       let index = -1;
@@ -213,7 +215,7 @@ export default {
           });
         });
     },
-    async addFile({ commit }, newFile) {
+    addFile({ commit, getters }, newFile) {
       Object.keys(newFile.files).forEach(async gist => {
         let fileObj = {
           name: newFile.files[gist].filename,
@@ -233,7 +235,20 @@ export default {
           description: newFile.description,
           gistFirst: newFile.files[Object.keys(newFile.files)[0]].filename
         };
-        commit("ADD_FILE", fileObj);
+        if (fileObj.data.length === 0) {
+          let headers = getters.authorized
+            ? {
+                Authorization: `${getters.tokenType} ${getters.token}`
+              }
+            : {};
+          fileObj.data = await (await fetch(newFile.files[gist].raw_url, {
+            headers: headers
+          })).text();
+        }
+        console.log(fileObj);
+        return new Promise(res => {
+          res(commit("ADD_FILE", fileObj));
+        });
       });
     },
     async removeFile({ getters, dispatch, commit }, obj) {
@@ -352,6 +367,7 @@ export default {
     activeFile: state => state.activeFile.name,
     activeFileData: state => state.activeFile.data,
     activeFileSize: state => state.activeFile.size,
+    activeFileGistId: state => state.activeFile.gist_id,
     activeFileMediaSize: state => state.activeFile.mediaSize,
     activeFileIndex: state => {
       return state.files.findIndex(el => {
@@ -359,10 +375,12 @@ export default {
       });
     },
     files: state => state.files,
-    fileByIndex: state => index => {
+    fileNameByIndex: state => index => {
       return state.files[index].name || null;
     },
-
+    fileByIndex: state => index => {
+      return state.files[index] || null;
+    },
     fileByName: (state, getters) => name => {
       return getters.files.find(el => el.name === name) || {};
     },

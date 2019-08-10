@@ -17,7 +17,16 @@
         <div class="region">
           <h5>General</h5>
           <div class="binds">
-            <helpElement :keys="'Meta-Tab'">Switch tabs</helpElement>
+            <helpElement :keys="'HOLD Ctrl AND `'">Next file</helpElement>
+            <helpElement :keys="'HOLD Ctrl-Shfit AND `'"
+              >Previous file</helpElement
+            >
+            <helpElement :keys="'Ctrl-Up'"
+              >Previous tabs (while switch tabs dialog open)</helpElement
+            >
+            <helpElement :keys="'Ctrl-Down'"
+              >Next tabs (while switch tabs dialog open)</helpElement
+            >
             <helpElement :keys="'Ctrl-S'">Save file</helpElement>
             <helpElement :keys="'Ctrl-R'">Load last save</helpElement>
             <helpElement :keys="'Ctrl-O'">Open file</helpElement>

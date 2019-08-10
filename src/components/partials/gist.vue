@@ -105,7 +105,7 @@ export default {
       }
     },
     gistToFile(gist) {
-      this.$router.push({ path: `/edit/${gist.id}` });
+      this.$router.push({ path: `/edit/${gist.id}?target=${this.filename}` });
     },
     async setStarClick(id) {
       this.setStar(id)

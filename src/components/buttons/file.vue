@@ -52,7 +52,6 @@ export default {
   position: relative;
   width: auto;
   padding: 0 0.3rem 0 0.8rem;
-  transition: background 0.15s;
   border: 1px solid #4a4a4a;
   @extend %pointer;
   @extend %flex-btw-center;

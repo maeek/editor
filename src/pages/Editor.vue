@@ -91,6 +91,7 @@ import editor from "@/components/partials/editor.vue";
 import panelBottom from "@/components/panels/panel-bottom.vue";
 import compact from "@/components/buttons/button-compact.vue";
 import { mapActions, mapGetters } from "vuex";
+import { Promise } from "q";
 export default {
   name: "app",
   data() {
@@ -112,8 +113,8 @@ export default {
       "activeFile",
       "authorized",
       "token",
-      "alias",
       "tokenType",
+      "alias",
       "fileById",
       "files"
     ]),
@@ -134,7 +135,8 @@ export default {
       "showHelpModal",
       "removeFile",
       "switchFile",
-      "setLoading"
+      "setLoading",
+      "setHeaders"
     ]),
     openFile() {
       document.querySelector("input[name='openFile']").click();
@@ -213,26 +215,26 @@ export default {
         headers: headers,
         cache: "no-cache"
       });
-    }
-  },
-  created() {
-    const $this = this;
-    $this.isFullscreen = false;
-    document.onfullscreenchange = function() {
-      $this.isFullscreen = document.fullscreenElement;
-    };
-    if (this.$route.params.id) {
-      this.fetchGist(`https://api.github.com/gists/${this.$route.params.id}`)
+    },
+    load(link) {
+      const $this = this;
+      let token = this.authorized ? `${this.tokenType} ${this.token}` : "";
+      let headers = $this.authorized
+        ? {
+            Authorization: token
+          }
+        : {};
+      this.fetchGist(`https://api.github.com/gists/${link}`, headers)
         .then(res => res.json())
         .then(res => {
-          $this.setLoading(false);
           if (!res.message) {
-            $this.addFile(res);
-            $this.$store.commit(
-              "ACTIVE_FILE",
-              $this.$route.query.target || Object.keys(res.files)[0]
-            );
+            $this.addFile(res).then(() => {
+              $this.switchFile(
+                $this.$route.query.target || Object.keys(res.files)[0]
+              );
+            });
           }
+          $this.setLoading(false);
         })
         .catch(e => {
           $this.setLoading(false);
@@ -240,29 +242,26 @@ export default {
             code: e.code || 424,
             text:
               e.text ||
+              e ||
               "The method could not be performed on the resource because the requested action depended on another action and that action failed."
           };
         });
     }
   },
+  beforeMount() {
+    const $this = this;
+    $this.isFullscreen = false;
+    document.onfullscreenchange = function() {
+      $this.isFullscreen = document.fullscreenElement;
+    };
+    if (this.$route.params.id) {
+      this.load(this.$route.params.id);
+      if (this.$route.query.target) this.switchFile(this.$route.query.target);
+    }
+  },
   beforeRouteUpdate(to, from, next) {
-    if (to.params.id) {
-      this.fetchGist(`https://api.github.com/gists/${to.params.id}`)
-        .then(res => res.json())
-        .then(res => {
-          if (!res.message) {
-            this.addFile(res);
-            this.setLoading(false);
-            this.$store.commit(
-              "ACTIVE_FILE",
-              to.query.target || Object.keys(res.files)[0]
-            );
-          }
-        })
-        .catch(e => {
-          console.log(e);
-          this.fetchError = e;
-        });
+    if (to.params.id && from.params.id && to.params.id != from.params.id) {
+      this.load(to.params.id);
     }
     next();
   }

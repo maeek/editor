@@ -27,15 +27,27 @@ window.addEventListener(
       document.querySelector("input[type='file']").click();
     }
 
-    if (e.metaKey && e.code == "Tab") {
+    if (e.ctrlKey && e.code == "Backquote") {
       e.preventDefault();
+      store.dispatch("showFilesDialog", true);
       let i = store.getters.activeFileIndex;
       const filesLength = store.getters.files.length;
-      if (i < filesLength - 1) i++;
-      else if (i == filesLength - 1) i = 0;
+      if (e.shiftKey) {
+        if (i > 0) i--;
+        else if (i == 0) i = filesLength - 1;
+      } else {
+        if (i < filesLength - 1) i++;
+        else if (i == filesLength - 1) i = 0;
+      }
       const fileName = store.getters.fileByIndex(i);
-      store.dispatch("switchFile", fileName);
-      store.dispatch("showFilesDialog", true);
+      console.log(fileName);
+      store.dispatch("switchFile", fileName.name);
+      router.push({
+        path: `/edit/${fileName.gistId}`,
+        query: {
+          target: fileName.name
+        }
+      });
       document
         .querySelector(".opened")
         .scrollTo(0, document.querySelector(".isActive").offsetTop);
@@ -51,7 +63,7 @@ window.addEventListener(
       store.dispatch("switchFile", fileName);
       document
         .querySelector(".opened")
-        .scrollTo(0, document.querySelector(".isActive").offsetTop);
+        .scrollTo(0, document.querySelector(".isActive").offsetTop || 0);
     }
 
     if (store.getters.filesDialog && e.code == "ArrowUp") {
@@ -73,7 +85,7 @@ window.addEventListener(
 window.addEventListener(
   "keyup",
   function(e) {
-    if (e.code == "MetaLeft") {
+    if (e.code == "ControlLeft") {
       store.dispatch("showFilesDialog", false);
     }
   },

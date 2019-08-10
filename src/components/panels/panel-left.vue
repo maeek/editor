@@ -50,6 +50,9 @@ export default {
         path: `/edit/${file}`,
         props: {
           focus: this.fileById(file).gistFirst
+        },
+        query: {
+          target: this.fileById(file).gistFirst
         }
       });
     }
