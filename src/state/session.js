@@ -14,7 +14,7 @@ export default {
     userPublicGists: 0,
     html_link: null,
     id: null,
-    api_key: "",
+    api_key: "hPn-WdgLRHSm9iL48z8wU7wjnG0",
     tokenType: "Bearer"
   },
   mutations: {
