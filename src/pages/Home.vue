@@ -27,7 +27,10 @@
       </compact>
     </panel-top>
     <div class="wrapper">
-      <panel-left v-if="authorized && files.length > 0" ref="panelLeft"></panel-left>
+      <panel-left
+        v-if="authorized && files.length > 0"
+        ref="panelLeft"
+      ></panel-left>
       <div class="wrapper wrapper-column" ref="wrapper">
         <user-panel v-if="user || (authorized && !shwPublic)" :user="user" />
         <div class="switch" v-if="authorized">
@@ -112,7 +115,7 @@ export default {
     ...mapActions(["toggleSettings", "logout"]),
     resize() {
       if (this.authorized) {
-        if(document.body.clientWidth <= 768 && this.$refs.panelLeft) {
+        if (document.body.clientWidth <= 768 && this.$refs.panelLeft) {
           this.$refs.panelLeft.$el.style["margin-top"] = "2.1rem";
           this.$refs.wrapper.style["padding-top"] = "0";
         } else {
