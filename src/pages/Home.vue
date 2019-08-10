@@ -183,7 +183,6 @@ export default {
 @media screen and (max-width: 768px) {
   .page-editor {
     .wrapper {
-      padding-top: 2.1rem;
       &-column {
         padding-top: 0;
       }
