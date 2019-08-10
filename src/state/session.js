@@ -1,4 +1,7 @@
 /*global OAuth*/
+
+const apiKey = require("../../api.key");
+
 export default {
   state: {
     loginFailed: false,
@@ -14,7 +17,7 @@ export default {
     userPublicGists: 0,
     html_link: null,
     id: null,
-    api_key: "",
+    api_key: apiKey,
     tokenType: "Bearer"
   },
   mutations: {
