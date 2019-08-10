@@ -18,7 +18,7 @@
           <h5>Editor</h5>
           <div class="options">
             <optionCheck :key="'autoSave'" :checked="false">
-              Auto save
+              Auto save <span class="experimental">(Experimental)</span>
             </optionCheck>
             <optionCheck
               :key="'lineNums'"
@@ -121,6 +121,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.experimental {
+  font-size: 0.8rem;
+  color: #ababab;
+}
 .close {
   position: absolute;
   width: 4.3rem;

@@ -82,10 +82,10 @@ export default {
       return {
         autofocus: true,
         tabSize: this.tabSize ? this.tabSize : 2,
-        smartIndent: this.smartIndent || true,
+        smartIndent: this.smartIndent || false,
         styleActiveLine: true,
-        lineNumbers: this.lineNumbers || true,
-        lineWrapping: this.lineWrap || true,
+        lineNumbers: this.lineNumbers || false,
+        lineWrapping: this.lineWrap || false,
         line: true,
         foldGutter: true,
         lineWiseCopyCut: true,
@@ -93,10 +93,10 @@ export default {
         mode: this.fileMode || "text/plain",
         keyMap: this.keyMap,
         matchBrackets: true,
-        autoCloseBrackets: this.autoClose || true,
+        autoCloseBrackets: this.autoClose || false,
         showCursorWhenSelecting: true,
         theme: "base16-dark",
-        scrollPastEnd: this.scrollPastEnd || true
+        scrollPastEnd: this.scrollPastEnd || false
       };
     },
     editor() {

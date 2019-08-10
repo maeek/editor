@@ -28,7 +28,9 @@ button {
   border-radius: 5px;
   margin: 0 0.2rem;
   color: $compact--button-color;
-  background: $compact--button-bg;
+  color: #fefefe;
+  background: transparent;
+  // background: $compact--button-bg;
   @include rectangle(auto, 1.5rem);
   @extend %pointer;
   @extend %noselect;
@@ -39,17 +41,21 @@ button {
     @extend %typo-normal;
   }
   span {
-    color: #fefefe;
+    color: inherit;
     @include rectangle(auto, 100%);
     @extend %typo-tiny;
     @extend %flex-center;
   }
   &.active {
-    color: $compact--button--color-hover;
+    color: $compact--button-bg;
     background: $compact--button--bg-hover;
     i {
       color: $compact--button-bg;
     }
+  }
+  &.close,
+  &.login {
+    background: $compact--button-bg;
   }
   @media screen and (max-width: 768px) {
     .hidden {
@@ -61,10 +67,15 @@ button {
   }
 }
 button:hover {
-  color: $compact--button--color-hover;
+  color: $compact--button-bg;
   background: $compact--button--bg-hover;
   i {
     color: $compact--button-bg;
+  }
+}
+@media screen and (max-width: 768px) {
+  button {
+    background: $compact--button-bg;
   }
 }
 </style>

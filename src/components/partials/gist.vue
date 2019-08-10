@@ -38,18 +38,21 @@
         >
         <span
           class="stats stats-button"
+          :title="`Unstar ${gist.id}`"
           v-if="authorized && !starred && hasStar"
           @click="unStarClick(gist.id)"
-          ><i class="material-icons starred">star</i>UnStar</span
+          ><i class="material-icons starred">star</i>Unstar</span
         >
         <span
           class="stats stats-button"
+          :title="`Star ${gist.id}`"
           v-if="authorized && starred"
           @click="unStar(gist.id)"
           ><i class="material-icons starred">star</i>Unstar</span
         >
         <span
           class="stats stats-button"
+          :title="`Delete ${gist.id}`"
           @click="rmFileModal({ rid: gist.id, files: gist.files })"
           v-if="
             (authorized && !$route.params.user && !shwPublic) ||
@@ -207,10 +210,10 @@ li {
           margin: 0 0.5rem;
           font-size: 1.2rem;
           font-weight: 400;
+          line-break: auto;
           span {
             color: $panel-top--header;
             @extend %pointer;
-            word-break: break-all;
           }
           .filename {
             font-weight: 700;

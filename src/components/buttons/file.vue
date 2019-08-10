@@ -14,9 +14,12 @@
     >
       <slot></slot>
     </span>
-    <i class="material-icons close" @click.stop="remove">{{
-      name ? "delete" : "close"
-    }}</i>
+    <i
+      class="material-icons close"
+      :title="name ? `Delete ${name}` : `Close ${obj}`"
+      @click.stop="remove"
+      >{{ name ? "delete" : "close" }}</i
+    >
   </div>
 </template>
 

@@ -29,6 +29,15 @@
         <i class="material-icons">people</i>Following: {{ following }}
       </span>
     </div>
+    <div class="more" v-else>
+      <a
+        class="stats stats-button"
+        target="_blank"
+        :href="`https://github.com/${aliasName}`"
+      >
+        <i class="material-icons">exit_to_app</i>Open on Github
+      </a>
+    </div>
   </div>
 </template>
 
@@ -139,7 +148,11 @@ export default {
         border-radius: 5px;
         border: 2px solid $compact--button-bg;
         padding: 0.1rem 0.3rem;
+        text-decoration: none;
         @extend %pointer;
+        i {
+          color: $comment--header;
+        }
         &:hover {
           background: #2d2d2d;
         }
@@ -160,6 +173,10 @@ export default {
       justify-content: flex-start;
       align-items: flex-start;
       align-content: flex-start;
+    }
+
+    h5 {
+      font-size: 1.5rem;
     }
   }
 }

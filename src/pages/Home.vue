@@ -5,6 +5,7 @@
         :title="'Log in'"
         name="Log in with Github"
         v-if="!authorized"
+        class="login"
         :hide="false"
       />
       <compact
@@ -12,6 +13,7 @@
         :title="'Log out'"
         name="Log out"
         @click.native="logout"
+        class="login"
         v-else
       >
         lock
@@ -59,7 +61,12 @@
             star
           </compact>
         </div>
-        <gists :user="user" :starred="starred" :shwPublic="shwPublic" />
+        <gists
+          :user="user"
+          :starred="starred"
+          :shwPublic="shwPublic"
+          ref="gists"
+        />
       </div>
     </div>
     <actions-button v-if="authorized"></actions-button>
@@ -104,14 +111,15 @@ export default {
   methods: {
     ...mapActions(["toggleSettings", "logout"])
   },
+  updated() {
+    if (this.authorized) {
+      this.$refs.wrapper.style["padding-top"] = "2rem";
+    }
+  },
   mounted() {
-    // const $this = this;
-    // $this.$refs.wrapper.addEventListener("scroll", function() {
-    //   console.log($this.$refs.wrapper.scrollTop ,$this.$refs.wrapper.clientHeight);
-    //   if($this.$refs.wrapper.scrollHeight - $this.$refs.wrapper.scrollTop <= $this.$refs.wrapper.clientHeight + 50){
-    //     console.log("YEEEE");
-    //   }
-    // });
+    if (this.authorized) {
+      this.$refs.wrapper.style["padding-top"] = "2rem";
+    }
   }
 };
 </script>
@@ -126,7 +134,6 @@ export default {
     @include rectangle(100%, 100%);
     overflow: auto;
     &-column {
-      padding-top: 2rem;
       flex-direction: column;
     }
     .panelLeft {
@@ -158,25 +165,6 @@ export default {
       padding: 0.3rem;
       @extend %flex-start;
     }
-    .my-account {
-      background: #0e0e0e;
-      width: 100%;
-      padding: 1rem 0.7rem;
-      @extend %typo-koho;
-      @extend %flex-start;
-      color: #ababab;
-      img {
-        width: 45px;
-      }
-      h5 {
-        color: $lines-focused;
-        margin: 0 1rem;
-        @extend %typo-header;
-      }
-      span {
-        margin: 0 1rem;
-      }
-    }
   }
 }
 .panelLeft::-webkit-scrollbar {
@@ -195,7 +183,7 @@ export default {
 @media screen and (max-width: 768px) {
   .page-editor {
     .wrapper {
-      padding-top: 2.2rem;
+      padding-top: 2.1rem;
       &-column {
         padding-top: 0;
       }

@@ -56,7 +56,7 @@ label {
     padding: 0.4rem 0.2rem;
     border: 1px solid $active--line;
     position: relative;
-    width: 6rem;
+    min-width: 8rem;
     margin: 0.2rem 0;
     text-transform: capitalize;
     background: $option--bg;
@@ -69,7 +69,7 @@ label {
     }
     ul {
       position: absolute;
-      right: 0;
+      left: -1px;
       background: #131313;
       list-style: none;
       border: 1px solid $active--line;
@@ -77,7 +77,7 @@ label {
       border-radius: 5px;
       overflow: hidden;
       padding: 0;
-      width: 6rem;
+      width: calc(100% + 2px);
       li {
         @extend %flex-start;
         width: 100%;

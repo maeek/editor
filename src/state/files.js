@@ -166,12 +166,16 @@ export default {
       });
     },
     async updateGists({ dispatch }, link) {
-      await dispatch("getGists", link);
+      await dispatch("getGists", { link: link });
     },
-    async getGists({ state, commit, dispatch, getters }, link) {
+    async appendGists({ dispatch }, link) {
+      console.log(link);
+      return dispatch("getGists", { link: link, append: true });
+    },
+    async getGists({ state, commit, dispatch, getters }, obj) {
       commit("QUERY_ACTIVE", true);
       let headers = await dispatch("setHeaders");
-      fetch(link, {
+      return fetch(obj.link, {
         method: "GET",
         headers: headers,
         cache: "no-store"
@@ -181,15 +185,20 @@ export default {
           if (res.message) {
             commit("QUERY_FAILED", {
               message: res.message,
-              link: link,
+              link: obj.link,
               authorized: getters.authorized
             });
             commit("QUERY_ACTIVE", false);
           } else {
             commit("QUERY_FAILED", false);
             commit("QUERY_ACTIVE", false);
-            dispatch("setPublicGists", res);
-            commit("GISTS", res);
+            if (obj.append) {
+              dispatch("setPublicGists", [...getters.publicGists, ...res]);
+              commit("GISTS", [...getters.gists, ...res]);
+            } else {
+              dispatch("setPublicGists", res);
+              commit("GISTS", res);
+            }
             commit("SET_LOADING", true);
           }
         })

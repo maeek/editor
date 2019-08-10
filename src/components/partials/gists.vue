@@ -87,15 +87,17 @@ export default {
       if (this.user) {
         this.gist_dir = `https://api.github.com/users/${
           this.$props.user
-        }/gists`;
+        }/gists?per_page=30`;
       } else {
         if (this.shwPublic) {
           this.gist_dir = `https://api.github.com/gists/public?page=${
             this.pages
-          }&per_page=10`;
+          }&per_page=30`;
         }
         if (this.authorized && !this.shwPublic && !this.starred) {
-          this.gist_dir = `https://api.github.com/users/${this.alias}/gists`;
+          this.gist_dir = `https://api.github.com/users/${
+            this.alias
+          }/gists?per_page=30`;
         } else if (this.authorized && this.starred) {
           this.gist_dir = `https://api.github.com/gists/starred?page=${
             this.pages
@@ -103,7 +105,7 @@ export default {
         } else {
           this.gist_dir = `https://api.github.com/gists/public?page=${
             this.pages
-          }&per_page=10`;
+          }&per_page=30`;
         }
       }
       return this.gist_dir;
