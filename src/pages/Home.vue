@@ -27,7 +27,7 @@
       </compact>
     </panel-top>
     <div class="wrapper">
-      <panel-left v-if="authorized && files.length > 0"></panel-left>
+      <panel-left v-if="authorized && files.length > 0" ref="panelLeft"></panel-left>
       <div class="wrapper wrapper-column" ref="wrapper">
         <user-panel v-if="user || (authorized && !shwPublic)" :user="user" />
         <div class="switch" v-if="authorized">
@@ -109,17 +109,28 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["toggleSettings", "logout"])
+    ...mapActions(["toggleSettings", "logout"]),
+    resize() {
+      if (this.authorized) {
+        if(document.body.clientWidth <= 768 && this.$refs.panelLeft) {
+          this.$refs.panelLeft.$el.style["margin-top"] = "2.1rem";
+          this.$refs.wrapper.style["padding-top"] = "0";
+        } else {
+          this.$refs.wrapper.style["padding-top"] = "2rem";
+        }
+      }
+    }
   },
   updated() {
-    if (this.authorized) {
-      this.$refs.wrapper.style["padding-top"] = "2rem";
-    }
+    this.resize();
   },
   mounted() {
-    if (this.authorized) {
-      this.$refs.wrapper.style["padding-top"] = "2rem";
-    }
+    const $this = this;
+    $this.resize();
+    window.addEventListener("resize", this.resize);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.resize);
   }
 };
 </script>
@@ -132,28 +143,11 @@ export default {
   .wrapper {
     @extend %flex-start;
     @include rectangle(100%, 100%);
-    overflow: auto;
+    overflow: hidden;
     &-column {
+      overflow: auto;
+      @include rectangle(100%, 100%);
       flex-direction: column;
-    }
-    .panelLeft {
-      width: 300px;
-      height: 100%;
-      background: $panel-files-bg;
-      @extend %flex-start;
-      @extend %typo-koho;
-      flex-direction: column;
-      .file {
-        min-height: 2rem;
-        height: auto;
-        padding: 0.5rem;
-        width: 100%;
-        border: 0;
-      }
-      .noActive {
-        color: darken($comment--header, 5);
-        margin: 1rem auto;
-      }
     }
     .switch {
       width: 100%;
@@ -167,19 +161,7 @@ export default {
     }
   }
 }
-.panelLeft::-webkit-scrollbar {
-  display: block;
-  width: 2px;
-  height: 2px;
-  padding: 5px;
-  overflow: auto;
-  background-color: #1d1d1d;
-}
 
-.panelLeft::-webkit-scrollbar-thumb {
-  background: $panel-top--header;
-  border: 2px solid #0000;
-}
 @media screen and (max-width: 768px) {
   .page-editor {
     .wrapper {

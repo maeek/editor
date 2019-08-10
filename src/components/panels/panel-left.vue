@@ -116,10 +116,11 @@ export default {
 @media screen and (max-width: 768px) {
   .panelLeft {
     width: 100% !important;
-    height: 2.1rem;
-    flex: 0 0 2.1rem;
+    height: auto;
+    flex: 0 0 auto;
     flex-direction: row !important;
     overflow: auto hidden;
+    flex-wrap: nowrap;
     padding: 0;
     .file {
       width: auto;
