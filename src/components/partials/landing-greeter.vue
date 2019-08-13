@@ -1,31 +1,44 @@
 <template>
   <div class="greeter" ref="greet">
     <h3 class="welcome">
-      <i class="material-icons">waves</i> EDITOR
+      <i class="material-icons">waves</i>
       <span class="ver">v{{ version }}</span>
+      EDITOR
     </h3>
     <img src="@/assets/icons/code.svg" />
+    <div class="wrapper">
+      <login-compact
+        title="Log in"
+        name="Log in with Github"
+        v-if="!authorized"
+        class="login"
+        :hide="false"
+      />
+      <compact
+        @click.native="$router.push({ path: '/edit/' })"
+        title="Log in"
+        :hide="false"
+        class="login"
+        name="Start editing"
+        >edit</compact
+      >
+    </div>
     <p>
       Easily create, edit and delete
       <a href="https://gist.github.com/">gists</a>
     </p>
-    <login-compact
-      :title="'Log in'"
-      name="Log in with Github"
-      v-if="!authorized"
-      class="login"
-      :hide="false"
-    />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import loginCompact from "@/components/buttons/login-button.vue";
+import compact from "@/components/buttons/button-compact.vue";
 
 export default {
   name: "landingGreeter",
   components: {
+    compact,
     loginCompact
   },
   computed: mapGetters(["version", "authorized"]),
@@ -82,8 +95,13 @@ export default {
     max-width: 95%;
     @extend %noselect;
   }
+  .wrapper {
+    @extend %flex-center;
+    align-items: stretch;
+  }
   button {
     padding: 1rem 2rem;
+    margin: 0.5rem;
     height: auto;
     font-weight: 900;
   }
@@ -93,6 +111,10 @@ export default {
     background-size: 41px 41px;
     h3 {
       margin: 1rem 0;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      margin: 0.5rem;
     }
   }
 }

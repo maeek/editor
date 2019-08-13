@@ -5,7 +5,7 @@
         :title="'Save file'"
         name="Save"
         @click.native="saveFile()"
-        v-if="activeFile && authorized"
+        v-if="activeFile"
       >
         save
       </compact>

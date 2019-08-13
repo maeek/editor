@@ -302,6 +302,13 @@ export default {
       preFiles[obj.name] = {
         content: getters.fileByName(getters.activeFile).data
       };
+      if (!getters.authorized) {
+        let file = state.files.find(
+          el => el.name == state.activeFile.name && el.gistId == obj.id
+        );
+        file.save.is = true;
+        file.save.last = getTime();
+      }
       fetch(`https://api.github.com/gists/${obj.id}`, {
         method: "PATCH",
         headers: headers,

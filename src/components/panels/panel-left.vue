@@ -1,6 +1,6 @@
 <template>
   <div class="panelLeft">
-    <h5 class="opened">Opened gists</h5>
+    <h5 class="opened" :class="{ authorized }">Opened gists</h5>
     <file
       v-for="file in computedGroups"
       :obj="file"
@@ -8,7 +8,13 @@
       :key="file"
     >
       <span class="owner">
-        {{ fileById(file) ? fileById(file).owner : file }}
+        {{
+          fileById(file)
+            ? fileById(file).owner
+              ? fileById(file).owner
+              : "&lt; LOCAL COPY &gt;"
+            : file
+        }}
       </span>
       <span>/</span>
       <span>
@@ -78,7 +84,7 @@ export default {
   @extend %typo-koho;
   overflow: hidden auto;
   flex-direction: column;
-  padding: 0.5rem 0;
+  padding: 0;
   .file {
     min-height: 2rem;
     height: auto;
@@ -102,9 +108,12 @@ export default {
   flex: 0 0 auto;
   color: $comment--header;
   background: #202020;
-  padding: 2.3rem 0.6rem 0.8rem 0.6rem;
   margin: 0;
+  padding: 0.8rem 0.6rem;
   width: 100%;
+  &.authorized {
+    padding: 2.5rem 0.6rem 0.8rem 0.6rem;
+  }
 }
 .panelLeft::-webkit-scrollbar {
   display: block;

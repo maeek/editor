@@ -1,5 +1,17 @@
 <template>
   <main class="editor" :key="gistDir" ref="main">
+    <h5
+      v-if="
+        !queryFailed &&
+          !queryActive &&
+          !authorized &&
+          !shwPublic &&
+          !user &&
+          !starred
+      "
+    >
+      Recent gists feed
+    </h5>
     <ul class="editorFields" v-if="!queryFailed && !queryActive">
       <gist
         v-for="gist in gists"
@@ -12,21 +24,38 @@
       ></gist>
     </ul>
     <page-changer
+      v-if="!queryFailed && !queryActive && shwPublic"
       @prev="Older"
       @next="Newer"
-      :shwPublic="shwPublic || (!authorized && !user)"
+      :shwPublic="shwPublic"
       :pages="pages"
     ></page-changer>
+    <button
+      class="show-more"
+      @click="$router.push({ path: '/public' })"
+      v-if="
+        !queryFailed &&
+          !queryActive &&
+          !shwPublic &&
+          !user &&
+          !starred &&
+          !authorized
+      "
+    >
+      <span class="wrapper">EXPLORE</span>
+    </button>
     <no-gists v-if="gistsLength < 1 && !queryActive && !queryFailed"></no-gists>
     <failed-request></failed-request>
-    <load-placeholder :count="!queryFailed ? 12 : 3"></load-placeholder>
+    <load-placeholder :count="count"></load-placeholder>
     <star-notf :list="starNotf"></star-notf>
+    <foot v-if="!starred && !user" />
   </main>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
 import gist from "@/components/partials/gist.vue";
+import foot from "@/components/partials/footer.vue";
 import noGists from "@/components/partials/no-gists.vue";
 import pageChanger from "@/components/partials/page-changer.vue";
 import starNotf from "@/components/partials/star-notf.vue";
@@ -40,7 +69,8 @@ export default {
     pageChanger,
     starNotf,
     loadPlaceholder,
-    failedRequest
+    failedRequest,
+    foot
   },
   props: ["user", "shwPublic", "starred"],
   data() {
@@ -62,6 +92,14 @@ export default {
       "queryFailed",
       "queryActive"
     ]),
+    count() {
+      // !queryFailed ? 12 : 3
+      let cc = 5;
+      if (this.shwPublic && !this.queryFailed) cc = 15;
+      else if (this.queryFailed) cc = 3;
+      else if (this.user) cc = 10;
+      return cc;
+    },
     gistDir() {
       return this.gist_dir;
     }
@@ -103,9 +141,15 @@ export default {
             this.pages
           }`;
         } else {
-          this.gist_dir = `https://api.github.com/gists/public?page=${
-            this.pages
-          }&per_page=30`;
+          if (!this.shwPublic) {
+            this.gist_dir = `https://api.github.com/gists/public?page=${
+              this.pages
+            }&per_page=5`;
+          } else {
+            this.gist_dir = `https://api.github.com/gists/public?page=${
+              this.pages
+            }&per_page=30`;
+          }
         }
       }
       return this.gist_dir;
@@ -141,6 +185,41 @@ export default {
   @extend %flex-start;
   flex-direction: column;
   position: relative;
+  .show-more {
+    width: 100%;
+    max-width: 1200px;
+    background: transparent;
+    .wrapper {
+      background: $panel-bottom;
+      display: block;
+      width: 100%;
+      color: $panel-top--header;
+      padding: 1rem;
+      border-radius: 8px;
+      @extend %noselect;
+      @extend %pointer;
+      &:hover {
+        color: $panel-bottom;
+        background: $panel-top--header;
+      }
+    }
+    margin: 0 auto 3rem;
+    @extend %typo-koho;
+    font-weight: 900;
+    text-align: center;
+    padding: 1rem;
+    @extend %typo-medium;
+  }
+  h5 {
+    width: 100%;
+    max-width: 1200px;
+    margin: 1rem auto;
+    @extend %typo-koho;
+    font-weight: 900;
+    color: #ababab;
+    padding: 0 1rem;
+    @extend %typo-medium;
+  }
   .editorFields {
     flex-direction: column;
     background: $body--bg;

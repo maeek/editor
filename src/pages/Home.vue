@@ -27,12 +27,11 @@
       </compact>
     </panel-top>
     <div class="wrapper">
-      <panel-left
-        v-if="authorized && files.length > 0"
-        ref="panelLeft"
-      ></panel-left>
+      <panel-left v-if="files.length > 0" ref="panelLeft"></panel-left>
       <div class="wrapper wrapper-column" ref="wrapper">
-        <landing-greeter v-if="!authorized && !user"></landing-greeter>
+        <landing-greeter
+          v-if="!authorized && !user && !shwPublic"
+        ></landing-greeter>
         <user-panel v-if="user || (authorized && !shwPublic)" :user="user" />
         <div class="switch" v-if="authorized">
           <compact

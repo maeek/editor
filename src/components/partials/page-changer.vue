@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapHoriz" v-if="!queryFailed && !queryActive && shwPublic">
+  <div class="wrapHoriz">
     <div
       @click="prev"
       :class="{ prev: true, newPages: pages < 2 }"
@@ -39,7 +39,7 @@ export default {
 <style scoped lang="scss">
 .wrapHoriz {
   width: 100%;
-  padding-bottom: 5rem;
+  padding-bottom: 2rem;
   @extend %flex-center;
 }
 
