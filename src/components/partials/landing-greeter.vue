@@ -82,6 +82,11 @@ export default {
     max-width: 95%;
     @extend %noselect;
   }
+  button {
+    padding: 1rem 2rem;
+    height: auto;
+    font-weight: 900;
+  }
 }
 @media screen and (max-width: 768px) {
   .greeter {
