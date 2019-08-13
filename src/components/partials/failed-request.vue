@@ -1,13 +1,13 @@
 <template>
-  <div v-if="queryFailed" class="failedRequest">
-    <i class="material-icons">error</i>
+  <div v-if="queryFailed || failed" class="failedRequest">
+    <img src="@/assets/icons/error.svg" />
     <span>Error</span>
-    <span class="message">{{ queryFailedObj.message }}</span>
+    <span class="message">{{ ms }}</span>
     <span class="link" v-if="queryFailedObj.link">{{
       queryFailedObj.link
     }}</span>
-    <span class="authorized" v-if="queryFailedObj.authorized"
-      ><i class="material-icons">lock</i>Authorized</span
+    <span class="authorized" v-if="authorized"
+      ><i class="material-icons">lock</i>You're Authorized</span
     >
   </div>
 </template>
@@ -16,7 +16,15 @@
 import { mapGetters } from "vuex";
 export default {
   name: "failedRequest",
-  computed: mapGetters(["queryFailedObj", "queryFailed"])
+  computed: {
+    ...mapGetters(["queryFailedObj", "queryFailed", "authorized"]),
+    ms() {
+      let ms = this.queryFailedObj.message || this.message;
+      ms = ms.toString().replace(/^TypeError:/g, "");
+      return ms;
+    }
+  },
+  props: ["failed", "message"]
 };
 </script>
 

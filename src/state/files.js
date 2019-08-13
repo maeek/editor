@@ -308,25 +308,30 @@ export default {
         );
         file.save.is = true;
         file.save.last = getTime();
+      } else {
+        fetch(`https://api.github.com/gists/${obj.id}`, {
+          method: "PATCH",
+          headers: headers,
+          body: JSON.stringify({
+            files: preFiles
+          })
+        })
+          .then(res => res.json())
+          .then(() => {
+            let file = state.files.find(
+              el => el.name == state.activeFile.name && el.gistId == obj.id
+            );
+            file.save.is = true;
+            file.save.last = getTime();
+          })
+          .catch(e => {
+            let file = state.files.find(
+              el => el.name == state.activeFile.name && el.gistId == obj.id
+            );
+            file.save.is = false;
+            console.log(e);
+          });
       }
-      fetch(`https://api.github.com/gists/${obj.id}`, {
-        method: "PATCH",
-        headers: headers,
-        body: JSON.stringify({
-          files: preFiles
-        })
-      })
-        .then(res => res.json())
-        .then(() => {
-          let file = state.files.find(
-            el => el.name == state.activeFile.name && el.gistId == obj.id
-          );
-          file.save.is = true;
-          file.save.last = getTime();
-        })
-        .catch(e => {
-          console.log(e);
-        });
     },
     activeFileData({ commit, getters, dispatch }, value, dispName) {
       if (value.hashCode() != getters.fileHash) {

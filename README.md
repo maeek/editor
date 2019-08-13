@@ -9,10 +9,12 @@ Source files for file editor application, based on codemirror library built with
 ### TODO
   - Downloading files
   - Star gist in editor view
-  - Create gist from files (drag and drop or manual selecion)
+  - Create new gist from files (drag and drop or manual selecion)
   - Modifying gists (file names, public/private etc.)
   - User gists pages
   - Load only focused files
+  - Revisions
+  - Comments
 
 ## Installing
 To setup login with github you need to provide api key for oauth.io in `src/state/session.js` - `state.api_key`

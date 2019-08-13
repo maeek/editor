@@ -3,7 +3,7 @@
     <div class="wrapper">
       <div class="user">
         <img
-          v-if="gist.owner.avatar_url && gist.owner.login != alias"
+          v-if="(gist.owner.avatar_url && gist.owner.login != alias) || starred"
           :src="gist.owner.avatar_url"
           @click="route"
         />
@@ -48,7 +48,7 @@
           class="stats stats-button"
           :title="`Star ${gist.id}`"
           v-if="authorized && starred"
-          @click="unStar(gist.id)"
+          @click="unStarClick(gist.id)"
           ><i class="material-icons starred">star</i>Unstar</span
         >
         <span

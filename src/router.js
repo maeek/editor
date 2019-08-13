@@ -4,41 +4,44 @@ import Router from "vue-router";
 Vue.use(Router);
 
 /* Pages */
-import Home from "@/pages/Home.vue";
-import Editor from "@/pages/Editor.vue";
-
 const routes = [
   {
     path: "/",
-    component: Home
+    component: () =>
+      import(/* webpackChunkName: "home-chunk" */ "@/pages/Home.vue")
   },
   {
     path: "/public/",
-    component: Home,
+    component: () =>
+      import(/* webpackChunkName: "home-chunk" */ "@/pages/Home.vue"),
     props: {
       shwPublic: true
     }
   },
   {
     path: "/starred/",
-    component: Home,
+    component: () =>
+      import(/* webpackChunkName: "home-chunk" */ "@/pages/Home.vue"),
     props: {
       starred: true
     }
   },
   {
     path: "/user/:user",
-    component: Home,
+    component: () =>
+      import(/* webpackChunkName: "home-chunk" */ "@/pages/Home.vue"),
     props: true
   },
   {
     path: "/edit/:id",
-    component: Editor,
+    component: () =>
+      import(/* webpackChunkName: "editor-chunk" */ "@/pages/Editor.vue"),
     props: true
   },
   {
     path: "/edit/",
-    component: Editor
+    component: () =>
+      import(/* webpackChunkName: "editor-chunk" */ "@/pages/Editor.vue")
   }
 ];
 

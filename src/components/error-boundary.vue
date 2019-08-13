@@ -1,4 +1,5 @@
 <script>
+import failedRequest from "@/components/partials/failed-request.vue";
 export default {
   name: "ErrorBoundary",
   data: () => ({
@@ -8,14 +9,23 @@ export default {
     this.error = [err, vm, info];
   },
   render(h) {
-    console.log(this.error);
-    return this.error ? h("p", "Ooops") : this.$slots.default[0];
+    return this.error
+      ? h(failedRequest, {
+          props: {
+            failed: true,
+            message: `${this.error[0]}`
+          }
+        })
+      : this.$slots.default[0];
   }
 };
 </script>
 <style lang="scss">
 p {
   color: rgb(255, 115, 115);
+  padding: 1rem;
   @extend %typo-koho;
+  width: 100%;
+  @extend %flex-center;
 }
 </style>

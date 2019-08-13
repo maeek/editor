@@ -30,7 +30,8 @@
       <panel-left v-if="files.length > 0" ref="panelLeft"></panel-left>
       <div class="wrapper wrapper-column" ref="wrapper">
         <landing-greeter
-          v-if="!authorized && !user && !shwPublic"
+          :class="{ authorized }"
+          v-if="!authorized && !starred && !user && !shwPublic"
         ></landing-greeter>
         <user-panel v-if="user || (authorized && !shwPublic)" :user="user" />
         <div class="switch" v-if="authorized">

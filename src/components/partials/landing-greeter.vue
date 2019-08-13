@@ -1,11 +1,10 @@
 <template>
   <div class="greeter" ref="greet">
-    <h3 class="welcome">
-      <i class="material-icons">waves</i>
-      <span class="ver">v{{ version }}</span>
-      EDITOR
-    </h3>
     <img src="@/assets/icons/code.svg" />
+    <p>
+      Manage your <a href="https://gist.github.com/">gists</a> easily with
+      Editor
+    </p>
     <div class="wrapper">
       <login-compact
         title="Log in"
@@ -23,10 +22,6 @@
         >edit</compact
       >
     </div>
-    <p>
-      Easily create, edit and delete
-      <a href="https://gist.github.com/">gists</a>
-    </p>
   </div>
 </template>
 
@@ -56,14 +51,13 @@ export default {
   transition: opacity 1s;
   flex: 0 0 auto;
   height: auto;
-  padding: 0 0 1rem 0;
-  // background-color: #1f1f1f;
+  padding: 0 0 2.1rem 0;
   @extend %typo-koho;
   @extend %flex-start-center;
   flex-direction: column;
   background-image: url("../../assets/dot.svg");
   h3 {
-    margin: 2rem 0;
+    margin: 0.5rem 0;
     color: $panel-top--header;
     @extend %typo-big;
     font-weight: 900;
@@ -82,15 +76,17 @@ export default {
   p {
     color: #ababab;
     flex: 0 0 auto;
-    padding: 1rem 0;
+    @extend %typo-medium;
+    padding: 0.5rem 0;
+    font-weight: 900;
   }
   a {
-    font-weight: 400;
     color: $panel-top--header;
     text-decoration: none;
+    margin: 0 0.3rem;
   }
   img {
-    margin: 1rem 0;
+    margin: 0.5rem 0;
     width: 700px;
     max-width: 95%;
     @extend %noselect;
@@ -109,6 +105,9 @@ export default {
 @media screen and (max-width: 768px) {
   .greeter {
     background-size: 41px 41px;
+    padding: 0 0 1rem 0;
+    justify-content: center;
+    min-height: 40%;
     h3 {
       margin: 1rem 0;
     }

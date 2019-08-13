@@ -1,6 +1,6 @@
 <template>
   <div class="page-editor" :key="'edtID' + id">
-    <panel-top>
+    <panel-top :show="false">
       <compact
         :title="'Save file'"
         name="Save"
@@ -24,7 +24,12 @@
       <compact :title="'Download file'" name="Download" v-if="activeFile">
         save_alt
       </compact>
-      <compact :title="'Star this gist'" name="Star gist" v-if="authorized">
+      <compact
+        :title="'Star this gist'"
+        name="Star gist"
+        v-if="authorized && !star"
+        @click.native="setStarClick(id)"
+      >
         star
       </compact>
       <compact
@@ -98,7 +103,8 @@ export default {
     return {
       fullscreen: document.fullscreenEnabled,
       isFullscreen: null,
-      fetchError: false
+      fetchError: false,
+      star: false
     };
   },
   components: {
@@ -136,7 +142,9 @@ export default {
       "removeFile",
       "switchFile",
       "setLoading",
-      "setHeaders"
+      "setHeaders",
+      "setStar",
+      "unStar"
     ]),
     openFile() {
       document.querySelector("input[name='openFile']").click();
@@ -245,6 +253,18 @@ export default {
               e ||
               "The method could not be performed on the resource because the requested action depended on another action and that action failed."
           };
+        });
+    },
+    async setStarClick(id) {
+      this.setStar(id)
+        .then(res => {
+          if (res.status === 204) {
+            this.star = true;
+            this.$emit("starred", { status: true, id: id });
+          }
+        })
+        .catch(e => {
+          console.log(e);
         });
     }
   },
