@@ -79,8 +79,6 @@ export default {
       OAuth.popup("github").then(async github => {
         const { access_token, token_type } = github;
         console.log("GH Access token", access_token);
-        commit("ACTIVE_FILE", "");
-        commit("FILES", []);
         const res = await github.me();
         await dispatch("userInfo", res);
         window.localStorage.setItem(
