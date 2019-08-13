@@ -20,6 +20,8 @@ yarn-error.log*
 *.sln
 *.sw?
 
+# Trash
+code_old.svg
 
 # Auth-io api key
 api.key

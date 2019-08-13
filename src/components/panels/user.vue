@@ -1,42 +1,46 @@
 <template>
   <div class="my-account">
-    <img :src="image" />
-    <div class="info">
-      <h5>
-        <span v-if="!user">Welcome,</span
-        ><span class="name">{{ aliasName }}</span>
-      </h5>
-      <span>{{ username }}</span>
-    </div>
-    <div class="spacer"></div>
-    <div
-      class="more"
-      v-if="!$route.params.user || $route.params.user === alias"
-    >
-      <span class="stats">
-        <i class="material-icons">location_on</i>Location: {{ location }}
-      </span>
-      <span class="stats">
-        <i class="material-icons">public</i>Public gists: {{ userPublicGists }}
-      </span>
-      <span class="stats">
-        <i class="material-icons">public</i>Public repos: {{ userPublicRepos }}
-      </span>
-      <span class="stats">
-        <i class="material-icons">person</i>Followers: {{ followers }}
-      </span>
-      <span class="stats">
-        <i class="material-icons">people</i>Following: {{ following }}
-      </span>
-    </div>
-    <div class="more" v-else>
-      <a
-        class="stats stats-button"
-        target="_blank"
-        :href="`https://github.com/${aliasName}`"
+    <div class="wrapper">
+      <img :src="image" />
+      <div class="info">
+        <h5>
+          <span v-if="!user">Welcome,</span
+          ><span class="name">{{ aliasName }}</span>
+        </h5>
+        <span>{{ username }}</span>
+      </div>
+      <div class="spacer"></div>
+      <div
+        class="more"
+        v-if="!$route.params.user || $route.params.user === alias"
       >
-        <i class="material-icons">exit_to_app</i>Open on Github
-      </a>
+        <span class="stats">
+          <i class="material-icons">location_on</i>Location: {{ location }}
+        </span>
+        <span class="stats">
+          <i class="material-icons">public</i>Public gists:
+          {{ userPublicGists }}
+        </span>
+        <span class="stats">
+          <i class="material-icons">public</i>Public repos:
+          {{ userPublicRepos }}
+        </span>
+        <span class="stats">
+          <i class="material-icons">person</i>Followers: {{ followers }}
+        </span>
+        <span class="stats">
+          <i class="material-icons">people</i>Following: {{ following }}
+        </span>
+      </div>
+      <div class="more" v-else>
+        <a
+          class="stats stats-button"
+          target="_blank"
+          :href="`https://github.com/${aliasName}`"
+        >
+          <i class="material-icons">exit_to_app</i>Open on Github
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -102,11 +106,17 @@ export default {
 .my-account {
   background: #0e0e0e;
   width: 100%;
-  padding: 1rem 0.7rem;
+  flex: 0 0 auto;
   @extend %typo-koho;
-  @extend %flex-start;
-  flex-wrap: wrap;
   color: #ababab;
+  .wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 1rem auto;
+    @extend %flex-start;
+    padding: 1rem 0.7rem;
+    flex-wrap: wrap;
+  }
   img {
     margin-left: 0.6rem;
     width: 64px;
@@ -133,7 +143,6 @@ export default {
     flex-wrap: wrap;
     width: 380px;
     flex-direction: row;
-    max-height: 2.5rem;
     .stats {
       margin: 0.3rem 0 0 1rem;
       font-weight: 900;

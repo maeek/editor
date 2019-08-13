@@ -40,7 +40,6 @@ window.addEventListener(
         else if (i == filesLength - 1) i = 0;
       }
       const fileName = store.getters.fileByIndex(i);
-      console.log(fileName);
       store.dispatch("switchFile", fileName.name);
       router.push({
         path: `/edit/${fileName.gistId}`,

@@ -1,62 +1,76 @@
 <template>
-  <div class="modal" @click="newFileModal(false)">
-    <div class="wrap" @click.stop v-if="pending">
-      <h3>
-        <i class="material-icons">hourglass_empty</i>
-        Operation pending:
-      </h3>
-      <p class="pending">
-        + Adding {{ filename }}
-        {{ $route.params.id ? `to ${$route.params.id}` : `` }}
-      </p>
-      <p class="pending error" v-if="typeof pending != 'boolean'">
-        Error {{ pending }}
-      </p>
-    </div>
-    <div class="wrap" @click.stop v-if="!pending">
-      <h3>
-        <i class="material-icons">note_add</i>
-        Create new gist
-      </h3>
-      <p class="pending" v-if="$route.params.id">
-        + Adding to {{ $route.params.id }}
-      </p>
-      <input
-        ref="input"
-        name="newfile"
-        v-model="filename"
-        placeholder="Type gist name, i.e. README.md"
-        @keyup="createFileEnter"
-      />
-      <div class="options">
-        <compact
-          :hide="false"
-          :title="'Cancel'"
-          name="Cancel"
-          @click.native="newFileModal(false)"
+  <div class="modal" @click="newFileModal(false)" ref="modal">
+    <transition name="scale" mode="out-in">
+      <div class="wrap row" @click.stop v-if="pending">
+        <div class="material-icons leading">hourglass_empty</div>
+        <div class="wrap" @click.stop>
+          <h3>
+            Operation pending:
+          </h3>
+          <p class="pending">
+            + Adding {{ filename }}
+            {{ $route.params.id ? `to ${$route.params.id}` : `` }}
+          </p>
+          <p class="pending error" v-if="typeof pending != 'boolean'">
+            Error {{ pending }}
+          </p>
+        </div>
+      </div>
+      <div class="wrap row" @click.stop v-else>
+        <div
+          class="material-icons leading close-modal"
+          @click="newFileModal(false)"
         >
           close
-        </compact>
-        <compact
-          :hide="false"
-          :title="'Add file'"
-          name="Add"
-          @click.native="createFile"
-        >
-          add
-        </compact>
+        </div>
+        <div class="material-icons leading">note_add</div>
+        <div class="wrap">
+          <h3>
+            Create new gist
+          </h3>
+          <p class="pending" v-if="$route.params.id">
+            + Adding to {{ $route.params.id }}
+          </p>
+          <input
+            ref="input"
+            name="newfile"
+            v-model="filename"
+            placeholder="Type gist name with extension, i.e. README.md"
+            @keyup="createFileEnter"
+          />
+          <div class="options">
+            <button-modal
+              :hide="false"
+              :title="'Create secret gist'"
+              name="Create secret gist"
+              @click.native="createFile(false)"
+              class="active secret"
+            >
+              add
+            </button-modal>
+            <button-modal
+              :hide="false"
+              :title="'Create public gist'"
+              name="Create public gist"
+              @click.native="createFile(true)"
+              class="active public"
+            >
+              all_inclusive
+            </button-modal>
+          </div>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
-import compact from "@/components/buttons/button-compact.vue";
+import buttonModal from "@/components/buttons/button-modal.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "modal",
   components: {
-    compact
+    buttonModal
   },
   data() {
     return {
@@ -75,7 +89,7 @@ export default {
       "setHeaders",
       "saveFile"
     ]),
-    createFile() {
+    createFile(pb) {
       const name = this.$refs.input.value;
       if (name.length > 0) {
         this.filename = name;
@@ -99,7 +113,8 @@ export default {
           url: this.$route.params.id
             ? `https://api.github.com/gists/${this.$route.params.id}`
             : "https://api.github.com/gists",
-          files: files
+          files: files,
+          public: pb
         })
           .then(res => res.json())
           .then(res => {
@@ -144,14 +159,21 @@ export default {
     },
     createFileEnter(e) {
       if (e.code == "Enter") {
-        this.createFile();
+        this.createFile(false);
       } else if (e.code == "Escape") {
         this.newFileModal(false);
       }
+    },
+    esc_close(e) {
+      e.code === "Escape" && this.newFileModal(false);
     }
   },
   mounted() {
     this.$refs.input.focus();
+    this.$refs.modal.addEventListener("keyup", this.esc_close);
+  },
+  beforeDestroy() {
+    this.$refs.modal.removeEventListener("keyup", this.esc_close);
   }
 };
 </script>
@@ -168,37 +190,76 @@ export default {
   @extend %typo-koho;
   .wrap {
     max-width: 95%;
+    @extend %flex-center;
+    flex-direction: column;
     border-radius: 5px;
-    padding: 1rem 0.5rem;
-    background: $panel-files-bg;
-    @include rectangle(500px, auto);
+    @include rectangle(600px, 100%);
+    background: #1d1d1d;
+    max-width: 95%;
+    position: relative;
+    &.row {
+      padding: 0;
+      flex-direction: row;
+      justify-content: center;
+      align-content: flex-start;
+      align-items: flex-start;
+      height: auto;
+    }
+    &:not(.row) {
+      padding: 2.5rem 1rem;
+      background: $panel-files-bg;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .leading {
+      font-weight: 400;
+      font-size: 2.5rem;
+      color: $panel-top--header;
+      @extend %noselect;
+      padding: 1rem 2rem;
+      margin: 0;
+      height: 100%;
+      @extend %flex-start;
+    }
+    .close-modal {
+      @extend %pointer;
+      @extend %noselect;
+      position: absolute;
+      top: 0.2rem;
+      right: 0.5rem;
+      padding: 0;
+      height: auto;
+      color: #aaa;
+      z-index: 20;
+    }
     .pending {
       padding: 0.5rem;
+      width: 100%;
       background: #1d1d1d;
       font-family: monospace;
       color: #fff;
       margin: 0;
       border-radius: 4px;
+      margin-top: 1rem;
       border: 2px solid #2d2d2d;
       &.error {
         color: lighten(red, 20);
       }
     }
     .options {
-      margin: 1rem 0 0 0;
-      @extend %flex-end-center;
+      margin: 2rem 0 0 0;
+      width: 100%;
+      @extend %flex-end;
+      align-items: stretch;
     }
     h3 {
       margin: 0 0 0.7rem 0;
+      width: 100%;
       font-weight: 400;
       color: $panel-top--header;
       @extend %typo-header;
       @extend %noselect;
       @extend %flex-start-center;
-      i {
-        font-size: inherit;
-        margin: 0 0.3rem 0 0;
-      }
     }
     input {
       border-radius: 5px;
@@ -208,6 +269,29 @@ export default {
       background: $compact--button-bg;
       @include rectangle("100%", "auto");
       @extend %typo-normal;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .modal {
+    .wrap {
+      &.row {
+        flex-direction: column;
+        align-items: center;
+        align-content: center;
+      }
+      .leading {
+        padding: 1.5rem 0;
+      }
+      .close-modal {
+        top: -0.5rem;
+      }
+      &:not(.row) {
+        padding: 2.5rem 1rem;
+        max-width: 100%;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
     }
   }
 }

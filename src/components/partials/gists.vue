@@ -14,12 +14,12 @@
     <page-changer
       @prev="Older"
       @next="Newer"
-      :shwPublic="shwPublic"
+      :shwPublic="shwPublic || (!authorized && !user)"
       :pages="pages"
     ></page-changer>
     <no-gists v-if="gistsLength < 1 && !queryActive && !queryFailed"></no-gists>
     <failed-request></failed-request>
-    <load-placeholder :count="10"></load-placeholder>
+    <load-placeholder :count="!queryFailed ? 12 : 3"></load-placeholder>
     <star-notf :list="starNotf"></star-notf>
   </main>
 </template>
@@ -149,8 +149,11 @@ export default {
   }
   ul {
     padding: 0 1rem;
+    padding-bottom: 2rem;
     list-style: none;
     width: 100%;
+    max-width: 1200px;
+    margin: 1rem auto;
     transform: translate3d(0, 0, 0);
   }
 }

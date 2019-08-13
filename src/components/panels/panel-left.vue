@@ -99,9 +99,12 @@ export default {
   }
 }
 .opened {
-  margin: 0.5rem;
   flex: 0 0 auto;
   color: $comment--header;
+  background: #202020;
+  padding: 2.3rem 0.6rem 0.8rem 0.6rem;
+  margin: 0;
+  width: 100%;
 }
 .panelLeft::-webkit-scrollbar {
   display: block;
@@ -125,6 +128,11 @@ export default {
     overflow: auto hidden;
     flex-wrap: nowrap;
     padding: 0;
+    .opened {
+      padding: 0.55rem;
+      height: 100%;
+      width: auto;
+    }
     .file {
       width: auto;
       white-space: nowrap;

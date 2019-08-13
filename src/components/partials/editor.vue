@@ -2,7 +2,9 @@
   <main class="editor">
     <div
       class="editorFields"
-      v-if="files.length > 0 && activeFile && activeFileData && !gistLoading"
+      v-if="
+        files.length > 0 && activeFile && activeFileData != null && !gistLoading
+      "
     >
       <error-boundary>
         <codemirror
@@ -26,7 +28,7 @@
     <input type="file" name="openFile" @input="loadFile" multiple ref="input" />
     <div
       class="addFile"
-      v-if="(!activeFile || !activeFileData) && !gistLoading"
+      v-if="(!activeFile || activeFileData == null) && !gistLoading"
       ref="dropArea"
       @dragenter="dropActive"
       @dragover="dropActive"
@@ -304,7 +306,7 @@ export default {
       span {
         font-size: 1rem;
         display: flex;
-        text-decoration: underline dotted $comment--header;
+        text-decoration: underline wavy $comment--header;
         padding: 0.5rem 0;
         color: #ababab;
       }

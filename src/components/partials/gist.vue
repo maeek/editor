@@ -18,7 +18,10 @@
           <span class="description">{{ gist.description }}</span>
         </div>
       </div>
-      <div class="wrapper">
+      <div class="wrapper options">
+        <span class="stats pb" v-if="gist.public"
+          ><i class="material-icons">public</i>Public</span
+        >
         <span class="stats" v-if="Object.keys(gist.files).length > 0"
           ><i class="material-icons">code</i>Files:
           {{ Object.keys(gist.files).length }}</span
@@ -27,9 +30,7 @@
           ><i class="material-icons">comment</i>Comments:
           {{ gist.comments }}</span
         >
-        <span class="stats" v-if="gist.public"
-          ><i class="material-icons">public</i>Public</span
-        >
+
         <span
           class="stats stats-button"
           v-if="authorized && !starred && !hasStar"
@@ -171,6 +172,9 @@ li {
     @extend %flex-btw-center;
     flex-wrap: wrap;
     .stats {
+      &.pb {
+        color: $comment--header;
+      }
       margin: 0.3rem 0 0 1rem;
       font-weight: 900;
       color: $bottom--button-color;
@@ -241,12 +245,16 @@ li {
   li > .wrapper {
     width: 100%;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: flex-start;
     align-content: flex-start;
     flex-wrap: nowrap;
     .stats {
-      margin: 1rem 0.5rem 0 0;
+      margin: 0.5rem 0rem 0 0.5rem;
+    }
+    .user .path h5 .filename,
+    .user .path .description {
+      word-break: break-all;
     }
   }
 }

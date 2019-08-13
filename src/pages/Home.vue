@@ -32,6 +32,7 @@
         ref="panelLeft"
       ></panel-left>
       <div class="wrapper wrapper-column" ref="wrapper">
+        <landing-greeter v-if="!authorized && !user"></landing-greeter>
         <user-panel v-if="user || (authorized && !shwPublic)" :user="user" />
         <div class="switch" v-if="authorized">
           <compact
@@ -63,6 +64,13 @@
           >
             star
           </compact>
+          <compact
+            :title="'Add new gist'"
+            name="New gist"
+            @click.native="newFileModal(true)"
+          >
+            add
+          </compact>
         </div>
         <gists
           :user="user"
@@ -82,6 +90,7 @@ import panelLeft from "@/components/panels/panel-left.vue";
 import compact from "@/components/buttons/button-compact.vue";
 import loginCompact from "@/components/buttons/login-button.vue";
 import gists from "@/components/partials/gists.vue";
+import landingGreeter from "@/components/partials/landing-greeter.vue";
 import userPanel from "@/components/panels/user.vue";
 import actionsButton from "@/components/buttons/actions.vue";
 import { mapActions, mapGetters } from "vuex";
@@ -95,6 +104,7 @@ export default {
     compact,
     gists,
     userPanel,
+    landingGreeter,
     actionsButton
   },
   data() {
@@ -112,11 +122,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["toggleSettings", "logout"]),
+    ...mapActions(["toggleSettings", "logout", "newFileModal"]),
     resize() {
       if (this.authorized) {
         if (document.body.clientWidth <= 768 && this.$refs.panelLeft) {
-          this.$refs.panelLeft.$el.style["margin-top"] = "2.1rem";
+          this.$refs.panelLeft.$el.style["padding-top"] = "2.1rem";
           this.$refs.wrapper.style["padding-top"] = "0";
         } else {
           this.$refs.wrapper.style["padding-top"] = "2rem";

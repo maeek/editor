@@ -23,14 +23,15 @@ export default {
 <style scoped lang="scss">
 .failedRequest {
   width: calc(100% - 4rem);
+  max-width: 1200px;
   border: 3px solid #2d2d2d;
   color: #f0f0f0;
   padding: 1rem;
   border-radius: 8px;
-  margin: 2rem;
   @extend %typo-koho;
   @extend %flex-start;
   flex-direction: column;
+  margin: 2rem auto;
   i {
     margin: 1rem 0;
     font-size: 2rem;

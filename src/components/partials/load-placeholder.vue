@@ -23,7 +23,8 @@ export default {
   @include rectangle(100%, 100%);
 }
 .placeholderWrapper {
-  margin-top: 1em;
+  max-width: 1200px;
+  margin: 1rem auto;
 }
 .placeholder {
   color: #f0f0f0;

@@ -1,5 +1,5 @@
 <template>
-  <div class="actions">
+  <div class="actions" @click.stop>
     <transition name="width-to-left">
       <div class="container" v-if="showContainer">
         <compact
@@ -84,7 +84,16 @@ export default {
     },
     openFile() {
       this.$router.push({ path: "/edit/" });
+    },
+    hideButtons() {
+      this.showContainer = false;
     }
+  },
+  mounted() {
+    document.addEventListener("click", this.hideButtons);
+  },
+  beforeDestroy() {
+    document.removeEventListener("click", this.hideButtons);
   }
 };
 </script>
@@ -94,7 +103,7 @@ export default {
   position: fixed;
   bottom: 1.5rem;
   right: 2rem;
-  z-index: 15;
+  z-index: 8;
   @extend %flex-end;
   @extend %noselect;
   flex-direction: column;
@@ -109,7 +118,7 @@ export default {
     @extend %typo-big;
     @extend %pointer;
     @extend %flex-center;
-    transition: 0.4s;
+    transition: 0.2s;
     &.showContainer {
       transform: rotate(180deg);
     }

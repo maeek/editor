@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: "buttonCompact",
+  name: "buttonModal",
   props: {
     name: {
       default: "",
@@ -27,58 +27,45 @@ export default {
 button {
   border-radius: 5px;
   margin: 0 0.2rem;
-  color: $compact--button-color;
   color: #fefefe;
   background: transparent;
-  // background: $compact--button-bg;
-  @include rectangle(auto, 1.5rem);
+  padding: 0.5rem 1rem;
+  @include rectangle(auto, auto);
   @extend %pointer;
   @extend %noselect;
-  @extend %flex-center;
+  @extend %flex-start-center;
+  border: 1px solid $compact--button-color;
   i {
-    margin: 0 0.2rem 0 0;
+    margin: 0 0.5rem 0 0;
     color: $compact--button--bg-hover;
-    @extend %typo-normal;
+    @extend %typo-medium;
   }
   span {
     color: inherit;
     @include rectangle(auto, 100%);
-    @extend %typo-tiny;
-    @extend %flex-center;
+    @extend %typo-small;
+    @extend %flex-start;
+    font-weight: 900;
   }
   &.active {
+    color: $compact--button--bg-hover;
+    border: 1px solid $compact--button--bg-hover;
+  }
+  &[title="Cancel"],
+  &.secret {
+    color: #ababab;
+    border: 1px solid #333;
+  }
+  &:hover {
     color: $compact--button-bg;
     background: $compact--button--bg-hover;
+    &[title="Cancel"],
+    &.secret {
+      background: #ababab;
+    }
     i {
       color: $compact--button-bg;
     }
-  }
-  &[title="Cancel"] {
-    background: #333;
-  }
-  &.close,
-  &.login {
-    background: $compact--button-bg;
-  }
-  @media screen and (max-width: 768px) {
-    .hidden {
-      margin: 0;
-    }
-    .hide {
-      display: none;
-    }
-  }
-}
-button:hover {
-  color: $compact--button-bg;
-  background: $compact--button--bg-hover;
-  i {
-    color: $compact--button-bg;
-  }
-}
-@media screen and (max-width: 768px) {
-  button {
-    background: $compact--button-bg;
   }
 }
 </style>

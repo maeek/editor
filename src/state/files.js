@@ -147,7 +147,7 @@ export default {
         headers: headers,
         body: JSON.stringify({
           description: "Gist created with https://editor.eswomp.it/",
-          public: false,
+          public: obj.public || false,
           files: obj.files
         })
       });
@@ -392,7 +392,8 @@ export default {
       if (state.activeFile.name && state.activeFile.data && state.files) {
         if (
           getters.fileByName(name ? name : state.activeFile.name).hash ===
-          state.activeFile.data.hashCode()
+            state.activeFile.data.hashCode() &&
+          state.activeFile.data != null
         ) {
           saved = true;
         } else {

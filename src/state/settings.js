@@ -8,9 +8,12 @@ const modes = CodeMirror.modeInfo.filter(el => {
   };
 });
 
+const pjson = require("../../package.json");
+const version = pjson.version;
+
 export default {
   state: {
-    version: "1.0.0",
+    version: version,
     tabSize: 2,
     lineNumbers: true,
     keyMap: "sublime",
