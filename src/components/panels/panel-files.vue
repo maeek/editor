@@ -189,7 +189,7 @@ export default {
       // Show modal;
     }
   },
-  updated() {
+  mounted() {
     const $this = this;
     if (this.files.length > 0) {
       this.$refs.panelFiles.addEventListener(
