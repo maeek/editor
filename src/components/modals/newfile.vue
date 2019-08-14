@@ -242,6 +242,7 @@ export default {
       border-radius: 4px;
       margin-top: 1rem;
       border: 2px solid #2d2d2d;
+      @extend %flex-start-center;
       &.error {
         color: lighten(red, 20);
       }

@@ -188,6 +188,7 @@ export default {
         color: #aaa;
         text-decoration: line-through $comment--header;
       }
+      @extend %flex-start-center;
       &.error {
         color: lighten(red, 20);
       }

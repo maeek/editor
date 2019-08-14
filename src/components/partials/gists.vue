@@ -93,7 +93,6 @@ export default {
       "queryActive"
     ]),
     count() {
-      // !queryFailed ? 12 : 3
       let cc = 5;
       if (this.shwPublic && !this.queryFailed) cc = 15;
       else if (this.queryFailed) cc = 3;

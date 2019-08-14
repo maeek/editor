@@ -276,7 +276,9 @@ export default {
     };
     if (this.$route.params.id) {
       this.load(this.$route.params.id);
-      if (this.$route.query.target) this.switchFile(this.$route.query.target);
+      if (this.$route.query.target) {
+        this.switchFile(this.$route.query.target);
+      }
     }
   },
   beforeRouteUpdate(to, from, next) {
