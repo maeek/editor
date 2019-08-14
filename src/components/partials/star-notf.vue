@@ -7,7 +7,7 @@
         :key="star.id + i"
         @click="list.shift()"
       >
-        <i class="material-icons">star</i>
+        <i class="material-icons">{{ star.status ? "star" : "star_border" }}</i>
         <span>{{
           star.status ? `Starred ${star.id}` : `UnStarred ${star.id}`
         }}</span>
@@ -36,25 +36,24 @@ export default {
 }
 .starNotf {
   position: fixed;
-  top: 3rem;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 5rem;
+  right: 1.5rem;
   z-index: 20;
   .star {
-    background: $comment--header;
-    margin: 0.3rem 0;
-    color: darken($comment--header, 25);
+    background: #0e0e0e;
+    margin: 0.5rem 0;
+    color: #aaa;
     border-radius: 5px;
     border-bottom: 0.3rem solid darken($comment--header, 25);
-    padding: 0.2rem 1rem;
+    padding: 0.8rem 1rem;
     position: relative;
     @extend %typo-koho;
     @extend %typo-small;
-    @extend %flex-center;
+    @extend %flex-start-center;
     i {
       @extend %noselect;
       margin-right: 1rem;
-      font-size: 1.5rem;
+      font-size: 0.8rem;
       color: lighten($comment--header, 35);
     }
     &::before {

@@ -204,7 +204,7 @@ body {
 
 .scale-w-center-enter,
 .scale-w-center-leave-to {
-    transform: translateX(-50%) scale(1.7);
+    transform: scale(1.7);
     opacity: 0;
 }
 
