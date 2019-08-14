@@ -3,12 +3,15 @@
     <div class="wrapper">
       <div class="column">
         <h3><i class="material-icons">waves</i></h3>
-      </div>
-      <div class="column">
-        <a href="https://gist.github.com/">Gists page</a>
-        <a href="https://github.com/maeek/editor">Project on github</a>
+        <span
+          >Do you like Editor? Give it a star on
+          <a target="_blank" href="https://github.com/maeek/editor"
+            >Github</a
+          ></span
+        >
         <span>License MIT</span>
       </div>
+      <div class="column"></div>
     </div>
   </footer>
 </template>
@@ -38,6 +41,9 @@ footer {
       width: 50%;
       @extend %flex-start;
       flex-direction: column;
+    }
+    span {
+      margin: 0.5rem 0;
     }
     a {
       color: $panel-top--header;
