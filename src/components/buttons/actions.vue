@@ -32,7 +32,7 @@
           name="Show on github"
           @click.native="
             goTo(
-              `https://github.com/${$route.params.user}` ||
+              `https://github.com/${$route.params.user || 'maeek'}` ||
                 profile_link ||
                 'https://github.com/maeek/editor'
             )
