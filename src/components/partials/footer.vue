@@ -2,7 +2,7 @@
   <footer>
     <div class="wrapper">
       <div class="column">
-        <h3><i class="material-icons">waves</i></h3>
+        <h3><i class="material-icons">waves</i>{{ version }}</h3>
         <span
           >Do you like Editor? Give it a star on
           <a target="_blank" href="https://github.com/maeek/editor"
@@ -17,8 +17,10 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
-  name: "foot"
+  name: "foot",
+  computed: mapGetters(["version"])
 };
 </script>
 
