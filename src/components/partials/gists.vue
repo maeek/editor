@@ -227,11 +227,11 @@ export default {
   }
   ul {
     padding: 0 1rem;
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
     list-style: none;
     width: 100%;
     max-width: 1200px;
-    margin: 1rem auto;
+    margin: 1rem auto 0 auto;
     transform: translate3d(0, 0, 0);
   }
 }

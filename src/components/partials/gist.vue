@@ -15,6 +15,7 @@
               filename || "&lt; NO FILES &gt;"
             }}</span>
           </h5>
+          <span class="description">{{ mimeType }}</span>
           <span class="description">{{ gist.description }}</span>
         </div>
       </div>
@@ -87,6 +88,9 @@ export default {
     filename() {
       return this.file;
     },
+    mimeType() {
+      return this.mime;
+    },
     hasStar() {
       return this.star;
     }
@@ -143,6 +147,7 @@ export default {
     (async function() {
       let raw_link = Object.keys($this.gist.files)[0];
       $this.file = raw_link;
+      $this.mime = $this.gist.files[raw_link].type;
     })();
   },
   beforeDestroy() {
