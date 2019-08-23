@@ -8,7 +8,7 @@ Source files for file editor web application, based on codemirror library built 
 ![Editor preview mobile](https://raw.githubusercontent.com/maeek/editor/master/src/assets/preview_m.png)
 
 ### TODO
-  - Downloading files
+  - ~~Downloading files~~
   - ~~Star gist in editor view~~
   - Create new gist from files (drag and drop or manual selecion)
   - Modifying gists (file names, public/private etc.)

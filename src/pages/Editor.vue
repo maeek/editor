@@ -21,7 +21,12 @@
         file_copy
       </compact>
       <input type="file" name="openFile" @input="loadFile" multiple />
-      <compact :title="'Download file'" name="Download" v-if="activeFile">
+      <compact
+        :title="'Download file'"
+        name="Download"
+        v-if="activeFile"
+        @click.native="downloadFile"
+      >
         save_alt
       </compact>
       <compact
@@ -122,6 +127,7 @@ export default {
       "tokenType",
       "alias",
       "fileById",
+      "fileByName",
       "files"
     ]),
     fullscreenIndicator: function() {
@@ -146,6 +152,23 @@ export default {
       "setStar",
       "unStar"
     ]),
+    downloadFile() {
+      const fileName = this.activeFile;
+      const file = this.fileByName(fileName);
+      const type = file.mode;
+      const data = file.data;
+      const blob = new Blob([data], { type: type });
+      if (window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveBlob(blob, fileName);
+      } else {
+        var elem = window.document.createElement("a");
+        elem.href = window.URL.createObjectURL(blob);
+        elem.download = fileName;
+        document.body.appendChild(elem);
+        elem.click();
+        document.body.removeChild(elem);
+      }
+    },
     openFile() {
       document.querySelector("input[name='openFile']").click();
     },
