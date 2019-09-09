@@ -27,14 +27,14 @@
       </compact>
     </panel-top>
     <div class="wrapper">
-      <panel-left v-if="files.length > 0" ref="panelLeft"></panel-left>
+      <panel-left v-if="files.length > 0 && !not_found" ref="panelLeft"></panel-left>
       <div class="wrapper wrapper-column" ref="wrapper">
         <landing-greeter
           :class="{ authorized }"
-          v-if="!authorized && !starred && !user && !shwPublic"
+          v-if="!authorized && !starred && !user && !shwPublic && !not_found"
         ></landing-greeter>
-        <user-panel v-if="user || (authorized && !shwPublic)" :user="user" />
-        <div class="switch" v-if="authorized">
+        <user-panel v-if="(user && !not_found) || (authorized && !shwPublic && !not_found)" :user="user" />
+        <div class="switch" v-if="authorized && !not_found">
           <compact
             :class="{ active: !shwPublic && !user && !starred }"
             @click.native="$router.push({ path: '/' })"
@@ -76,11 +76,39 @@
           :user="user"
           :starred="starred"
           :shwPublic="shwPublic"
+          :not_found="not_found"
+          v-if="!not_found"
           ref="gists"
         />
+        <div v-if="not_found" class="fetchError">
+          <pre>
+                _____
+             ,-"     "-.
+            / o       o \
+           /   \     /   \
+          /     )-"-(     \
+         /     ( 6 6 )     \
+        /       \ " /       \
+       /         )=(         \
+      /   o   .--"-"--.   o   \
+     /    I  /  -   -  \  I    \
+ .--(    (_}y/\       /\y{_)    )--.
+(    ".___l\/__\_____/__\/l___,"    )
+ \                                 /
+  "-._      o O o O o O o      _,-"
+      `--Y--.___________.--Y--'
+         |==.___________.==| 
+         `==.___________.==' 
+            
+            /           \
+           /             \
+          </pre>
+      <span class="code">404</span>
+      <span class="text">Resource not found</span>
+    </div>
       </div>
     </div>
-    <actions-button v-if="authorized"></actions-button>
+    <actions-button v-if="authorized && !not_found"></actions-button>
   </div>
 </template>
 
@@ -112,7 +140,7 @@ export default {
       groups: []
     };
   },
-  props: ["user", "shwPublic", "starred"],
+  props: ["user", "shwPublic", "starred", "not_found"],
   computed: {
     ...mapGetters(["authorized", "avatar", "alias", "name", "files"]),
     key() {
@@ -174,7 +202,33 @@ export default {
     }
   }
 }
-
+.fetchError {
+  width: 100%;
+  min-height: 60%;
+  color: $comment--header;
+  pre {
+    font-family: monospace;
+    white-space: pre-wrap;
+    font-size: 1rem;
+    font-weight: 900;
+  }
+  span {
+    font-weight: 900;
+  }
+  .code {
+    font-size: 2rem;
+  }
+  .text {
+    margin: 0.5rem 0;
+    width: 400px;
+    max-width: 95%;
+    text-align: center;
+    color: $compact--button-color;
+  }
+  @extend %flex-center;
+  @extend %typo-koho;
+  flex-direction: column;
+}
 @media screen and (max-width: 768px) {
   .page-editor {
     .wrapper {

@@ -15,7 +15,7 @@
       </compact>
       <div class="data">
         <div class="region">
-          <h5>Editor</h5>
+          <!-- <h5>Editor</h5> -->
           <div class="options">
             <optionCheck :key="'autoSave'" :checked="false">
               Auto save <span class="experimental">(Experimental)</span>
@@ -131,8 +131,18 @@ export default {
   top: 0.5rem;
   right: 0.5rem;
 }
+h3 {
+  width: 100%;
+  padding: 0.5rem;
+  background: #1d1d1d;
+  margin:0;
+  i {
+    color: $comment--header;
+  }
+}
 .modal {
   .wrap {
+    padding: 0;
     .data {
       max-width: 100%;
       margin: 0 auto;

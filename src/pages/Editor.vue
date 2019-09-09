@@ -240,8 +240,8 @@ export default {
         document.exitFullscreen();
       }
     },
-    async fetchGist(url, headers) {
-      return await fetch(url, {
+    fetchGist(url, headers) {
+      return fetch(url, {
         method: "GET",
         headers: headers,
         cache: "no-cache"
@@ -264,6 +264,8 @@ export default {
                 $this.$route.query.target || Object.keys(res.files)[0]
               );
             });
+          } else {
+            throw {code: 404, text: res.message, doc_link: res.documentation_url};
           }
           $this.setLoading(false);
         })
@@ -272,9 +274,7 @@ export default {
           this.fetchError = {
             code: e.code || 424,
             text:
-              e.text ||
-              e ||
-              "The method could not be performed on the resource because the requested action depended on another action and that action failed."
+              e.text || e || "The method could not be performed on the resource because the requested action depended on another action and that action failed."
           };
         });
     },

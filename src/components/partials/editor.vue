@@ -18,6 +18,29 @@
         >
         </codemirror>
       </error-boundary>
+      <div class="revisions">
+        <h5>Version history</h5>
+        <div class="close-revision material-icons">close</div>
+        <ul class="revs">
+          <li v-for="n in 1" :key="n">
+            <span>#{{n}}</span>
+            <span class="name">Revision name</span>
+            <span class="time">01-01-1970 00:00:00</span>
+            <compact
+              title="Preview Revision"
+              name="Preview"
+            >
+              visibility
+            </compact>
+            <compact
+              title="Load Revision"
+              name="Load"
+            >
+              build
+            </compact>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="loader" v-if="gistLoading && $route.params.id">
       <h5>
@@ -52,6 +75,8 @@ import errorBoundary from "@/components/error-boundary.vue";
 import /* webpackPrefetch: true, webpackChunkName: "codemirror-keymap-sublime" */ "codemirror/keymap/sublime.js";
 import /* webpackPrefetch: true, webpackChunkName: "codemirror-keymap-vim" */ "codemirror/keymap/vim.js";
 
+import compact from "@/components/buttons/button-compact.vue";
+
 export default {
   name: "editorWrapper",
   data() {
@@ -61,7 +86,8 @@ export default {
   },
   components: {
     codemirror,
-    errorBoundary
+    errorBoundary,
+    compact
   },
   computed: {
     ...mapGetters([
@@ -230,7 +256,61 @@ export default {
 @import "../../../node_modules/codemirror/theme/base16-dark.css";
 .editor {
   .vue-codemirror {
-    @include rectangle(100%, 100%);
+    @include rectangle(100%, auto);
+    @extend %flex-btw-start;
+    flex-direction: column;
+    flex: 1 0 auto;
+  }
+  .revisions {
+    width: 100%;
+    flex: 0 0 auto;
+    min-height: 300px;
+    background: #222;
+    position: relative;
+    padding:0;
+    .close-revision {
+      top: 0.4rem;
+      right: 0.5rem;
+      position: absolute;
+      color: #aaa;
+      font-weight: 900;
+    }
+    .revs {
+      width: 100%;
+      height: auto;
+      list-style: none;
+      color: #ababab;
+      padding: 0.5rem;
+      margin:0;
+      overflow: auto;
+      @extend %typo-koho;
+      @extend %typo-small;
+      li {
+        @extend %flex-start-center;
+        padding: 0.5rem;
+        margin: 0.3rem 0;
+        background: #333333;
+        border-radius: 4px;
+        span:nth-of-type(1) {
+          min-width: 40px;
+        }
+        .name {
+          flex: 1 0 auto;
+          margin: 0.5rem;
+        }
+        .time {
+          margin: 0 1rem;
+        }
+      }
+    }
+    h5 {
+      padding: 0.5rem;
+      margin: 0;
+      color: #f0f0f0;
+      background: #1d1d1d;
+      @extend %typo-koho;
+      font-weight: 400;
+    }
   }
   flex: 1 1 auto;
   overflow: auto;

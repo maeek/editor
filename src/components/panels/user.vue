@@ -1,5 +1,5 @@
 <template>
-  <div class="my-account">
+  <div class="my-account" v-if="!queryFailed && !queryActive">
     <div class="wrapper">
       <img :src="image" />
       <div class="info">
@@ -68,7 +68,9 @@ export default {
       "following",
       "name",
       "userPublicGists",
-      "userPublicRepos"
+      "userPublicRepos",
+      "queryFailed",
+      "queryActive"
     ]),
     image() {
       return this.image_url;

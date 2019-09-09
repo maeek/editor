@@ -168,13 +168,14 @@ export default {
       });
     },
     async updateGists({ dispatch }, link) {
-      await dispatch("getGists", { link: link });
+      return await dispatch("getGists", { link: link });
     },
     async appendGists({ dispatch }, link) {
       console.log(link);
       return dispatch("getGists", { link: link, append: true });
     },
     async getGists({ state, commit, dispatch, getters }, obj) {
+      commit("QUERY_FAILED", false);
       commit("QUERY_ACTIVE", true);
       let headers = await dispatch("setHeaders");
       return fetch(obj.link, {

@@ -42,6 +42,14 @@ const routes = [
     path: "/edit/",
     component: () =>
       import(/* webpackChunkName: "editor-chunk" */ "@/pages/Editor.vue")
+  },
+  {
+    path: "*",
+    component: () =>
+      import(/* webpackChunkName: "home-chunk" */ "@/pages/Home.vue"),
+    props: {
+      not_found: true
+    }
   }
 ];
 

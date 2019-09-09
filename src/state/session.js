@@ -4,6 +4,7 @@ const apiKey = require("../../api.key");
 
 export default {
   state: {
+    pendingLogin: true,
     loginFailed: false,
     name: null,
     alias: null,
@@ -71,6 +72,9 @@ export default {
       const { token_type, access_token } = token;
       state.type = token_type;
       state.token = access_token;
+    },
+    PENDING_LOGIN(state, status) {
+      state.pendingLogin = status;
     }
   },
   actions: {
@@ -105,10 +109,14 @@ export default {
     async userInfo({ commit }, api) {
       commit("USER", api);
       console.log(api);
+    },
+    setPendingLogin({ commit }, status) {
+      commit("PENDING_LOGIN", status);
     }
   },
   getters: {
     userObj: state => state,
+    pendingLogin: state => state.pendingLogin,
     name: state => state.name,
     alias: state => state.alias,
     email: state => state.email,

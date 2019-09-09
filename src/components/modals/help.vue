@@ -171,8 +171,22 @@ export default {
 .close {
   position: absolute;
   top: 0.5rem;
-  right: 4.55rem;
-  width: 4.65rem;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+.modal {
+    .wrap {
+      padding: 0;
+    }
+}
+h3 {
+  width: 100%;
+  padding: 0.5rem;
+  background: #1d1d1d;
+  margin:0;
+  i {
+    color: $comment--header;
+  }
 }
 @media screen and (max-width: 768px) {
   .modal {

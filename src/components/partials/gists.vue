@@ -72,7 +72,7 @@ export default {
     failedRequest,
     foot
   },
-  props: ["user", "shwPublic", "starred"],
+  props: ["user", "shwPublic", "starred", "not_found"],
   data() {
     return {
       gist_dir: "https://api.github.com/gists/public",
@@ -95,8 +95,9 @@ export default {
     count() {
       let cc = 5;
       if (this.shwPublic && !this.queryFailed) cc = 15;
-      else if (this.queryFailed) cc = 3;
+      else if (this.queryFailed) cc = 0;
       else if (this.user) cc = 10;
+      else if (this.queryActive) cc = 10;
       return cc;
     },
     gistDir() {
