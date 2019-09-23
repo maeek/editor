@@ -232,6 +232,9 @@ export default {
           flex-wrap: nowrap;
           white-space: nowrap;
         }
+        &::before {
+          content: initial;
+        }
       }
 
       &::after {
@@ -244,9 +247,24 @@ export default {
         height: 3px;
         background: $panel-top--header;
       }
+      &::before {
+        position: absolute;
+        content: "";
+        top: 50%;
+        right: -23px;
+        border-radius: 50%;
+        transform: translateY(-50%);
+        width: 10px;
+        height: 10px;
+        background: #666;
+        z-index: 1;
+      }
       &:last-child:after {
         background: transparent;
       }
+      &:last-child:before {
+          content: initial;
+        }
       &.loaded {
         border: 2px solid darken($panel-top--header, 15);
         span:nth-of-type(1) {

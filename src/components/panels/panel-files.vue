@@ -16,6 +16,12 @@
       <i class="material-icons" @click="scrollRight">
         keyboard_arrow_right
       </i>
+      <i :class="{'material-icons': true, active: showRevisions}" title="Revisions" @click="showRevs">
+        history
+      </i>
+      <i :class="{'material-icons': true, active: comments}" title="Comments" @click="showComs">
+        comment
+      </i>
       <i class="material-icons showMore" @click.stop="showMore(!moreDialog)">
         more_horiz
       </i>
@@ -60,7 +66,9 @@ export default {
       "fileMode",
       "fileData",
       "moreDialog",
-      "filesDialog"
+      "filesDialog",
+      "comments",
+      "showRevisions"
     ])
   },
   methods: {
@@ -71,7 +79,9 @@ export default {
       "saveFile",
       "showMore",
       "showFilesDialog",
-      "newFileModal"
+      "newFileModal",
+      "setComments",
+      "setRevisions"
     ]),
     openFile(ev, file) {
       console.log(file);
@@ -105,6 +115,28 @@ export default {
     dragEn(ev) {
       ev.preventDefault();
       this.$refs.panelFiles.removeAttribute("style");
+    },
+    showComs() {
+      if (!this.comments) {
+        this.fetchGist(
+          `https://api.github.com/gists/${this.$route.params.id}/comments`
+        ).then(data => {
+          this.$store.commit("SET_COMMENTS", data);
+        });
+      }
+      // this.setRevisions(false);
+      this.setComments(!this.comments);
+    },
+    showRevs() {
+      if (!this.showRevisions) {
+        this.fetchGist(
+          `https://api.github.com/gists/${this.$route.params.id}/commits`
+        ).then(data => {
+          this.$store.commit("SET_REVS", data.reverse());
+        });
+      }
+      // this.setComments(false);
+      this.setRevisions(!this.showRevisions);
     },
     readFileAsync(file) {
       return new Promise((resolve, reject) => {
@@ -186,8 +218,19 @@ export default {
     returnToPrevious() {
       this.activeFileData(this.fileData(), "saveFile");
     },
-    removeAll() {
-      // Show modal;
+    async fetchGist(link) {
+      return fetch(link, {
+        headers: await this.$store.dispatch("setHeaders"),
+        cache: "no-cache"
+      })
+        .then(res => res.json())
+        .then(ms => {
+          if (!ms.message) {
+            return ms;
+          } else {
+            return null;
+          }
+        });
     }
   },
   mounted() {
@@ -217,22 +260,25 @@ export default {
   overflow-y: hidden;
   transition: background 0.2s;
   background: $panel-files-bg;
-  @include rectangle(calc(100% - 5rem), calc(2rem + 2px));
+  @include rectangle(calc(100% - 8.5rem), calc(2rem + 2px));
   @extend %flex-start;
   .scroller {
     position: fixed;
     right: 0;
-    width: 5rem;
+    width: 8.5rem;
     height: calc(2rem + 2px);
     background: #1d1d1d;
     z-index: 5;
     @extend %flex-center;
     @extend %noselect;
     i {
-      margin: 0 0.1rem;
+      margin: 0 0.2rem;
       color: #ababab;
       @extend %pointer;
       @extend %typo-medium;
+      &.active {
+        color: $comment--header;
+      }
     }
     i:hover {
       color: #fefefe;

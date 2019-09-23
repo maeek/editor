@@ -35,6 +35,7 @@
               title="Delete"
               name="Delete"
               :hide="false"
+              v-if="alias === com.user.login"
               @click.native="removeComment(com.id)"
             >
               delete
