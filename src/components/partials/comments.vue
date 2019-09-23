@@ -28,7 +28,6 @@
       <span>Comments will be displayed here</span>
     </div>
     <new-comment ref="newComment" @create="createComment" />
-    <div class="end revsEnd" v-if="commentsList.length > 0"></div>
   </div>
 </template>
 
@@ -160,33 +159,6 @@ export default {
     color: $comment--header;
     font-size: 2rem;
     margin: 0.3rem 0;
-  }
-}
-.end {
-  width: 12px;
-  height: 12px;
-  flex: 0 0 12px;
-  border-radius: 50%;
-  background: $comment--header;
-  margin: 2rem auto;
-  position: relative;
-  @extend %noselect;
-  &::after,
-  &::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 6px;
-    height: 6px;
-    background: darken($comment--header, 10);
-    border-radius: 50%;
-    transform: translateY(-50%);
-  }
-  &::after {
-    right: -10px;
-  }
-  &::before {
-    left: -10px;
   }
 }
 .comments {
