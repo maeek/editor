@@ -33,7 +33,7 @@ label {
     display: none;
   }
   input ~ .checkbox--wrapper {
-    @include rectangle(1.1rem, 1.1rem);
+    @include rectangle(24px, 24px);
     transition: 0.3s background, 0.3s color;
     @extend %flex-start;
     flex-direction: row;
@@ -51,11 +51,13 @@ label {
       left: 50%;
       transform: translate(-50%, -50%);
       @extend %typo-small;
-      @include rectangle(0.8rem, 0.8rem);
+      @extend %flex-center;
+      @include rectangle(100%, 100%);
       z-index: 5;
       -webkit-font-feature-settings: "liga";
       font-family: "Material Icons";
       color: #111;
+      font-size: 1rem;
       font-weight: 900;
     }
   }

@@ -2,10 +2,19 @@ import Vue from "vue";
 import App from "./App.vue";
 import store from "./store";
 import router from "./router";
+import VueShowdown, { showdown } from "vue-showdown";
 // import "./service-worker";
 import "oauthio-web";
 
 Vue.config.productionTip = true;
+
+Vue.use(VueShowdown, {
+  options: {
+    emoji: true,
+    tables: true
+  }
+});
+showdown.setFlavor("github");
 
 new Vue({
   router,

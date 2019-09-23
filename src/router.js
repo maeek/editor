@@ -33,6 +33,12 @@ const routes = [
     props: true
   },
   {
+    path: "/edit/:id/:ver",
+    component: () =>
+      import(/* webpackChunkName: "editor-chunk" */ "@/pages/Editor.vue"),
+    props: true
+  },
+  {
     path: "/edit/:id",
     component: () =>
       import(/* webpackChunkName: "editor-chunk" */ "@/pages/Editor.vue"),

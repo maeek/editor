@@ -35,6 +35,8 @@ export default {
   },
   beforeRouteLeave(next) {
     this.$el.remove();
+    this.$store.dispatch("setComments", false);
+    this.$store.commit("SET_REVS", []);
     next();
   }
 };

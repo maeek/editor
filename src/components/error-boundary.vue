@@ -20,7 +20,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 p {
   color: rgb(255, 115, 115);
   padding: 1rem;
