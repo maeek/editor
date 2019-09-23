@@ -74,6 +74,7 @@ export default {
       "newFileModal"
     ]),
     openFile(ev, file) {
+      console.log(file);
       if (
         this.fileIsSaved ||
         (this.activeFile && this.fileMode().includes("image/"))

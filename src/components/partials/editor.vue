@@ -1,16 +1,23 @@
 <template>
-  <main class="editor">
+  <main class="editor" ref="editorWrapper">
     <div
       class="editorFields"
       v-if="
         files.length > 0 && activeFile && activeFileData != null && !gistLoading
       "
     >
+      <revisions
+        v-if="showRevisions"
+        ref="revs"
+        :scroll="scroll"
+        @scrolled="scrolled = false"
+        @next="revPage"
+      />
       <error-boundary>
         <codemirror
           ref="codeMrr"
           :key="activeFile"
-          :value="code"
+          :value="activeFileData"
           :options="cmOption"
           placeholder="Type here..."
           @ready="onReady"
@@ -18,29 +25,14 @@
         >
         </codemirror>
       </error-boundary>
-      <div class="revisions">
-        <h5>Version history</h5>
-        <div class="close-revision material-icons">close</div>
-        <ul class="revs">
-          <li v-for="n in 1" :key="n">
-            <span>#{{n}}</span>
-            <span class="name">Revision name</span>
-            <span class="time">01-01-1970 00:00:00</span>
-            <compact
-              title="Preview Revision"
-              name="Preview"
-            >
-              visibility
-            </compact>
-            <compact
-              title="Load Revision"
-              name="Load"
-            >
-              build
-            </compact>
-          </li>
-        </ul>
-      </div>
+
+      <comments
+        v-if="comments"
+        ref="applet"
+        :scroll="scroll"
+        @scrolled="scrolled = false"
+      />
+      <footer-component />
     </div>
     <div class="loader" v-if="gistLoading && $route.params.id">
       <h5>
@@ -74,20 +66,26 @@ import { mapGetters, mapActions } from "vuex";
 import errorBoundary from "@/components/error-boundary.vue";
 import /* webpackPrefetch: true, webpackChunkName: "codemirror-keymap-sublime" */ "codemirror/keymap/sublime.js";
 import /* webpackPrefetch: true, webpackChunkName: "codemirror-keymap-vim" */ "codemirror/keymap/vim.js";
-
-import compact from "@/components/buttons/button-compact.vue";
+import revisions from "@/components/partials/revisions.vue";
+import comments from "@/components/partials/comments.vue";
+// import compact from "@/components/buttons/button-compact.vue";
+import footerComponent from "@/components/partials/footer.vue";
 
 export default {
   name: "editorWrapper",
   data() {
     return {
-      code: ""
+      code: "",
+      scrolled: false,
+      loadedRev: null
     };
   },
   components: {
     codemirror,
     errorBoundary,
-    compact
+    revisions,
+    comments,
+    footerComponent
   },
   computed: {
     ...mapGetters([
@@ -96,6 +94,7 @@ export default {
       "fileData",
       "activeFile",
       "files",
+      "activeFile",
       "activeFileData",
       "keyMap",
       "autoClose",
@@ -104,7 +103,11 @@ export default {
       "lineWrap",
       "lineNumbers",
       "tabSize",
-      "gistLoading"
+      "gistLoading",
+      "showRevisions",
+      "comments",
+      "commentsList",
+      "showRevsList"
     ]),
     cmOption() {
       return {
@@ -132,10 +135,24 @@ export default {
     },
     codeMrr() {
       return this.$refs.codeMrr.codemirror;
+    },
+    scroll() {
+      return this.scrolled;
+    },
+    loadedRevision() {
+      return this.loadedRev;
     }
   },
   methods: {
-    ...mapActions(["saveFile", "addFile", "switchFile", "newFileModal"]),
+    ...mapActions([
+      "saveFile",
+      "addFile",
+      "switchFile",
+      "newFileModal",
+      "setRevisions",
+      "closeById",
+      "setComments"
+    ]),
     triggerSave(newcode) {
       this.code = newcode ? newcode : "";
       this.$store.dispatch("activeFileData", newcode);
@@ -145,9 +162,41 @@ export default {
       this.$data.code = this.$store.getters.fileData();
       this.cmOption.mode = this.fileMode;
     },
+    revPage(page) {
+      this.fetchGist(
+        `https://api.github.com/gists/${
+          this.$route.params.id
+        }/commits?page=${page}`
+      ).then(data => {
+        console.log(data);
+        this.$store.commit("SET_REVS", [
+          ...data.reverse(),
+          ...this.showRevsList
+        ]);
+      });
+    },
     openFile() {
       let input = this.$refs.input;
       input.click();
+    },
+    async fetchGist(link) {
+      return fetch(link, {
+        headers: await this.$store.dispatch("setHeaders"),
+        cache: "no-cache"
+      })
+        .then(res => res.json())
+        .then(ms => {
+          if (!ms.message) {
+            return ms;
+          } else {
+            return null;
+          }
+        });
+    },
+    closeRevs() {
+      this.setComments(false);
+      this.setRevisions(false);
+      this.scrolled = false;
     },
     loadFile(ev) {
       const files = ev.target.files;
@@ -245,8 +294,35 @@ export default {
     window.removeEventListener("keydown", $this.saveS);
   },
   mounted() {
+    const $this = this;
     if (this.gistLoading && !this.$route.params.id)
       this.$store.commit("SET_LOADING", false);
+    this.$refs.editorWrapper.addEventListener("scroll", function() {
+      if ($this.$refs.applet) {
+        if (
+          $this.$refs.editorWrapper.scrollTop + 70 >=
+          $this.$refs.applet.$el.offsetTop
+        ) {
+          $this.scrolled = true;
+        } else {
+          $this.scrolled = false;
+        }
+      }
+    });
+    if (this.showRevisions) {
+      this.fetchGist(
+        `https://api.github.com/gists/${this.$route.params.id}/commits`
+      ).then(data => {
+        if (data) this.$store.commit("SET_REVS", data.reverse());
+      });
+    }
+    if (this.comments) {
+      this.fetchGist(
+        `https://api.github.com/gists/${this.$route.params.id}/comments`
+      ).then(data => {
+        if (data) this.$store.commit("SET_COMMENTS", data);
+      });
+    }
   }
 };
 </script>
@@ -255,62 +331,13 @@ export default {
 @import "../../../node_modules/codemirror/lib/codemirror.css";
 @import "../../../node_modules/codemirror/theme/base16-dark.css";
 .editor {
+  scroll-behavior: smooth;
   .vue-codemirror {
     @include rectangle(100%, auto);
     @extend %flex-btw-start;
     flex-direction: column;
     flex: 1 0 auto;
-  }
-  .revisions {
-    width: 100%;
-    flex: 0 0 auto;
-    min-height: 300px;
-    background: #222;
-    position: relative;
-    padding:0;
-    .close-revision {
-      top: 0.4rem;
-      right: 0.5rem;
-      position: absolute;
-      color: #aaa;
-      font-weight: 900;
-    }
-    .revs {
-      width: 100%;
-      height: auto;
-      list-style: none;
-      color: #ababab;
-      padding: 0.5rem;
-      margin:0;
-      overflow: auto;
-      @extend %typo-koho;
-      @extend %typo-small;
-      li {
-        @extend %flex-start-center;
-        padding: 0.5rem;
-        margin: 0.3rem 0;
-        background: #333333;
-        border-radius: 4px;
-        span:nth-of-type(1) {
-          min-width: 40px;
-        }
-        .name {
-          flex: 1 0 auto;
-          margin: 0.5rem;
-        }
-        .time {
-          margin: 0 1rem;
-        }
-      }
-    }
-    h5 {
-      padding: 0.5rem;
-      margin: 0;
-      color: #f0f0f0;
-      background: #1d1d1d;
-      @extend %typo-koho;
-      font-weight: 400;
-    }
+    min-height: 80%;
   }
   flex: 1 1 auto;
   overflow: auto;

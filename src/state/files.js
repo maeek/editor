@@ -65,9 +65,9 @@ export default {
         state.activeFile.size = null;
       }
     },
-    CHANGE_NAME(state, name, newName) {
+    CHANGE_NAME(state, obj) {
       state.files = state.files.filter(el => {
-        el.name = el.name == name ? newName : el.name;
+        el.name = el.name == obj.name ? obj.newName : el.name;
         return el;
       });
     },
@@ -85,6 +85,10 @@ export default {
         el.mode = el.name == name ? mode : el.mode;
         return el;
       });
+    },
+    GIST_FIRST(state, name) {
+      const file = state.files.find(el => el.name == name);
+      file.gistFirst = name;
     },
     ACTIVE_FILE(state, name) {
       state.activeFile.name = name;
@@ -162,7 +166,7 @@ export default {
           description:
             getters.fileById(obj.id).description ||
             "Gist created with https://editor.eswomp.it/",
-          public: false,
+          public: obj.public || false,
           files: obj.files
         })
       });
@@ -217,10 +221,12 @@ export default {
         });
     },
     addFile({ commit, getters }, newFile) {
+      console.log(newFile);
       Object.keys(newFile.files).forEach(async gist => {
         let fileObj = {
           name: newFile.files[gist].filename,
           mode: newFile.files[gist].type,
+          public: newFile.public,
           save: {
             last: newFile.updated_at,
             is: true
@@ -234,7 +240,9 @@ export default {
             : "".hashCode(),
           gistId: newFile.id,
           description: newFile.description,
-          gistFirst: newFile.files[Object.keys(newFile.files)[0]].filename
+          gistFirst: newFile.files[Object.keys(newFile.files)[0]].filename,
+          comments_url: newFile.comments_url,
+          comments: newFile.comments
         };
         if (fileObj.data.length === 0) {
           let headers = getters.authorized
@@ -246,7 +254,7 @@ export default {
             headers: headers
           })).text();
         }
-        console.log(fileObj);
+        // console.log(fileObj);
         return new Promise(res => {
           res(commit("ADD_FILE", fileObj));
         });
@@ -360,6 +368,7 @@ export default {
       commit("FILES", files);
       commit("ACTIVE_FILE", null);
       commit("ACTIVE_FILE_DATA", null);
+      return true;
     },
     async setStar({ dispatch }, id) {
       let headers = await dispatch("setHeaders");

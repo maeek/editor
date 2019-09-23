@@ -250,12 +250,15 @@ export default {
     load(link) {
       const $this = this;
       let token = this.authorized ? `${this.tokenType} ${this.token}` : "";
+      let fullLink = this.$route.params.ver
+        ? `https://api.github.com/gists/${link}/${this.$route.params.ver}`
+        : `https://api.github.com/gists/${link}`;
       let headers = $this.authorized
         ? {
             Authorization: token
           }
         : {};
-      this.fetchGist(`https://api.github.com/gists/${link}`, headers)
+      this.fetchGist(fullLink, headers)
         .then(res => res.json())
         .then(res => {
           if (!res.message) {
@@ -265,7 +268,11 @@ export default {
               );
             });
           } else {
-            throw {code: 404, text: res.message, doc_link: res.documentation_url};
+            throw {
+              code: 404,
+              text: res.message,
+              doc_link: res.documentation_url
+            };
           }
           $this.setLoading(false);
         })
@@ -274,7 +281,9 @@ export default {
           this.fetchError = {
             code: e.code || 424,
             text:
-              e.text || e || "The method could not be performed on the resource because the requested action depended on another action and that action failed."
+              e.text ||
+              e ||
+              "The method could not be performed on the resource because the requested action depended on another action and that action failed."
           };
         });
     },

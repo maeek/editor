@@ -135,7 +135,7 @@ h3 {
   width: 100%;
   padding: 0.5rem;
   background: #1d1d1d;
-  margin:0;
+  margin: 0;
   i {
     color: $comment--header;
   }

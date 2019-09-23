@@ -25,7 +25,7 @@ export default {
 
 <style scoped lang="scss">
 button {
-  border-radius: 5px;
+  border-radius: 4px;
   margin: 0 0.2rem;
   color: $compact--button-color;
   color: #fefefe;
