@@ -4,6 +4,9 @@
       <new-file v-if="newFileModal" />
     </transition>
     <transition name="scale" mode="out-in">
+      <not-saved v-if="showNotSaved" />
+    </transition>
+    <transition name="scale" mode="out-in">
       <remove-file v-if="removeFileModal" />
     </transition>
     <transition name="scale" mode="out-in">
@@ -26,6 +29,7 @@
 
 <script>
 import newFile from "@/components/modals/newfile.vue";
+import notSaved from "@/components/modals/notSaved.vue";
 import removeFile from "@/components/modals/removeFile.vue";
 import settings from "@/components/modals/settings.vue";
 import help from "@/components/modals/help.vue";
@@ -43,7 +47,8 @@ export default {
     opened,
     removeFile,
     editModal,
-    markdownPreview
+    markdownPreview,
+    notSaved
   },
   computed: mapGetters([
     "removeFileModal",
@@ -51,7 +56,8 @@ export default {
     "showSettings",
     "helpModal",
     "editGist",
-    "showMarkdown"
+    "showMarkdown",
+    "showNotSaved"
   ]),
   methods: mapActions(["showFilesDialog"]),
   mounted() {

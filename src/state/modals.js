@@ -12,7 +12,8 @@ export default {
     loadedRevisions: [],
     comments: false,
     commentsList: [],
-    markdown: false
+    markdown: false,
+    notSaved: false
   },
   mutations: {
     SHOW_SETTINGS(state, val) {
@@ -53,11 +54,17 @@ export default {
     },
     MARKDOWN(state, val) {
       state.markdown = val;
+    },
+    FILE_NOT_SAVED(state, val) {
+      state.notSaved = val;
     }
   },
   actions: {
     editModal({ commit }, val) {
       commit("EDIT_MODAL", val);
+    },
+    setNotSaved({ commit }, val) {
+      commit("FILE_NOT_SAVED", val);
     },
     toggleSettings({ commit }, val) {
       commit("SHOW_SETTINGS", val);
@@ -108,6 +115,7 @@ export default {
     showRevsList: state => state.loadedRevisions,
     comments: state => state.comments,
     commentsList: state => state.commentsList,
-    showMarkdown: state => state.markdown
+    showMarkdown: state => state.markdown,
+    showNotSaved: state => state.notSaved
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="new-comment">
+  <div class="new-comment" v-if="authorized">
     <div class="label">
       <span :class="{ active: selected === 0 }" @click="selected = 0"
         >Write</span
@@ -36,7 +36,7 @@ import compact from "@/components/buttons/button-compact.vue";
 export default {
   name: "newComment",
   computed: {
-    ...mapGetters(["comments", "commentsList"])
+    ...mapGetters(["authorized", "comments", "commentsList"])
   },
   data() {
     return {
@@ -64,12 +64,12 @@ export default {
 <style scoped lang="scss">
 .new-comment {
   width: calc(100% - 1rem);
-  max-width: calc(900px - 1rem);
+  max-width: calc(1200px - 1rem);
   @extend %flex-start-end;
   @extend %typo-koho;
   @extend %noselect;
   // background-image: url("../../assets/dot.svg");
-  background-color: #141414;
+  background-color: #222;
   border-radius: 4px;
   margin: 0 1rem 1rem;
   box-shadow: 0 1px 3px rgba(17, 17, 17, 0.664);
@@ -96,7 +96,7 @@ export default {
   textarea {
     width: 100%;
     border: 0;
-    background-color: #222222;
+    background-color: #191919;
     border-radius: 4px;
     min-height: 90px;
     font-family: monospace;

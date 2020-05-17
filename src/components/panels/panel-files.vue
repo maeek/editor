@@ -16,11 +16,24 @@
       <i class="material-icons" @click="scrollRight">
         keyboard_arrow_right
       </i>
-      <i :class="{'material-icons': true, active: showRevisions}" title="Revisions" @click="showRevs">
+      <i
+        :class="{ 'material-icons': true, active: showRevisions }"
+        title="Revisions"
+        @click="showRevs"
+      >
         history
       </i>
-      <i :class="{'material-icons': true, active: comments}" title="Comments" @click="showComs">
-        comment
+      <i
+        :class="{
+          'material-icons': true,
+          active: comments,
+          commentIndicator: true
+        }"
+        title="Comments"
+        :data-comments="coms"
+        @click="showComs"
+      >
+        chat_bubble
       </i>
       <i class="material-icons showMore" @click.stop="showMore(!moreDialog)">
         more_horiz
@@ -68,8 +81,15 @@ export default {
       "moreDialog",
       "filesDialog",
       "comments",
+      "commentsList",
       "showRevisions"
-    ])
+    ]),
+    coms() {
+      let coms = this.$store.getters.fileById(this.$route.params.id)
+        ? this.$store.getters.fileById(this.$route.params.id).comments
+        : 0;
+      return this.commentsList.length || coms;
+    }
   },
   methods: {
     ...mapActions([
@@ -311,6 +331,32 @@ export default {
   }
   .moreBtn:hover {
     color: $panel-top--header;
+  }
+}
+.commentIndicator {
+  position: relative;
+  &::after {
+    content: attr(data-comments);
+    position: absolute;
+    top: 2px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 12px;
+    height: 12px;
+    background: #ababab;
+    border-radius: 50%;
+    font-size: 0.65rem;
+    color: #000;
+    z-index: 2;
+    @extend %flex-center;
+    @extend %typo-koho;
+  }
+  &.active::after {
+    background: $comment--header;
+  }
+  &:hover:after {
+    background: #fff;
   }
 }
 .bar--files::-webkit-scrollbar {

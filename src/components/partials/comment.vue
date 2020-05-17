@@ -1,19 +1,18 @@
 <template>
   <li>
-    <div class="user">
-      <img
-        :src="com.user.avatar_url"
-        :alt="com.user.login + 'avatar'"
-        aria-hidden="true"
-      />
+    <div class="user" ref="comment">
+      <img :src="avatar" :alt="user + 'avatar'" aria-hidden="true" />
       <div class="comment-info">
         <div>
-          <span class="name">{{ com.user.login }}</span>
+          <span class="name">{{ user }}</span>
           <div class="row">
             <span class="indicator" v-if="com.author_association === 'OWNER'">
               AUTHOR
             </span>
-            <span class="indicator" v-if="com.author_association">
+            <span
+              class="indicator"
+              v-if="com.author_association && com.author_association !== 'NONE'"
+            >
               {{ com.author_association }}
             </span>
           </div>
@@ -26,7 +25,7 @@
               title="Edit"
               name="Edit"
               :hide="false"
-              v-if="alias === com.user.login"
+              v-if="alias === user"
               @click.native="showEdits = !showEdits"
             >
               edit
@@ -35,7 +34,7 @@
               title="Delete"
               name="Delete"
               :hide="false"
-              v-if="alias === com.user.login"
+              v-if="alias === user"
               @click.native="removeComment(com.id)"
             >
               delete
@@ -49,7 +48,11 @@
       <span :class="{ active: edit }" @click="edit = true">Write</span>
       <span :class="{ active: !edit }" @click="edit = false">Preview</span>
     </div>
-    <VueShowdown class="pre" v-if="!edit || !showEdits" :markdown="body" />
+    <VueShowdown
+      class="pre"
+      v-if="!edit || !showEdits"
+      :markdown="preparedBody"
+    />
     <div class="edit" v-if="showEdits">
       <textarea
         v-if="edit"
@@ -79,7 +82,26 @@ import compact from "@/components/buttons/button-compact.vue";
 export default {
   name: "comment",
   computed: {
-    ...mapGetters(["alias", "comments", "commentsList"])
+    ...mapGetters(["alias", "comments", "commentsList"]),
+    avatar() {
+      if (this.com.user) return this.com.user.avatar_url;
+      else return "null";
+    },
+    user() {
+      if (this.com.user) return this.com.user.login;
+      else return "null";
+    },
+    preparedBody() {
+      let body = this.body,
+        reg = new RegExp(/gist.github.com\/(.+)\/(.+)[^/]$/gim);
+
+      body = body.replace(reg, `editor.eswomp.it/#/edit/$2`);
+
+      reg = new RegExp(/gist.github.com\/(.+)[^/]$/gim);
+      body = body.replace(reg, `editor.eswomp.it/#/edit/$1`);
+
+      return body;
+    }
   },
   components: {
     compact
@@ -107,6 +129,24 @@ export default {
       this.setComments(false);
       this.scrolled = false;
     }
+  },
+  mounted() {
+    const $this = this;
+    console.log(this.body);
+    this.$refs.comment.addEventListener("click", function(e) {
+      if (e.target.tagName === "a") {
+        console.log(e);
+        if (e.target.href.includes("editor.eswomp.it")) {
+          let link = e.target
+            .getAttribute("href")
+            .replace(/((https|http):\/\/)?editor.eswomp.it/, "");
+          e.preventDefault();
+          $this.$router.push({
+            path: `${link}`
+          });
+        }
+      }
+    });
   }
 };
 </script>
@@ -118,7 +158,7 @@ li {
   border-bottom: 3px solid #444;
   padding: 0.1rem 0.4rem;
   margin: 1rem 0;
-  background: #111111;
+  background: #222222;
   border-radius: 4px;
   transition: 0.4s;
   position: relative;
@@ -203,7 +243,7 @@ li {
   textarea {
     width: 100%;
     border: 0;
-    background-color: #222222;
+    background-color: #191919;
     border-radius: 4px;
     min-height: 90px;
     font-family: monospace;

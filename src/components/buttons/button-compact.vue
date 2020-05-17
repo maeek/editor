@@ -36,7 +36,7 @@ button {
   @extend %noselect;
   @extend %flex-center;
   i {
-    margin: 0 0.2rem 0 0;
+    margin: 0 0.2rem;
     color: $compact--button--bg-hover;
     @extend %typo-normal;
   }

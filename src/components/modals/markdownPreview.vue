@@ -57,7 +57,7 @@ export default {
     justify-content: flex-start !important;
     align-items: flex-start !important;
     flex-direction: column;
-    border-radius: 5px;
+    border-radius: 0;
     @include rectangle(auto, 100%);
     background: #1d1d1d;
     color: #dadada;

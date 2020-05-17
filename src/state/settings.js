@@ -23,11 +23,15 @@ export default {
     autoCloseBrackets: true,
     smartIndent: true,
     fontSize: 16,
-    modes: modes
+    modes: modes,
+    promptLeave: true
   },
   mutations: {
     TAB_SIZE(state, size) {
       state.tabSize = size;
+    },
+    PROMPT_LEAVE(state, val) {
+      state.promptLeave = val;
     },
     LINE_WRAP(state, val) {
       state.lineWrapping = val;
@@ -61,6 +65,9 @@ export default {
     setKeyMap({ commit }, val) {
       commit("KEY_MAP", val);
     },
+    setPromptLeave({ commit }, val) {
+      commit("PROMPT_LEAVE", val);
+    },
     setTabSize({ commit }, val) {
       commit("TAB_SIZE", val ? val : 2);
     },
@@ -89,6 +96,7 @@ export default {
     smartIndent: state => state.smartIndent,
     autoClose: state => state.autoCloseBrackets,
     lineWrap: state => state.lineWrapping,
-    modes: state => state.modes
+    modes: state => state.modes,
+    showPromptLeave: state => state.promptLeave
   }
 };

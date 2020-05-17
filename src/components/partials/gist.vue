@@ -20,15 +20,15 @@
         </div>
       </div>
       <div class="wrapper options">
-        <span class="stats pb" v-if="gist.public"
-          ><i class="material-icons">public</i>Public</span
+        <span class="stats pb" title="Public gist" v-if="gist.public"
+          ><i class="material-icons">public</i></span
         >
         <span class="stats" v-if="Object.keys(gist.files).length > 0"
-          ><i class="material-icons">code</i>Files:
+          ><i class="material-icons">description</i>
           {{ Object.keys(gist.files).length }}</span
         >
         <span class="stats"
-          ><i class="material-icons">comment</i>Comments:
+          ><i class="material-icons">comment</i>
           {{ gist.comments }}</span
         >
 

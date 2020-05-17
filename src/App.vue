@@ -37,6 +37,7 @@ export default {
     this.$el.remove();
     this.$store.dispatch("setComments", false);
     this.$store.commit("SET_REVS", []);
+    this.$store.dispatch("setMarkdown", false);
     next();
   }
 };

@@ -33,7 +33,9 @@
           </p>
           <p class="pending" v-if="$route.params.id">+/- {{ editGist }}</p>
           <label>
-            <span class="label">Filename</span>
+            <span class="label"
+              ><i class="material-icons">edit</i> Filename</span
+            >
             <input
               name="editFile"
               placeholder="Type gist name with extension, i.e. README.md"
@@ -41,6 +43,7 @@
               ref="newFile"
               @keyup="modifyFileEnter"
             />
+            <div class="material-icons clear" @click="clearInput">clear</div>
           </label>
           <div class="options">
             <button-modal
@@ -55,7 +58,7 @@
             <button-modal
               :hide="false"
               :title="'Edit'"
-              name="Edit"
+              name="Apply"
               @click.native="modifyGist"
               class="active public"
             >
@@ -124,6 +127,9 @@ export default {
         });
       }
     },
+    clearInput() {
+      this.$refs.newFile.value = "";
+    },
     async getGist(headers) {
       return fetch(`https://api.github.com/gists/${this.$route.params.id}`, {
         headers: await headers,
@@ -185,7 +191,17 @@ export default {
     max-width: 95%;
     position: relative;
     label {
+      position: relative;
       width: 100%;
+      .clear {
+        position: absolute;
+        right: 0.3rem;
+        bottom: 0.15rem;
+        font-size: 2rem;
+        color: #6e6e6e;
+        @extend %pointer;
+        @extend %noselect;
+      }
       span {
         display: block;
         margin: 1rem 0 0 0;

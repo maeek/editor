@@ -148,6 +148,9 @@ export default {
   font-weight: 900;
   @extend %noselect;
   @extend %flex-center;
+  width: 100%;
+  background: #1d1d1d;
+  margin-bottom: 2rem;
   flex-direction: column;
   color: lighten($comment--header, 40);
   span {
@@ -164,7 +167,7 @@ export default {
 .comments {
   width: 100%;
   flex: 0 0 auto;
-  background-color: #202020;
+  background-color: #151515;
   // background-image: url("../../assets/dot.svg");
   background-position: center;
   position: relative;
@@ -190,7 +193,7 @@ export default {
   }
   .coms {
     width: 100%;
-    max-width: 900px;
+    max-width: 1200px;
     color: #aaa;
     padding: 0.5rem;
     @extend %typo-koho;

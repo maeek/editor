@@ -24,7 +24,7 @@
       ></gist>
     </ul>
     <page-changer
-      v-if="!queryFailed && !queryActive && shwPublic"
+      v-if="!queryFailed && !queryActive"
       @prev="Older"
       @next="Newer"
       :shwPublic="shwPublic"
@@ -123,32 +123,20 @@ export default {
         this.$store.commit("USER", user);
       }
       if (this.user) {
-        this.gist_dir = `https://api.github.com/users/${
-          this.$props.user
-        }/gists?per_page=30`;
+        this.gist_dir = `https://api.github.com/users/${this.$props.user}/gists?page=${this.pages}&per_page=30`;
       } else {
         if (this.shwPublic) {
-          this.gist_dir = `https://api.github.com/gists/public?page=${
-            this.pages
-          }&per_page=30`;
+          this.gist_dir = `https://api.github.com/gists/public?page=${this.pages}&per_page=30`;
         }
         if (this.authorized && !this.shwPublic && !this.starred) {
-          this.gist_dir = `https://api.github.com/users/${
-            this.alias
-          }/gists?per_page=30`;
+          this.gist_dir = `https://api.github.com/users/${this.alias}/gists?page=${this.pages}&per_page=30`;
         } else if (this.authorized && this.starred) {
-          this.gist_dir = `https://api.github.com/gists/starred?page=${
-            this.pages
-          }`;
+          this.gist_dir = `https://api.github.com/gists/starred?page=${this.pages}`;
         } else {
           if (!this.shwPublic) {
-            this.gist_dir = `https://api.github.com/gists/public?page=${
-              this.pages
-            }&per_page=5`;
+            this.gist_dir = `https://api.github.com/gists/public?page=${this.pages}&per_page=5`;
           } else {
-            this.gist_dir = `https://api.github.com/gists/public?page=${
-              this.pages
-            }&per_page=30`;
+            this.gist_dir = `https://api.github.com/gists/public?page=${this.pages}&per_page=30`;
           }
         }
       }

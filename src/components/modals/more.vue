@@ -4,8 +4,11 @@
     <div class="moreBtn" v-if="markdown" @click="setMarkdown(!showMarkdown)">
       Preview
     </div>
-    <div class="moreBtn">Fork gist</div>
-    <div class="moreBtn" @click="editModal(activeFile)">Edit gist</div>
+    <div class="moreBtn" @click="goToProfile">Open profile</div>
+    <div v-if="authorized" class="moreBtn">Fork gist</div>
+    <div class="moreBtn" v-if="authorized" @click="editModal(activeFile)">
+      Edit gist
+    </div>
     <div class="moreBtn" @click="showRevs">Revisions</div>
     <div class="moreBtn" @click="showComs">Comments</div>
     <div class="moreBtn" @click="returnToPrevious">Load last save</div>
@@ -23,6 +26,7 @@ export default {
   name: "moreDialog",
   computed: {
     ...mapGetters([
+      "authorized",
       "fileData",
       "moreDialog",
       "filesDialog",
@@ -103,6 +107,12 @@ export default {
       }
       // this.setComments(false);
       this.setRevisions(!this.showRevisions);
+    },
+    goToProfile() {
+      let user = this.$store.getters.fileById(this.$route.params.id).owner;
+      this.$router.push({
+        path: `/user/${user}`
+      });
     },
     showComs() {
       if (!this.comments) {

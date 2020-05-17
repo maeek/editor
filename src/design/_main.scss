@@ -29,6 +29,7 @@ body {
 a {
     color: $panel-top--header;
     text-decoration: underline $comment--header;
+    word-break: break-all;
 }
 
 table {
@@ -327,6 +328,9 @@ input[name="openFile"] {
 }
 
 @media screen and (max-width: 768px) {
+    .desktop {
+        display: none !important;
+    }
     .modal {
         .wrap {
             .data {

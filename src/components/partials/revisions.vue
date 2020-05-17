@@ -167,7 +167,7 @@ export default {
   width: 100%;
   z-index: 1;
   flex: 0 0 auto;
-  background-color: #222;
+  background-color: #151515;
   // background-image: url("../../assets/dot.svg");
   position: relative;
   display: flex;
@@ -193,7 +193,7 @@ export default {
     height: auto;
     list-style: none;
     color: #ababab;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1%;
     margin: 0;
     overflow: auto;
     @extend %typo-koho;
@@ -263,8 +263,8 @@ export default {
         background: transparent;
       }
       &:last-child:before {
-          content: initial;
-        }
+        content: initial;
+      }
       &.loaded {
         border: 2px solid darken($panel-top--header, 15);
         span:nth-of-type(1) {
@@ -302,5 +302,18 @@ export default {
       left: 0;
     }
   }
+}
+::-webkit-scrollbar {
+  display: block;
+  width: 2px;
+  height: 2px;
+  padding: 5px;
+  overflow: auto;
+  background-color: #1d1d1d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $panel-top--header;
+  border: 2px solid #0000;
 }
 </style>

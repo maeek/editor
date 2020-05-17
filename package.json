@@ -1,11 +1,12 @@
 {
     "name": "note",
-    "version": "2.0.2",
+    "version": "2.0.4",
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint"
+        "lint": "vue-cli-service lint",
+        "deploy": "vue-cli-service build && rm -rf /mnt/vps/var/www/editor/dist && cp -r /home/maek/Desktop/www/editor/dist /mnt/vps/var/www/editor/"
     },
     "dependencies": {
         "codemirror": "^5.48.2",

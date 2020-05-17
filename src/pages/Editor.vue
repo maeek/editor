@@ -336,6 +336,7 @@ export default {
       white-space: pre-wrap;
       font-size: 1rem;
       font-weight: 900;
+      background: transparent !important;
     }
     span {
       font-weight: 900;

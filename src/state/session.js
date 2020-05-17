@@ -79,21 +79,29 @@ export default {
   },
   actions: {
     async authorize({ commit, dispatch, getters }) {
-      OAuth.initialize(getters.api_key);
-      OAuth.popup("github").then(async github => {
-        const { access_token, token_type } = github;
-        console.log("GH Access token", access_token);
-        const res = await github.me();
-        await dispatch("userInfo", res);
-        window.localStorage.setItem(
-          "gh-token",
-          JSON.stringify({
-            access_token: btoa(github.access_token),
-            token_type: github.token_type
+      try {
+        OAuth.initialize(getters.api_key);
+        OAuth.popup("github")
+          .then(async github => {
+            const { access_token, token_type } = github;
+            console.log("GH Access token", access_token);
+            const res = await github.me();
+            await dispatch("userInfo", res);
+            window.localStorage.setItem(
+              "gh-token",
+              JSON.stringify({
+                access_token: btoa(github.access_token),
+                token_type: github.token_type
+              })
+            );
+            commit("TOKEN", { token_type, access_token });
           })
-        );
-        commit("TOKEN", { token_type, access_token });
-      });
+          .fail(e => {
+            console.error(e);
+          });
+      } catch (e) {
+        console.error(e);
+      }
     },
     logout({ commit }) {
       commit("TOKEN", { token_type: null, access_token: null });

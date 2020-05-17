@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+import store from "./store";
 
 Vue.use(Router);
 
@@ -59,7 +60,23 @@ const routes = [
   }
 ];
 
-export default new Router({
+const router = new Router({
   mode: "hash",
   routes: routes
 });
+
+router.beforeEach((to, from, next) => {
+  store.dispatch("setMarkdown", false);
+  if (
+    store.getters.activeFile &&
+    !store.getters.fileIsSaved() &&
+    store.getters.showPromptLeave
+  ) {
+    store.dispatch("setNotSaved", to.fullPath);
+  } else {
+    store.dispatch("setNotSaved", false);
+    next();
+  }
+});
+
+export default router;

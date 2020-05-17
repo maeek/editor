@@ -25,14 +25,28 @@
         >
         </codemirror>
       </error-boundary>
-
+      <user :wide="true" :user="user" />
+      
       <comments
         v-if="comments"
         ref="applet"
         :scroll="scroll"
         @scrolled="scrolled = false"
       />
-      <footer-component />
+      <footer-component class="footer" :wide="true">
+        <compact title="Home" name="Home" class="save rev">
+          home
+        </compact>
+        <compact title="Settings" name="Settings" class="save rev">
+          device_hub
+        </compact>
+        <compact title="Contact" name="Contact" class="save rev">
+          chat
+        </compact>
+        <compact title="Report issue" name="Report issue" class="save rev">
+          bug_report
+        </compact>
+      </footer-component>
     </div>
     <div class="loader" v-if="gistLoading && $route.params.id">
       <h5>
@@ -68,7 +82,8 @@ import /* webpackPrefetch: true, webpackChunkName: "codemirror-keymap-sublime" *
 import /* webpackPrefetch: true, webpackChunkName: "codemirror-keymap-vim" */ "codemirror/keymap/vim.js";
 import revisions from "@/components/partials/revisions.vue";
 import comments from "@/components/partials/comments.vue";
-// import compact from "@/components/buttons/button-compact.vue";
+import user from "@/components/panels/user.vue";
+import compact from "@/components/buttons/button-compact.vue";
 import footerComponent from "@/components/partials/footer.vue";
 
 export default {
@@ -85,7 +100,9 @@ export default {
     errorBoundary,
     revisions,
     comments,
-    footerComponent
+    compact,
+    footerComponent,
+    user
   },
   computed: {
     ...mapGetters([
@@ -141,6 +158,11 @@ export default {
     },
     loadedRevision() {
       return this.loadedRev;
+    },
+    user() {
+      if (this.$store.getters.fileById(this.$route.params.id))
+        return this.$store.getters.fileById(this.$route.params.id).owner;
+      else return null;
     }
   },
   methods: {
@@ -151,7 +173,8 @@ export default {
       "newFileModal",
       "setRevisions",
       "closeById",
-      "setComments"
+      "setComments",
+      "setMarkdown"
     ]),
     triggerSave(newcode) {
       this.code = newcode ? newcode : "";
@@ -330,11 +353,20 @@ export default {
 <style scoped lang="scss">
 @import "../../../node_modules/codemirror/lib/codemirror.css";
 @import "../../../node_modules/codemirror/theme/base16-dark.css";
+.footer {
+  &.wide {
+    padding: 2rem 0;
+  }
+  button.rev {
+    margin: 0.3rem;
+  }
+}
 .editor {
   scroll-behavior: smooth;
   .vue-codemirror {
     @include rectangle(100%, auto);
     @extend %flex-btw-start;
+    background: #151515;
     flex-direction: column;
     flex: 1 0 auto;
     min-height: 80%;
@@ -346,7 +378,8 @@ export default {
   .editorFields {
     flex-direction: column;
     background: $body--bg;
-    @include rectangle(100%, 100%);
+    @include rectangle(100%, auto);
+    min-height: 100%;
     @extend %flex-start;
   }
   .addFile {

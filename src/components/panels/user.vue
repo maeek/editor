@@ -1,5 +1,8 @@
 <template>
-  <div class="my-account" v-if="!queryFailed && !queryActive">
+  <div
+    :class="{ 'my-account': true, wide }"
+    v-if="!queryFailed && !queryActive"
+  >
     <div class="wrapper">
       <img :src="image" />
       <div class="info">
@@ -12,7 +15,11 @@
       <div class="spacer"></div>
       <div
         class="more"
-        v-if="!$route.params.user || $route.params.user === alias"
+        v-if="
+          (!$route.params.user && !$route.params.id) ||
+            ($route.params.user && $route.params.user === alias) ||
+            alias === user
+        "
       >
         <span class="stats">
           <i class="material-icons">location_on</i>Location: {{ location }}
@@ -50,7 +57,7 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "user",
-  props: ["user"],
+  props: ["user", "wide"],
   data() {
     return {
       image_url: "",
@@ -111,6 +118,16 @@ export default {
   flex: 0 0 auto;
   @extend %typo-koho;
   color: #ababab;
+  &.wide {
+    // background: #151515;
+    .wrapper {
+      padding: 1rem 0;
+      max-width: 95%;
+      img {
+        margin: 0;
+      }
+    }
+  }
   .wrapper {
     width: 100%;
     max-width: 1200px;

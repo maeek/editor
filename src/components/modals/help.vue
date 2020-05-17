@@ -169,10 +169,9 @@ export default {
 
 <style scoped lang="scss">
 .close {
-  position: absolute;
+  position: fixed;
   top: 0.5rem;
-  top: 0.5rem;
-  right: 0.5rem;
+  right: 1rem;
 }
 .modal {
   .wrap {
@@ -180,6 +179,9 @@ export default {
   }
 }
 h3 {
+  position: sticky;
+  top: 0;
+  left: 0;
   width: 100%;
   padding: 0.5rem;
   background: #1d1d1d;
