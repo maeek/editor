@@ -11,7 +11,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "app",
   components: {
-    modals
+    modals,
   },
   computed: {
     ...mapGetters(["authorized"]),
@@ -19,7 +19,7 @@ export default {
       return `${this.user}+${this.authorized ? "ac" : "nac"} ${
         this.id ? this.id : "nid"
       } ${this.$route.query.target || "notarget"}`;
-    }
+    },
   },
   props: ["user", "focus", "id"],
   created() {
@@ -28,15 +28,18 @@ export default {
     if (user && access) {
       this.$store.commit("TOKEN", {
         token_type: access.token_type,
-        access_token: atob(access.access_token)
+        access_token: atob(access.access_token),
       });
       this.$store.commit("USER", user);
     }
   },
   beforeRouteLeave(next) {
     this.$el.remove();
+    this.$store.dispatch("setComments", false);
+    this.$store.commit("SET_REVS", []);
+    this.$store.dispatch("setMarkdown", false);
     next();
-  }
+  },
 };
 </script>
 

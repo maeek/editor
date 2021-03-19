@@ -1,6 +1,11 @@
 <template>
   <nav class="bar bar--top">
-    <siteHeader><i class="material-icons">waves</i> EDITOR</siteHeader>
+    <siteHeader
+      ><i class="material-icons">{{
+        $route.params.id ? "arrow_back" : "waves"
+      }}</i>
+      {{ $route.params.id ? "Back" : "EDITOR" }}</siteHeader
+    >
     <div class="options">
       <slot></slot>
     </div>
@@ -13,8 +18,8 @@ import siteHeader from "@/components/panels/panel-top/siteHeader.vue";
 export default {
   name: "barTop",
   components: {
-    siteHeader
-  }
+    siteHeader,
+  },
 };
 </script>
 

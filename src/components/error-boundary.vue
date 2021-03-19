@@ -3,7 +3,7 @@ import failedRequest from "@/components/partials/failed-request.vue";
 export default {
   name: "ErrorBoundary",
   data: () => ({
-    error: false
+    error: false,
   }),
   errorCaptured(err, vm, info) {
     this.error = [err, vm, info];
@@ -13,14 +13,14 @@ export default {
       ? h(failedRequest, {
           props: {
             failed: true,
-            message: `${this.error[0]}`
-          }
+            message: `${this.error[0]}`,
+          },
         })
       : this.$slots.default[0];
-  }
+  },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 p {
   color: rgb(255, 115, 115);
   padding: 1rem;

@@ -3,11 +3,11 @@ module.exports = {
     sourceMap: true,
     loaderOptions: {
       sass: {
-        data: `@import "@/design/index.scss";`
-      }
-    }
+        data: `@import "@/design/index.scss";`,
+      },
+    },
   },
   devServer: {
-    disableHostCheck: true
-  }
+    disableHostCheck: true,
+  },
 };

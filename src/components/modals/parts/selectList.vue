@@ -24,14 +24,14 @@ export default {
   props: {
     activeOpt: String,
     optList: Array,
-    show: Boolean
+    show: Boolean,
   },
   methods: {
-    ...mapActions(["setKeyMap"])
+    ...mapActions(["setKeyMap"]),
   },
   computed: {
-    ...mapGetters(["keyMap"])
-  }
+    ...mapGetters(["keyMap"]),
+  },
 };
 </script>
 

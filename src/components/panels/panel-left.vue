@@ -31,23 +31,23 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "panelLeft",
   components: {
-    file
+    file,
   },
   data() {
     return {
-      groups: []
+      groups: [],
     };
   },
   computed: {
     ...mapGetters(["authorized", "files", "fileById"]),
     computedGroups() {
       let unique = [];
-      this.files.filter(el => {
+      this.files.filter((el) => {
         if (!unique.includes(el.gistId)) unique.push(el.gistId);
         return el;
       });
       return unique;
-    }
+    },
   },
   methods: {
     ...mapActions(["closeById"]),
@@ -55,22 +55,22 @@ export default {
       this.$router.push({
         path: `/edit/${file}`,
         props: {
-          focus: this.fileById(file).gistFirst
+          focus: this.fileById(file).gistFirst,
         },
         query: {
-          target: this.fileById(file).gistFirst
-        }
+          target: this.fileById(file).gistFirst,
+        },
       });
-    }
+    },
   },
   created() {
     let unique = [];
-    this.files.filter(el => {
+    this.files.filter((el) => {
       if (!unique.includes(el.gistId)) unique.push(el.gistId);
       return el;
     });
     this.groups = unique;
-  }
+  },
 };
 </script>
 

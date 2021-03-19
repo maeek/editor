@@ -24,8 +24,8 @@ export default {
     opnFile(name) {
       this.switchFile(name);
       this.showFilesDialog(false);
-    }
-  }
+    },
+  },
 };
 </script>
 

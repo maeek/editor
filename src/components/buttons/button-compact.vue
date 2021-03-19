@@ -13,19 +13,19 @@ export default {
   props: {
     name: {
       default: "",
-      type: String
+      type: String,
     },
     hide: {
       default: true,
-      type: Boolean
-    }
-  }
+      type: Boolean,
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
 button {
-  border-radius: 5px;
+  border-radius: 4px;
   margin: 0 0.2rem;
   color: $compact--button-color;
   color: #fefefe;
@@ -36,7 +36,7 @@ button {
   @extend %noselect;
   @extend %flex-center;
   i {
-    margin: 0 0.2rem 0 0;
+    margin: 0 0.2rem;
     color: $compact--button--bg-hover;
     @extend %typo-normal;
   }

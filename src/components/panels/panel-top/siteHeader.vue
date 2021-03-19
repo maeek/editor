@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "siteHeader"
+  name: "siteHeader",
 };
 </script>
 

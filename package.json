@@ -1,36 +1,40 @@
 {
     "name": "note",
-    "version": "1.2.9",
+    "version": "2.1.0",
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint"
+        "lint": "vue-cli-service lint",
+        "deploy": "vue-cli-service build && rm -rf /mnt/vps/var/www/editor/dist && cp -r /home/maek/Desktop/www/editor/dist /mnt/vps/var/www/editor/"
     },
     "dependencies": {
-        "codemirror": "^5.48.2",
-        "core-js": "^2.6.9",
-        "eslint-plugin-prettier": "^3.1.0",
-        "material-icons": "^0.3.1",
+        "codemirror": "^5.59.4",
+        "core-js": "^3.9.1",
+        "eslint-plugin-prettier": "^3.3.1",
+        "material-icons": "^0.5.4",
         "oauthio-web": "^0.6.2",
-        "register-service-worker": "^1.6.2",
-        "vue": "^2.6.10",
+        "register-service-worker": "^1.7.2",
+        "showdown": "^1.9.1",
+        "vue": "^2.6.12",
         "vue-codemirror": "^4.0.6",
-        "vue-router": "^3.0.7",
-        "vuex": "^3.1.1"
+        "vue-router": "^3.5.1",
+        "vue-showdown": "^2.4.1",
+        "vuex": "^3.6.2"
     },
     "devDependencies": {
-        "@types/codemirror": "0.0.76",
-        "@vue/cli-plugin-babel": "^3.9.2",
-        "@vue/cli-plugin-eslint": "^3.9.2",
-        "@vue/cli-plugin-pwa": "^3.9.0",
-        "@vue/cli-service": "^3.9.3",
-        "@vue/eslint-config-prettier": "^5.0.0",
+        "@types/codemirror": "0.0.108",
+        "@vue/cli-plugin-babel": "^4.5.12",
+        "@vue/cli-plugin-eslint": "^4.5.12",
+        "@vue/cli-plugin-pwa": "^4.5.12",
+        "@vue/cli-service": "^4.5.12",
+        "@vue/eslint-config-prettier": "^6.0.0",
         "babel-eslint": "^10.0.2",
-        "eslint": "^5.16.0",
-        "eslint-plugin-vue": "^5.2.3",
-        "sass": "^1.22.9",
+        "eslint": "^6.2.0",
+        "eslint-plugin-vue": "^7.7.0",
+        "sass": "^1.32.8",
         "sass-loader": "^7.1.0",
-        "vue-template-compiler": "^2.6.10"
+        "vue-template-compiler": "^2.6.12",
+        "webpack": "^4.46.0"
     }
 }

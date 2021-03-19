@@ -21,6 +21,13 @@
               Auto save <span class="experimental">(Experimental)</span>
             </optionCheck>
             <optionCheck
+              :key="'promptUnsaved'"
+              :checked="showPromptLeave"
+              @input.native="setPromptLeave(!showPromptLeave)"
+            >
+              Show prompt when you have unsaved changes
+            </optionCheck>
+            <optionCheck
               :key="'lineNums'"
               :checked="lineNumbers"
               @input.native="setLineNumbers(!lineNumbers)"
@@ -85,11 +92,11 @@ export default {
     compact,
     optionCheck,
     selectList,
-    number
+    number,
   },
   data() {
     return {
-      showList1: false
+      showList1: false,
     };
   },
   computed: {
@@ -100,8 +107,9 @@ export default {
       "scrollPastEnd",
       "smartIndent",
       "lineWrap",
-      "lineNumbers"
-    ])
+      "lineNumbers",
+      "showPromptLeave",
+    ]),
   },
   methods: {
     ...mapActions([
@@ -111,12 +119,13 @@ export default {
       "setLineNumbers",
       "setScrollPast",
       "setLineWrap",
-      "setTabSize"
+      "setTabSize",
+      "setPromptLeave",
     ]),
     shList1(val) {
       this.showList1 = val;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -126,7 +135,7 @@ export default {
   color: #ababab;
 }
 .close {
-  position: absolute;
+  position: fixed;
   width: 4.3rem;
   top: 0.5rem;
   right: 0.5rem;
@@ -135,7 +144,10 @@ h3 {
   width: 100%;
   padding: 0.5rem;
   background: #1d1d1d;
-  margin:0;
+  margin: 0;
+  position: sticky;
+  top: 0;
+  left: 0;
   i {
     color: $comment--header;
   }

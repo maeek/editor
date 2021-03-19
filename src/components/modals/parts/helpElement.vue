@@ -13,8 +13,8 @@
 export default {
   name: "helpElement",
   props: {
-    keys: String
-  }
+    keys: String,
+  },
 };
 </script>
 

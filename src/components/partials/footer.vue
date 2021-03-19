@@ -1,6 +1,6 @@
 <template>
-  <footer>
-    <div class="wrapper">
+  <footer :class="{ wide }">
+    <div :class="{ wrapper: true, wide: wide }">
       <div class="column">
         <h3><i class="material-icons">waves</i>{{ version }}</h3>
         <span
@@ -11,7 +11,9 @@
         >
         <span>License MIT</span>
       </div>
-      <div class="column"></div>
+      <div class="column">
+        <slot></slot>
+      </div>
     </div>
   </footer>
 </template>
@@ -20,7 +22,10 @@
 import { mapGetters } from "vuex";
 export default {
   name: "foot",
-  computed: mapGetters(["version"])
+  computed: mapGetters(["version"]),
+  props: {
+    wide: Boolean,
+  },
 };
 </script>
 
@@ -31,6 +36,12 @@ footer {
   padding: 2rem 1rem;
   background: #0e0e0e;
   color: #aaa;
+  &.wide {
+    // background: #151515;
+    .wrapper {
+      max-width: 95%;
+    }
+  }
   @extend %typo-koho;
   .wrapper {
     max-width: 1200px;
@@ -40,9 +51,13 @@ footer {
     justify-content: space-evenly;
     align-items: flex-start;
     .column {
-      width: 50%;
+      width: 80%;
       @extend %flex-start;
       flex-direction: column;
+      &:nth-of-type(2) {
+        align-items: flex-end;
+        width: 20%;
+      }
     }
     span {
       margin: 0.5rem 0;
@@ -70,6 +85,7 @@ footer {
 @media screen and (max-width: 768px) {
   footer {
     padding: 1rem;
+    height: auto;
     .wrapper {
       justify-content: center;
       align-items: center;
@@ -80,9 +96,17 @@ footer {
         display: flex;
         align-items: center;
         justify-content: center;
+        &:nth-of-type(2) {
+          flex-direction: row;
+        }
       }
+
       h3 {
         margin: 2rem 0;
+        flex-direction: column;
+        i {
+          margin: 0.5rem 0;
+        }
       }
     }
   }

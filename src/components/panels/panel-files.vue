@@ -10,11 +10,26 @@
     ref="panelFiles"
   >
     <div class="scroller">
-      <i class="material-icons" @click="scrollLeft">
-        keyboard_arrow_left
+      <i class="material-icons" @click="scrollLeft"> keyboard_arrow_left </i>
+      <i class="material-icons" @click="scrollRight"> keyboard_arrow_right </i>
+      <i
+        :class="{ 'material-icons': true, active: showRevisions }"
+        title="Revisions"
+        @click="showRevs"
+      >
+        history
       </i>
-      <i class="material-icons" @click="scrollRight">
-        keyboard_arrow_right
+      <i
+        :class="{
+          'material-icons': true,
+          active: comments,
+          commentIndicator: true,
+        }"
+        title="Comments"
+        :data-comments="coms"
+        @click="showComs"
+      >
+        chat_bubble
       </i>
       <i class="material-icons showMore" @click.stop="showMore(!moreDialog)">
         more_horiz
@@ -50,7 +65,7 @@ export default {
   name: "barFiles",
   components: {
     file,
-    moreDialog
+    moreDialog,
   },
   computed: {
     ...mapGetters([
@@ -60,8 +75,17 @@ export default {
       "fileMode",
       "fileData",
       "moreDialog",
-      "filesDialog"
-    ])
+      "filesDialog",
+      "comments",
+      "commentsList",
+      "showRevisions",
+    ]),
+    coms() {
+      let coms = this.$store.getters.fileById(this.$route.params.id)
+        ? this.$store.getters.fileById(this.$route.params.id).comments
+        : 0;
+      return this.commentsList.length || coms;
+    },
   },
   methods: {
     ...mapActions([
@@ -71,9 +95,12 @@ export default {
       "saveFile",
       "showMore",
       "showFilesDialog",
-      "newFileModal"
+      "newFileModal",
+      "setComments",
+      "setRevisions",
     ]),
     openFile(ev, file) {
+      console.log(file);
       if (
         this.fileIsSaved ||
         (this.activeFile && this.fileMode().includes("image/"))
@@ -82,8 +109,8 @@ export default {
         this.$router.push({
           path: `/edit/${file.gistId}`,
           query: {
-            target: file.name
-          }
+            target: file.name,
+          },
         });
       }
       // else alert("yee");
@@ -105,6 +132,28 @@ export default {
       ev.preventDefault();
       this.$refs.panelFiles.removeAttribute("style");
     },
+    showComs() {
+      if (!this.comments) {
+        this.fetchGist(
+          `https://api.github.com/gists/${this.$route.params.id}/comments`
+        ).then((data) => {
+          this.$store.commit("SET_COMMENTS", data);
+        });
+      }
+      // this.setRevisions(false);
+      this.setComments(!this.comments);
+    },
+    showRevs() {
+      if (!this.showRevisions) {
+        this.fetchGist(
+          `https://api.github.com/gists/${this.$route.params.id}/commits`
+        ).then((data) => {
+          this.$store.commit("SET_REVS", data.reverse());
+        });
+      }
+      // this.setComments(false);
+      this.setRevisions(!this.showRevisions);
+    },
     readFileAsync(file) {
       return new Promise((resolve, reject) => {
         let reader = new FileReader();
@@ -121,10 +170,10 @@ export default {
         files: {},
         uploaded_at: "",
         owner: {
-          login: $this.alias
+          login: $this.alias,
         },
         id: $this.$route.params.id || "",
-        description: ""
+        description: "",
       };
       if (!$this.$route.params.id && $this.authorized) {
         $this.newFileModal(true);
@@ -136,7 +185,7 @@ export default {
             filename: files[file].name,
             content: text,
             type: files[file].type,
-            size: files[file].size
+            size: files[file].size,
           };
           prepFiles.uploaded_at = new Date(files[file].lastModified)
             .toJSON()
@@ -148,8 +197,8 @@ export default {
             $this.$router.push({
               path: `/edit/${$this.$route.params.id || ""}`,
               query: {
-                target: files[file].name
-              }
+                target: files[file].name,
+              },
             });
             await $this.switchFile(files[file].name);
             $this.authorized && $this.saveFile();
@@ -167,14 +216,14 @@ export default {
       this.$refs.panelFiles.scrollBy({
         top: 0,
         left: -100,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     },
     scrollRight() {
       this.$refs.panelFiles.scrollBy({
         top: 0,
         left: 100,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     },
     scrollHoriz(e) {
@@ -185,9 +234,20 @@ export default {
     returnToPrevious() {
       this.activeFileData(this.fileData(), "saveFile");
     },
-    removeAll() {
-      // Show modal;
-    }
+    async fetchGist(link) {
+      return fetch(link, {
+        headers: await this.$store.dispatch("setHeaders"),
+        cache: "no-cache",
+      })
+        .then((res) => res.json())
+        .then((ms) => {
+          if (!ms.message) {
+            return ms;
+          } else {
+            return null;
+          }
+        });
+    },
   },
   mounted() {
     const $this = this;
@@ -203,7 +263,7 @@ export default {
         false
       );
     }
-  }
+  },
 };
 </script>
 
@@ -216,22 +276,25 @@ export default {
   overflow-y: hidden;
   transition: background 0.2s;
   background: $panel-files-bg;
-  @include rectangle(calc(100% - 5rem), calc(2rem + 2px));
+  @include rectangle(calc(100% - 8.5rem), calc(2rem + 2px));
   @extend %flex-start;
   .scroller {
     position: fixed;
     right: 0;
-    width: 5rem;
+    width: 8.5rem;
     height: calc(2rem + 2px);
     background: #1d1d1d;
     z-index: 5;
     @extend %flex-center;
     @extend %noselect;
     i {
-      margin: 0 0.1rem;
+      margin: 0 0.2rem;
       color: #ababab;
       @extend %pointer;
       @extend %typo-medium;
+      &.active {
+        color: $comment--header;
+      }
     }
     i:hover {
       color: #fefefe;
@@ -264,6 +327,32 @@ export default {
   }
   .moreBtn:hover {
     color: $panel-top--header;
+  }
+}
+.commentIndicator {
+  position: relative;
+  &::after {
+    content: attr(data-comments);
+    position: absolute;
+    top: 2px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 12px;
+    height: 12px;
+    background: #ababab;
+    border-radius: 50%;
+    font-size: 0.65rem;
+    color: #000;
+    z-index: 2;
+    @extend %flex-center;
+    @extend %typo-koho;
+  }
+  &.active::after {
+    background: $comment--header;
+  }
+  &:hover:after {
+    background: #fff;
   }
 }
 .bar--files::-webkit-scrollbar {

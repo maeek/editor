@@ -109,7 +109,7 @@ export default {
       fullscreen: document.fullscreenEnabled,
       isFullscreen: null,
       fetchError: false,
-      star: false
+      star: false,
     };
   },
   components: {
@@ -117,7 +117,7 @@ export default {
     panelFiles,
     editor,
     panelBottom,
-    compact
+    compact,
   },
   computed: {
     ...mapGetters([
@@ -128,15 +128,15 @@ export default {
       "alias",
       "fileById",
       "fileByName",
-      "files"
+      "files",
     ]),
-    fullscreenIndicator: function() {
+    fullscreenIndicator: function () {
       return this.isFullscreen ? "Disable fullscreen" : "Enable fullscreen";
-    }
+    },
   },
   props: {
     id: String,
-    focus: Boolean
+    focus: Boolean,
   },
   methods: {
     ...mapActions([
@@ -150,7 +150,7 @@ export default {
       "setLoading",
       "setHeaders",
       "setStar",
-      "unStar"
+      "unStar",
     ]),
     downloadFile() {
       const fileName = this.activeFile;
@@ -188,10 +188,10 @@ export default {
         files: {},
         uploaded_at: "",
         owner: {
-          login: $this.alias
+          login: $this.alias,
         },
         id: $this.$route.params.id || "",
-        description: ""
+        description: "",
       };
       if (!$this.$route.params.id && $this.authorized) {
         $this.newFileModal(true);
@@ -203,7 +203,7 @@ export default {
             filename: files[file].name,
             content: text,
             type: files[file].type,
-            size: files[file].size
+            size: files[file].size,
           };
           prepFiles.uploaded_at = new Date(files[file].lastModified)
             .toJSON()
@@ -215,8 +215,8 @@ export default {
             $this.$router.push({
               path: `/edit/${$this.$route.params.id || ""}`,
               query: {
-                target: files[file].name
-              }
+                target: files[file].name,
+              },
             });
             await $this.switchFile(files[file].name);
             $this.authorized && $this.saveFile();
@@ -244,20 +244,23 @@ export default {
       return fetch(url, {
         method: "GET",
         headers: headers,
-        cache: "no-cache"
+        cache: "no-cache",
       });
     },
     load(link) {
       const $this = this;
       let token = this.authorized ? `${this.tokenType} ${this.token}` : "";
+      let fullLink = this.$route.params.ver
+        ? `https://api.github.com/gists/${link}/${this.$route.params.ver}`
+        : `https://api.github.com/gists/${link}`;
       let headers = $this.authorized
         ? {
-            Authorization: token
+            Authorization: token,
           }
         : {};
-      this.fetchGist(`https://api.github.com/gists/${link}`, headers)
-        .then(res => res.json())
-        .then(res => {
+      this.fetchGist(fullLink, headers)
+        .then((res) => res.json())
+        .then((res) => {
           if (!res.message) {
             $this.addFile(res).then(() => {
               $this.switchFile(
@@ -265,36 +268,42 @@ export default {
               );
             });
           } else {
-            throw {code: 404, text: res.message, doc_link: res.documentation_url};
+            throw {
+              code: 404,
+              text: res.message,
+              doc_link: res.documentation_url,
+            };
           }
           $this.setLoading(false);
         })
-        .catch(e => {
+        .catch((e) => {
           $this.setLoading(false);
           this.fetchError = {
             code: e.code || 424,
             text:
-              e.text || e || "The method could not be performed on the resource because the requested action depended on another action and that action failed."
+              e.text ||
+              e ||
+              "The method could not be performed on the resource because the requested action depended on another action and that action failed.",
           };
         });
     },
     async setStarClick(id) {
       this.setStar(id)
-        .then(res => {
+        .then((res) => {
           if (res.status === 204) {
             this.star = true;
             this.$emit("starred", { status: true, id: id });
           }
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
-    }
+    },
   },
   beforeMount() {
     const $this = this;
     $this.isFullscreen = false;
-    document.onfullscreenchange = function() {
+    document.onfullscreenchange = function () {
       $this.isFullscreen = document.fullscreenElement;
     };
     if (this.$route.params.id) {
@@ -309,7 +318,7 @@ export default {
       this.load(to.params.id);
     }
     next();
-  }
+  },
 };
 </script>
 
@@ -327,6 +336,7 @@ export default {
       white-space: pre-wrap;
       font-size: 1rem;
       font-weight: 900;
+      background: transparent !important;
     }
     span {
       font-weight: 900;

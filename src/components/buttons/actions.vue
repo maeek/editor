@@ -61,15 +61,15 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "actions",
   components: {
-    compact
+    compact,
   },
   data() {
     return {
-      showContainer: false
+      showContainer: false,
     };
   },
   computed: {
-    ...mapGetters(["profile_link"])
+    ...mapGetters(["profile_link"]),
   },
   methods: {
     ...mapActions(["showHelpModal", "newFileModal"]),
@@ -87,14 +87,14 @@ export default {
     },
     hideButtons() {
       this.showContainer = false;
-    }
+    },
   },
   mounted() {
     document.addEventListener("click", this.hideButtons);
   },
   beforeDestroy() {
     document.removeEventListener("click", this.hideButtons);
-  }
+  },
 };
 </script>
 

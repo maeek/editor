@@ -117,33 +117,17 @@
             <helpElement :keys="'g~g~'">Switch characters size</helpElement>
             <helpElement :keys="'a'">Insert mode after cursor</helpElement>
             <helpElement :keys="'i'">Insert mode before cursor</helpElement>
-            <helpElement :keys="'s'">
-              Insert mode at cursor
-            </helpElement>
-            <helpElement :keys="'A'">
-              Insert mode at end of line
-            </helpElement>
+            <helpElement :keys="'s'"> Insert mode at cursor </helpElement>
+            <helpElement :keys="'A'"> Insert mode at end of line </helpElement>
             <helpElement :keys="'I'">
               Insert mode at start of line
             </helpElement>
-            <helpElement :keys="'o'">
-              Insert mode after line
-            </helpElement>
-            <helpElement :keys="'O'">
-              Insert mode before line
-            </helpElement>
-            <helpElement :keys="'u'">
-              Undo
-            </helpElement>
-            <helpElement :keys="':g <text>'">
-              Search
-            </helpElement>
-            <helpElement :keys="'/<text>'">
-              Search
-            </helpElement>
-            <helpElement :keys="'?<text>'">
-              Search
-            </helpElement>
+            <helpElement :keys="'o'"> Insert mode after line </helpElement>
+            <helpElement :keys="'O'"> Insert mode before line </helpElement>
+            <helpElement :keys="'u'"> Undo </helpElement>
+            <helpElement :keys="':g <text>'"> Search </helpElement>
+            <helpElement :keys="'/<text>'"> Search </helpElement>
+            <helpElement :keys="'?<text>'"> Search </helpElement>
           </div>
         </div>
       </div>
@@ -159,31 +143,33 @@ export default {
   name: "modal",
   components: {
     compact,
-    helpElement
+    helpElement,
   },
   methods: {
-    ...mapActions(["showHelpModal"])
-  }
+    ...mapActions(["showHelpModal"]),
+  },
 };
 </script>
 
 <style scoped lang="scss">
 .close {
-  position: absolute;
+  position: fixed;
   top: 0.5rem;
-  top: 0.5rem;
-  right: 0.5rem;
+  right: 1rem;
 }
 .modal {
-    .wrap {
-      padding: 0;
-    }
+  .wrap {
+    padding: 0;
+  }
 }
 h3 {
+  position: sticky;
+  top: 0;
+  left: 0;
   width: 100%;
   padding: 0.5rem;
   background: #1d1d1d;
-  margin:0;
+  margin: 0;
   i {
     color: $comment--header;
   }

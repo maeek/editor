@@ -22,9 +22,9 @@ export default {
       let ms = this.queryFailedObj.message || this.message;
       ms = ms.toString().replace(/^TypeError:/g, "");
       return ms;
-    }
+    },
   },
-  props: ["failed", "message"]
+  props: ["failed", "message"],
 };
 </script>
 

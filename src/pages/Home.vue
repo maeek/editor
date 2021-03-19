@@ -27,13 +27,21 @@
       </compact>
     </panel-top>
     <div class="wrapper">
-      <panel-left v-if="files.length > 0 && !not_found" ref="panelLeft"></panel-left>
+      <panel-left
+        v-if="files.length > 0 && !not_found"
+        ref="panelLeft"
+      ></panel-left>
       <div class="wrapper wrapper-column" ref="wrapper">
         <landing-greeter
           :class="{ authorized }"
           v-if="!authorized && !starred && !user && !shwPublic && !not_found"
         ></landing-greeter>
-        <user-panel v-if="(user && !not_found) || (authorized && !shwPublic && !not_found)" :user="user" />
+        <user-panel
+          v-if="
+            (user && !not_found) || (authorized && !shwPublic && !not_found)
+          "
+          :user="user"
+        />
         <div class="switch" v-if="authorized && !not_found">
           <compact
             :class="{ active: !shwPublic && !user && !starred }"
@@ -103,9 +111,9 @@
             /           \
            /             \
           </pre>
-      <span class="code">404</span>
-      <span class="text">Resource not found</span>
-    </div>
+          <span class="code">404</span>
+          <span class="text">Resource not found</span>
+        </div>
       </div>
     </div>
     <actions-button v-if="authorized && !not_found"></actions-button>
@@ -133,11 +141,11 @@ export default {
     gists,
     userPanel,
     landingGreeter,
-    actionsButton
+    actionsButton,
   },
   data() {
     return {
-      groups: []
+      groups: [],
     };
   },
   props: ["user", "shwPublic", "starred", "not_found"],
@@ -147,7 +155,7 @@ export default {
       return `${this.user}+${this.authorized ? "ac" : "nac"}+${
         this.shwPublic ? "yee" : "ney"
       } ${this.starred ? "yee" : "ney"}`;
-    }
+    },
   },
   methods: {
     ...mapActions(["toggleSettings", "logout", "newFileModal"]),
@@ -160,7 +168,7 @@ export default {
           this.$refs.wrapper.style["padding-top"] = "2rem";
         }
       }
-    }
+    },
   },
   updated() {
     this.resize();
@@ -172,7 +180,7 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.resize);
-  }
+  },
 };
 </script>
 

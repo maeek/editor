@@ -1,16 +1,6 @@
 <template>
   <div class="bar bar--bottom">
     <div>
-      <!-- <bottomButton :class="'interactive'">
-        <a>
-          <img
-            class="svg_logo"
-            dragabble="false"
-            src="@/assets/icons/github_logo.svg"
-          />
-          Log out
-        </a>
-      </bottomButton> -->
       <bottomButton>
         <i
           class="material-icons"
@@ -20,6 +10,12 @@
           lens
         </i>
         {{ saveStatus }}
+      </bottomButton>
+      <bottomButton @click.native="goToProfile" class="interactive desktop">
+        <a>
+          <i class="material-icons"> person </i>
+          {{ user }}
+        </a>
       </bottomButton>
     </div>
     <div>
@@ -35,7 +31,7 @@
       <bottomButton>
         {{ lines }}
       </bottomButton>
-      <bottomButton :class="'interactive'">
+      <bottomButton class="interactive desktop">
         <a href="https://github.com/maeek/editor">v{{ version }}</a>
       </bottomButton>
     </div>
@@ -49,7 +45,7 @@ import bottomButton from "@/components/buttons/bottom-panel-element.vue";
 export default {
   name: "barBottom",
   components: {
-    bottomButton
+    bottomButton,
   },
   computed: {
     ...mapGetters([
@@ -60,12 +56,12 @@ export default {
       "activeFile",
       "activeFileSize",
       "activeFileMediaSize",
-      "version"
+      "version",
     ]),
     displayNotSaved() {
       return !this.fileIsSaved() || this.fileIsSaved() === null;
     },
-    saveStatus: function() {
+    saveStatus: function () {
       if (this.fileIsSaved())
         return `All saved , last save - ${this.fileLastSaved()}`;
       else if (this.fileIsSaved() == null) return "No file";
@@ -73,8 +69,21 @@ export default {
     },
     lines() {
       return `Ln: ${this.fileLines}`;
-    }
-  }
+    },
+    user() {
+      if (this.$store.getters.fileById(this.$route.params.id))
+        return this.$store.getters.fileById(this.$route.params.id).owner;
+      else return null;
+    },
+  },
+  methods: {
+    goToProfile() {
+      let user = this.$store.getters.fileById(this.$route.params.id).owner;
+      this.$router.push({
+        path: `/user/${user}`,
+      });
+    },
+  },
 };
 </script>
 

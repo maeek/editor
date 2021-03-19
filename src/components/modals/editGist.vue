@@ -1,12 +1,12 @@
 <template>
-  <div class="modal" @click="newFileModal(false)" ref="modal">
+  <div class="modal" @click="editModal(false)" ref="modal">
     <transition name="scale" mode="out-in">
       <div class="wrap row" @click.stop v-if="pending">
         <div class="material-icons leading">hourglass_empty</div>
         <div class="wrap" @click.stop>
           <h3>Operation pending:</h3>
           <p class="pending">
-            + Adding {{ filename }}
+            +/- Editing {{ filename }}
             {{ $route.params.id ? `to ${$route.params.id}` : `` }}
           </p>
           <p class="pending error" v-if="typeof pending != 'boolean'">
@@ -17,41 +17,48 @@
       <div class="wrap row" @click.stop v-else>
         <div
           class="material-icons leading close-modal"
-          @click="newFileModal(false)"
+          @click="editModal(false)"
         >
           close
         </div>
-        <div class="material-icons leading">note_add</div>
+        <div class="material-icons leading">edit</div>
         <div class="wrap">
-          <h3>Create new gist</h3>
+          <h3>Edit gist</h3>
           <p class="pending" v-if="$route.params.id">
-            + Adding to {{ $route.params.id }}
+            +/- Editing {{ $route.params.id }}
           </p>
-          <input
-            ref="input"
-            name="newfile"
-            v-model="filename"
-            placeholder="Type gist name with extension, i.e. README.md"
-            @keyup="createFileEnter"
-          />
+          <p class="pending" v-if="$route.params.id">+/- {{ editGist }}</p>
+          <label>
+            <span class="label"
+              ><i class="material-icons">edit</i> Filename</span
+            >
+            <input
+              name="editFile"
+              placeholder="Type gist name with extension, i.e. README.md"
+              :value="editGist"
+              ref="newFile"
+              @keyup="modifyFileEnter"
+            />
+            <div class="material-icons clear" @click="clearInput">clear</div>
+          </label>
           <div class="options">
             <button-modal
               :hide="false"
-              :title="'Create secret gist'"
-              name="Create secret gist"
-              @click.native="createFile(false)"
+              :title="'Cancel'"
+              name="Cancel"
+              @click.native="editModal(false)"
               class="active secret"
             >
-              add
+              cancel
             </button-modal>
             <button-modal
               :hide="false"
-              :title="'Create public gist'"
-              name="Create public gist"
-              @click.native="createFile(true)"
+              :title="'Edit'"
+              name="Apply"
+              @click.native="modifyGist"
               class="active public"
             >
-              all_inclusive
+              done
             </button-modal>
           </div>
         </div>
@@ -62,7 +69,7 @@
 
 <script>
 import buttonModal from "@/components/buttons/button-modal.vue";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 export default {
   name: "modal",
   components: {
@@ -71,102 +78,88 @@ export default {
   data() {
     return {
       filename: "",
+      gist: null,
       pending: false,
     };
   },
   computed: {
-    ...mapGetters(["tokenType", "token", "authorized", "files"]),
+    ...mapGetters(["tokenType", "token", "authorized", "files", "editGist"]),
   },
   methods: {
     ...mapActions([
-      "newFileModal",
+      "editModal",
       "addFile",
       "newGist",
       "setHeaders",
       "saveFile",
+      "patchGist",
     ]),
-    createFile(pb) {
-      const name = this.$refs.input.value;
-      if (name.length > 0) {
-        this.filename = name;
-        let headers = this.setHeaders;
-        let files = {};
-        if (this.$route.params.id) {
-          this.files.forEach((el) => {
-            if (el.gistId == this.$route.params.id) {
-              files[el.name] = {
-                content: el.data,
-              };
-            }
-          });
-        }
-        files[name] = {
-          content: "// Empty",
+    ...mapMutations(["CHANGE_NAME", "GIST_FIRST"]),
+    modifyGist() {
+      const id = this.$route.params.id;
+      const files = {};
+      const oldFilename = this.editGist;
+      const newFilename = this.$refs.newFile.value;
+      if (newFilename.length > 0) {
+        files[oldFilename] = {
+          filename: newFilename,
         };
-        // console.log(this.$route.params.id, files);
         this.pending = true;
-        this.newGist({
-          url: this.$route.params.id
-            ? `https://api.github.com/gists/${this.$route.params.id}`
-            : "https://api.github.com/gists",
-          files: files,
-          public: pb,
-        })
-          .then((res) => res.json())
-          .then((res) => {
-            console.log(res);
-            if (!this.$route.params.id) {
-              this.$router.push({
-                path: `/edit/${res.id}`,
-              });
-              this.pending = false;
-              this.newFileModal(false);
-            } else {
-              this.getGist(headers);
-            }
-          })
-          .catch((e) => {
-            this.pending = e;
+        this.patchGist({
+          id,
+          files,
+          public: this.gist.public,
+        }).then(() => {
+          this.CHANGE_NAME({ name: oldFilename, newName: newFilename });
+          this.GIST_FIRST(newFilename);
+          this.$router.replace({
+            path: `/edit/${this.$route.params.id || ""}`,
+            query: {
+              target: newFilename,
+            },
           });
-      } else {
-        this.$refs.input.focus();
+          this.pending = false;
+          this.editModal(false);
+        });
       }
     },
-    getGist(headers) {
+    clearInput() {
+      this.$refs.newFile.value = "";
+    },
+    async getGist(headers) {
       return fetch(`https://api.github.com/gists/${this.$route.params.id}`, {
-        headers: headers,
+        headers: await headers,
         cache: "no-cache",
       })
         .then((res) => res.json())
         .then((ms) => {
           if (!ms.message) {
-            console.log(ms);
-            this.addFile(ms);
-            this.pending = false;
-            this.newFileModal(false);
-            this.$store.commit("ACTIVE_FILE", Object.keys(ms.files)[0]);
+            return ms;
           } else {
             this.pending = ms.message;
+            return null;
           }
         })
         .catch((e) => {
           this.pending = e;
         });
     },
-    createFileEnter(e) {
+    modifyFileEnter(e) {
       if (e.code == "Enter") {
-        this.createFile(false);
+        this.modifyGist();
       } else if (e.code == "Escape") {
-        this.newFileModal(false);
+        this.editModal(false);
       }
     },
     esc_close(e) {
-      e.code === "Escape" && this.newFileModal(false);
+      e.code === "Escape" && this.editModal(false);
     },
   },
   mounted() {
-    this.$refs.input.focus();
     this.$refs.modal.addEventListener("keyup", this.esc_close);
+    this.getGist(this.setHeaders()).then((data) => {
+      this.gist = data;
+    });
   },
   beforeDestroy() {
     this.$refs.modal.removeEventListener("keyup", this.esc_close);
@@ -193,6 +186,25 @@ export default {
     background: #1d1d1d;
     max-width: 95%;
     position: relative;
+    label {
+      position: relative;
+      width: 100%;
+      .clear {
+        position: absolute;
+        right: 0.3rem;
+        bottom: 0.15rem;
+        font-size: 2rem;
+        color: #6e6e6e;
+        @extend %pointer;
+        @extend %noselect;
+      }
+      span {
+        display: block;
+        margin: 1rem 0 0 0;
+        color: $file-name-color;
+        font-size: 0.8rem;
+      }
+    }
     &.row {
       padding: 0;
       flex-direction: row;
@@ -236,7 +248,7 @@ export default {
       color: #fff;
       margin: 0;
       border-radius: 4px;
-      margin-top: 1rem;
+      margin-top: 0.4rem;
       border: 2px solid #2d2d2d;
       @extend %flex-start-center;
       &.error {

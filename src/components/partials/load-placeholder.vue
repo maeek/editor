@@ -14,7 +14,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "loadPlaceholder",
   props: ["count"],
-  computed: mapGetters(["queryFailed", "queryActive"])
+  computed: mapGetters(["queryFailed", "queryActive"]),
 };
 </script>
 

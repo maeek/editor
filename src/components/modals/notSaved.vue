@@ -1,61 +1,34 @@
 <template>
-  <div class="modal" @click="rmFileModal(false)" ref="modal">
-    <div class="wrap row" @click.stop v-if="pending">
-      <div class="material-icons leading">hourglass_empty</div>
-      <div class="wrap">
-        <h3>Operation pending:</h3>
-        <p class="pending">Gist ID: {{ removeFileModal.rid }}</p>
-        <p
-          class="pending"
-          v-for="(file, i) in Object.keys(removeFileModal.files)"
-          :key="file + i"
-        >
-          <strong>{{ file }}</strong>
-        </p>
-        <p class="pending" v-if="typeof pending !== 'boolean'">
-          Error {{ pending }}
-        </p>
-      </div>
-    </div>
-    <div class="wrap row" @click.stop v-if="!pending">
-      <div
-        class="material-icons leading close-modal"
-        @click="rmFileModal(false)"
-      >
-        close
-      </div>
-      <div class="material-icons leading">delete</div>
-      <div class="wrap">
-        <h3>Remove gist {{ Object.keys(removeFileModal.files)[0] }}</h3>
-        <p class="pending">Gist ID: {{ removeFileModal.rid }}</p>
-        <p
-          class="pending"
-          v-for="(file, i) in Object.keys(removeFileModal.files)"
-          :key="file + i"
-        >
-          Removing {{ file }}
-        </p>
-        <div class="options">
-          <button-modal
-            :hide="false"
-            :title="'Cancel'"
-            name="Cancel"
-            @click.native="rmFileModal(false)"
-          >
-            close
-          </button-modal>
-          <button-modal
-            :hide="false"
-            :title="'Remove file'"
-            name="Remove"
-            @click.native="deleteGist(removeFileModal.rid)"
-            class="active"
-          >
-            delete
-          </button-modal>
+  <div class="modal" @click="setNotSaved(false)" ref="modal">
+    <transition name="scale" mode="out-in">
+      <div class="wrap row" @click.stop>
+        <div class="material-icons leading">hourglass_empty</div>
+        <div class="wrap" @click.stop>
+          <h3>You have unsaved changes!</h3>
+          <p class="pending">- {{ activeFile }}</p>
+          <div class="options">
+            <button-modal
+              :hide="false"
+              :title="'Go back'"
+              name="Back to file"
+              @click.native="setNotSaved(false)"
+              class="active public"
+            >
+              arrow_back
+            </button-modal>
+            <button-modal
+              :hide="false"
+              :title="'Leave without saving'"
+              name="Leave without saving"
+              @click.native="proceed"
+              class="active secret"
+            >
+              exit_to_app
+            </button-modal>
+          </div>
         </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -63,12 +36,13 @@
 import buttonModal from "@/components/buttons/button-modal.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
-  name: "removeFile",
+  name: "modal",
   components: {
     buttonModal,
   },
   data() {
     return {
+      filename: "",
       pending: false,
     };
   },
@@ -76,44 +50,25 @@ export default {
     ...mapGetters([
       "tokenType",
       "token",
-      "alias",
       "authorized",
-      "removeFileModal",
+      "activeFile",
+      "showNotSaved",
+      "files",
     ]),
   },
   methods: {
-    ...mapActions(["rmFileModal", "closeById", "updateGists"]),
-    deleteGist(id) {
-      this.pending = true;
-      this.closeById(id);
-      let headers = this.authorized
-        ? {
-            Authorization: `${this.tokenType} ${this.token}`,
-          }
-        : {};
-      fetch(`https://api.github.com/gists/${id}`, {
-        method: "DELETE",
-        headers: headers,
-      })
-        .then(() => {
-          this.rmFileModal(false);
-          this.pending = false;
-          let link = `https://api.github.com/users/${this.alias}/gists`;
-          this.updateGists(link);
-        })
-        .catch((e) => {
-          this.pending = e;
-        });
+    ...mapActions([
+      "newFileModal",
+      "addFile",
+      "newGist",
+      "setHeaders",
+      "saveFile",
+      "setNotSaved",
+    ]),
+    proceed() {
+      this.$store.dispatch("activeFileData", this.$store.getters.fileData());
+      this.$router.push(this.showNotSaved);
     },
-    esc_close(e) {
-      e.code === "Escape" && this.rmFileModal(false);
-    },
-  },
-  mounted() {
-    document.addEventListener("keyup", this.esc_close);
-  },
-  beforeDestroy() {
-    document.removeEventListener("keyup", this.esc_close);
   },
 };
 </script>
@@ -180,12 +135,8 @@ export default {
       color: #fff;
       margin: 0;
       border-radius: 4px;
-      margin-top: 0.2rem;
+      margin-top: 1rem;
       border: 2px solid #2d2d2d;
-      strong {
-        color: #aaa;
-        text-decoration: line-through $comment--header;
-      }
       @extend %flex-start-center;
       &.error {
         color: lighten(red, 20);
@@ -199,16 +150,12 @@ export default {
     }
     h3 {
       margin: 0 0 0.7rem 0;
-      font-weight: 400;
       width: 100%;
+      font-weight: 400;
       color: $panel-top--header;
       @extend %typo-header;
       @extend %noselect;
       @extend %flex-start-center;
-      i {
-        font-size: inherit;
-        margin: 0 0.3rem 0 0;
-      }
     }
     input {
       border-radius: 5px;

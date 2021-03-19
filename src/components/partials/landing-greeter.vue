@@ -34,12 +34,12 @@ export default {
   name: "landingGreeter",
   components: {
     compact,
-    loginCompact
+    loginCompact,
   },
   computed: mapGetters(["version", "authorized"]),
   mounted() {
     this.$refs.greet.style.opacity = 1;
-  }
+  },
 };
 </script>
 

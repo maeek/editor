@@ -7,6 +7,11 @@ $material-icons-font-path: '~material-icons/iconfont/';
     font-display: swap;
 }
 
+::selection {
+    background: lighten($comment--header, 35);
+    color: darken($comment--header, 35);
+}
+
 html {
     font-size: 1rem;
     height: 100%;
@@ -19,6 +24,33 @@ body {
     background: $body--bg;
     height: 100%;
     overflow: hidden;
+}
+
+a {
+    color: $panel-top--header;
+    text-decoration: underline $comment--header;
+    word-break: break-all;
+}
+
+table {
+    max-width: 100%;
+    overflow: auto;
+}
+
+td {
+    padding: 0 1rem;
+}
+
+img {
+    max-width: 100%;
+}
+
+pre {
+    background: #141414;
+    padding: 0.3rem;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-break: break-all;
 }
 
 * {
@@ -296,6 +328,9 @@ input[name="openFile"] {
 }
 
 @media screen and (max-width: 768px) {
+    .desktop {
+        display: none !important;
+    }
     .modal {
         .wrap {
             .data {

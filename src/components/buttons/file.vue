@@ -9,7 +9,7 @@
       :class="{
         name: true,
         'name-side': obj,
-        'name-name': !obj
+        'name-name': !obj,
       }"
     >
       <slot></slot>
@@ -30,7 +30,7 @@ export default {
   props: {
     name: String,
     obj: String,
-    id: String
+    id: String,
   },
   computed: mapGetters(["fileByName", "fileById"]),
   methods: {
@@ -38,8 +38,8 @@ export default {
     remove() {
       (this.name && this.removeFile({ name: this.name, id: this.id })) ||
         (this.obj && this.closeById(this.obj));
-    }
-  }
+    },
+  },
 };
 </script>
 

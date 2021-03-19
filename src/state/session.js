@@ -19,7 +19,7 @@ export default {
     html_link: null,
     id: null,
     api_key: apiKey,
-    tokenType: "Bearer"
+    tokenType: "Bearer",
   },
   mutations: {
     NAME(state, name) {
@@ -62,9 +62,9 @@ export default {
               id: user.raw.user.id,
               public_gists: user.raw.user.public_gists,
               public_repos: user.raw.user.public_repos,
-              html_url: user.raw.user.html_url
-            }
-          }
+              html_url: user.raw.user.html_url,
+            },
+          },
         })
       );
     },
@@ -75,25 +75,33 @@ export default {
     },
     PENDING_LOGIN(state, status) {
       state.pendingLogin = status;
-    }
+    },
   },
   actions: {
     async authorize({ commit, dispatch, getters }) {
-      OAuth.initialize(getters.api_key);
-      OAuth.popup("github").then(async github => {
-        const { access_token, token_type } = github;
-        console.log("GH Access token", access_token);
-        const res = await github.me();
-        await dispatch("userInfo", res);
-        window.localStorage.setItem(
-          "gh-token",
-          JSON.stringify({
-            access_token: btoa(github.access_token),
-            token_type: github.token_type
+      try {
+        OAuth.initialize(getters.api_key);
+        OAuth.popup("github")
+          .then(async (github) => {
+            const { access_token, token_type } = github;
+            // console.log("GH Access token", access_token);
+            const res = await github.me();
+            await dispatch("userInfo", res);
+            window.localStorage.setItem(
+              "gh-token",
+              JSON.stringify({
+                access_token: btoa(github.access_token),
+                token_type: github.token_type,
+              })
+            );
+            commit("TOKEN", { token_type, access_token });
           })
-        );
-        commit("TOKEN", { token_type, access_token });
-      });
+          .fail((e) => {
+            console.error(e);
+          });
+      } catch (e) {
+        console.error(e);
+      }
     },
     logout({ commit }) {
       commit("TOKEN", { token_type: null, access_token: null });
@@ -108,29 +116,29 @@ export default {
     },
     async userInfo({ commit }, api) {
       commit("USER", api);
-      console.log(api);
+      // console.log(api);
     },
     setPendingLogin({ commit }, status) {
       commit("PENDING_LOGIN", status);
-    }
+    },
   },
   getters: {
-    userObj: state => state,
-    pendingLogin: state => state.pendingLogin,
-    name: state => state.name,
-    alias: state => state.alias,
-    email: state => state.email,
-    avatar: state => state.avatar,
-    token: state => state.token,
-    tokenType: state => state.tokenType,
-    authorized: state => !!state.token,
-    location: state => state.location,
-    followers: state => state.followers,
-    following: state => state.following,
-    userPublicGists: state => state.userPublicGists,
-    userPublicRepos: state => state.userPublicRepos,
-    profile_link: state => state.html_link,
-    id: state => state.id,
-    api_key: state => state.api_key
-  }
+    userObj: (state) => state,
+    pendingLogin: (state) => state.pendingLogin,
+    name: (state) => state.name,
+    alias: (state) => state.alias,
+    email: (state) => state.email,
+    avatar: (state) => state.avatar,
+    token: (state) => state.token,
+    tokenType: (state) => state.tokenType,
+    authorized: (state) => !!state.token,
+    location: (state) => state.location,
+    followers: (state) => state.followers,
+    following: (state) => state.following,
+    userPublicGists: (state) => state.userPublicGists,
+    userPublicRepos: (state) => state.userPublicRepos,
+    profile_link: (state) => state.html_link,
+    id: (state) => state.id,
+    api_key: (state) => state.api_key,
+  },
 };
