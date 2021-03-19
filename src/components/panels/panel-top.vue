@@ -18,8 +18,8 @@ import siteHeader from "@/components/panels/panel-top/siteHeader.vue";
 export default {
   name: "barTop",
   components: {
-    siteHeader
-  }
+    siteHeader,
+  },
 };
 </script>
 

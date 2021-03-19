@@ -5,7 +5,7 @@
       :class="{
         'close-revision': true,
         'material-icons': true,
-        scrolled: scroll
+        scrolled: scroll,
       }"
       @click="closeRevs"
     >
@@ -18,7 +18,7 @@
         :class="{
           loaded:
             loadedRevision == rev.version ||
-            (!loadedRevision && n == showRevsList.length - 1)
+            (!loadedRevision && n == showRevsList.length - 1),
         }"
       >
         <span>#{{ n + 1 }}</span>
@@ -67,30 +67,30 @@ export default {
   data() {
     return {
       loadedRev: null,
-      page: 1
+      page: 1,
     };
   },
   props: {
-    scroll: Boolean
+    scroll: Boolean,
   },
   components: {
-    compact
+    compact,
   },
   computed: {
     ...mapGetters(["showRevisions", "showRevsList", "activeFile"]),
     loadedRevision() {
       return this.loadedRev;
-    }
+    },
   },
   methods: {
     ...mapActions(["setRevisions", "setComments"]),
     async fetchGist(link) {
       return fetch(link, {
         headers: await this.$store.dispatch("setHeaders"),
-        cache: "no-cache"
+        cache: "no-cache",
       })
-        .then(res => res.json())
-        .then(ms => {
+        .then((res) => res.json())
+        .then((ms) => {
           if (!ms.message) {
             return ms;
           } else {
@@ -102,7 +102,7 @@ export default {
       this.$emit("next", ++this.page);
     },
     loadRev(link, ver) {
-      this.fetchGist(link).then(data => {
+      this.fetchGist(link).then((data) => {
         this.loadedRev = ver;
         console.log(data);
         const file = data.files[this.activeFile]
@@ -122,7 +122,7 @@ export default {
       e.preventDefault();
       const delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
       this.$refs.revs.scrollLeft -= delta * 35;
-    }
+    },
   },
   mounted() {
     const $this = this;
@@ -132,7 +132,7 @@ export default {
       $this.scrollHoriz,
       false
     );
-  }
+  },
 };
 </script>
 

@@ -5,7 +5,7 @@
       :class="{
         'close-revision': true,
         'material-icons': true,
-        scrolled: scroll
+        scrolled: scroll,
       }"
       @click="closeRevs"
     >
@@ -40,19 +40,19 @@ import comment from "@/components/partials/comment.vue";
 export default {
   name: "comments",
   computed: {
-    ...mapGetters(["comments", "commentsList"])
+    ...mapGetters(["comments", "commentsList"]),
   },
   data() {
     return {
-      textComment: ""
+      textComment: "",
     };
   },
   components: {
     newComment,
-    comment
+    comment,
   },
   props: {
-    scroll: Boolean
+    scroll: Boolean,
   },
   methods: {
     ...mapActions(["setRevisions", "setComments"]),
@@ -67,10 +67,10 @@ export default {
     async fetchGist(link) {
       return fetch(link, {
         headers: await this.$store.dispatch("setHeaders"),
-        cache: "no-cache"
+        cache: "no-cache",
       })
-        .then(res => res.json())
-        .then(ms => {
+        .then((res) => res.json())
+        .then((ms) => {
           if (!ms.message) {
             return ms;
           } else {
@@ -81,7 +81,7 @@ export default {
     updateComments() {
       this.fetchGist(
         `https://api.github.com/gists/${this.$route.params.id}/comments`
-      ).then(data => {
+      ).then((data) => {
         this.$store.commit("SET_COMMENTS", []);
         this.$store.commit("SET_COMMENTS", data);
       });
@@ -91,11 +91,11 @@ export default {
         method: "POST",
         headers: await this.$store.dispatch("setHeaders"),
         body: JSON.stringify({
-          body: text
-        })
+          body: text,
+        }),
       })
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (!res.message) {
             this.$refs.newComment.textComment = "";
             this.updateComments();
@@ -107,9 +107,9 @@ export default {
         `https://api.github.com/gists/${this.$route.params.id}/comments/${id}`,
         {
           method: "DELETE",
-          headers: await this.$store.dispatch("setHeaders")
+          headers: await this.$store.dispatch("setHeaders"),
         }
-      ).then(res => {
+      ).then((res) => {
         if (res.ok) {
           this.updateComments();
         }
@@ -122,10 +122,10 @@ export default {
           method: "PATCH",
           headers: await this.$store.dispatch("setHeaders"),
           body: JSON.stringify({
-            body: obj.body
-          })
+            body: obj.body,
+          }),
         }
-      ).then(res => {
+      ).then((res) => {
         if (res.ok) {
           this.updateComments();
         }
@@ -134,8 +134,8 @@ export default {
     closeRevs() {
       this.setComments(false);
       this.scrolled = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

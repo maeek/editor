@@ -17,8 +17,8 @@
         class="more"
         v-if="
           (!$route.params.user && !$route.params.id) ||
-            ($route.params.user && $route.params.user === alias) ||
-            alias === user
+          ($route.params.user && $route.params.user === alias) ||
+          alias === user
         "
       >
         <span class="stats">
@@ -62,7 +62,7 @@ export default {
     return {
       image_url: "",
       user_name: "",
-      alias_name: ""
+      alias_name: "",
     };
   },
   computed: {
@@ -77,7 +77,7 @@ export default {
       "userPublicGists",
       "userPublicRepos",
       "queryFailed",
-      "queryActive"
+      "queryActive",
     ]),
     image() {
       return this.image_url;
@@ -87,14 +87,14 @@ export default {
     },
     aliasName() {
       return this.user ? this.user : this.alias;
-    }
+    },
   },
   methods: {
     ...mapActions(["toggleSettings", "logout"]),
     async getUser(user) {
       const res = await fetch(`https://api.github.com/users/${user}`);
       return await res.json();
-    }
+    },
   },
   async created() {
     let data = {};
@@ -107,7 +107,7 @@ export default {
       this.user_name = this.name;
       this.alias_name = this.alias;
     }
-  }
+  },
 };
 </script>
 

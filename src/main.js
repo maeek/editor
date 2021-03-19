@@ -11,20 +11,20 @@ Vue.config.productionTip = true;
 Vue.use(VueShowdown, {
   options: {
     emoji: true,
-    tables: true
-  }
+    tables: true,
+  },
 });
 showdown.setFlavor("github");
 
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
 
 window.addEventListener(
   "keydown",
-  function(e) {
+  function (e) {
     if (e.ctrlKey && e.code == "KeyS") {
       e.preventDefault();
     } else if (e.ctrlKey && e.code == "KeyR") {
@@ -53,8 +53,8 @@ window.addEventListener(
       router.push({
         path: `/edit/${fileName.gistId}`,
         query: {
-          target: fileName.name
-        }
+          target: fileName.name,
+        },
       });
       document
         .querySelector(".opened")
@@ -92,7 +92,7 @@ window.addEventListener(
 
 window.addEventListener(
   "keyup",
-  function(e) {
+  function (e) {
     if (e.code == "ControlLeft") {
       store.dispatch("showFilesDialog", false);
     }
@@ -100,7 +100,7 @@ window.addEventListener(
   false
 );
 
-String.prototype.hashCode = function() {
+String.prototype.hashCode = function () {
   var hash = 0;
   if (this.length == 0) {
     return hash;

@@ -1,10 +1,10 @@
 import CodeMirror from "codemirror";
 import "codemirror/mode/meta.js";
 
-const modes = CodeMirror.modeInfo.filter(el => {
+const modes = CodeMirror.modeInfo.filter((el) => {
   return {
     mode: el.mode,
-    mime: el.mime
+    mime: el.mime,
   };
 });
 
@@ -24,7 +24,7 @@ export default {
     smartIndent: true,
     fontSize: 16,
     modes: modes,
-    promptLeave: true
+    promptLeave: true,
   },
   mutations: {
     TAB_SIZE(state, size) {
@@ -53,7 +53,7 @@ export default {
     },
     KEY_MAP(state, val) {
       state.keyMap = val;
-    }
+    },
   },
   actions: {
     setLineNumbers({ commit }, enabled) {
@@ -82,21 +82,21 @@ export default {
     },
     setSmartIndent({ commit }, val) {
       commit("SMART_INDENT", val);
-    }
+    },
   },
   getters: {
-    lineNumbers: state => state.lineNumbers,
-    fontSize: state => state.fontSize,
-    fontSizeArray: state => state.fontSizeArray,
-    version: state => state.version,
-    keyMap: state => state.keyMap,
-    keyMaps: state => state.keyMaps,
-    scrollPastEnd: state => state.scrollPastEnd,
-    tabSize: state => state.tabSize,
-    smartIndent: state => state.smartIndent,
-    autoClose: state => state.autoCloseBrackets,
-    lineWrap: state => state.lineWrapping,
-    modes: state => state.modes,
-    showPromptLeave: state => state.promptLeave
-  }
+    lineNumbers: (state) => state.lineNumbers,
+    fontSize: (state) => state.fontSize,
+    fontSizeArray: (state) => state.fontSizeArray,
+    version: (state) => state.version,
+    keyMap: (state) => state.keyMap,
+    keyMaps: (state) => state.keyMaps,
+    scrollPastEnd: (state) => state.scrollPastEnd,
+    tabSize: (state) => state.tabSize,
+    smartIndent: (state) => state.smartIndent,
+    autoClose: (state) => state.autoCloseBrackets,
+    lineWrap: (state) => state.lineWrapping,
+    modes: (state) => state.modes,
+    showPromptLeave: (state) => state.promptLeave,
+  },
 };

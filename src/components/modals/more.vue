@@ -33,7 +33,7 @@ export default {
       "activeFile",
       "showRevisions",
       "comments",
-      "showMarkdown"
+      "showMarkdown",
     ]),
     markdown() {
       return (
@@ -44,7 +44,7 @@ export default {
           (this.activeFile.toLowerCase().includes(".md") ||
             this.activeFile.toLowerCase().includes(".markdown")))
       );
-    }
+    },
   },
   methods: {
     ...mapActions([
@@ -54,20 +54,20 @@ export default {
       "editModal",
       "setRevisions",
       "setComments",
-      "setMarkdown"
+      "setMarkdown",
     ]),
     scrollLeft() {
       this.$parent.$refs.panelFiles.scrollBy({
         top: 0,
         left: -100,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     },
     scrollRight() {
       this.$parent.$refs.panelFiles.scrollBy({
         top: 0,
         left: 100,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     },
     returnToPrevious() {
@@ -76,7 +76,7 @@ export default {
     shareGist() {
       window.navigator.permissions
         .query({ name: "clipboard-write" })
-        .then(result => {
+        .then((result) => {
           if (result.state == "granted" || result.state == "prompt") {
             navigator.clipboard.writeText(window.location.href);
           }
@@ -85,10 +85,10 @@ export default {
     async fetchGist(link) {
       return fetch(link, {
         headers: await this.$store.dispatch("setHeaders"),
-        cache: "no-cache"
+        cache: "no-cache",
       })
-        .then(res => res.json())
-        .then(ms => {
+        .then((res) => res.json())
+        .then((ms) => {
           if (!ms.message) {
             return ms;
           } else {
@@ -100,7 +100,7 @@ export default {
       if (!this.showRevisions) {
         this.fetchGist(
           `https://api.github.com/gists/${this.$route.params.id}/commits`
-        ).then(data => {
+        ).then((data) => {
           console.log(data);
           this.$store.commit("SET_REVS", data.reverse());
         });
@@ -111,31 +111,31 @@ export default {
     goToProfile() {
       let user = this.$store.getters.fileById(this.$route.params.id).owner;
       this.$router.push({
-        path: `/user/${user}`
+        path: `/user/${user}`,
       });
     },
     showComs() {
       if (!this.comments) {
         this.fetchGist(
           `https://api.github.com/gists/${this.$route.params.id}/comments`
-        ).then(data => {
+        ).then((data) => {
           console.log(data);
           this.$store.commit("SET_COMMENTS", data);
         });
       }
       // this.setRevisions(false);
       this.setComments(!this.comments);
-    }
+    },
   },
   mounted() {
     if (!this.showRevisions) {
       this.fetchGist(
         `https://api.github.com/gists/${this.$route.params.id}/commits`
-      ).then(data => {
+      ).then((data) => {
         this.$store.commit("SET_REVS", data.reverse());
       });
     }
-  }
+  },
 };
 </script>
 

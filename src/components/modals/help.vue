@@ -117,33 +117,17 @@
             <helpElement :keys="'g~g~'">Switch characters size</helpElement>
             <helpElement :keys="'a'">Insert mode after cursor</helpElement>
             <helpElement :keys="'i'">Insert mode before cursor</helpElement>
-            <helpElement :keys="'s'">
-              Insert mode at cursor
-            </helpElement>
-            <helpElement :keys="'A'">
-              Insert mode at end of line
-            </helpElement>
+            <helpElement :keys="'s'"> Insert mode at cursor </helpElement>
+            <helpElement :keys="'A'"> Insert mode at end of line </helpElement>
             <helpElement :keys="'I'">
               Insert mode at start of line
             </helpElement>
-            <helpElement :keys="'o'">
-              Insert mode after line
-            </helpElement>
-            <helpElement :keys="'O'">
-              Insert mode before line
-            </helpElement>
-            <helpElement :keys="'u'">
-              Undo
-            </helpElement>
-            <helpElement :keys="':g <text>'">
-              Search
-            </helpElement>
-            <helpElement :keys="'/<text>'">
-              Search
-            </helpElement>
-            <helpElement :keys="'?<text>'">
-              Search
-            </helpElement>
+            <helpElement :keys="'o'"> Insert mode after line </helpElement>
+            <helpElement :keys="'O'"> Insert mode before line </helpElement>
+            <helpElement :keys="'u'"> Undo </helpElement>
+            <helpElement :keys="':g <text>'"> Search </helpElement>
+            <helpElement :keys="'/<text>'"> Search </helpElement>
+            <helpElement :keys="'?<text>'"> Search </helpElement>
           </div>
         </div>
       </div>
@@ -159,11 +143,11 @@ export default {
   name: "modal",
   components: {
     compact,
-    helpElement
+    helpElement,
   },
   methods: {
-    ...mapActions(["showHelpModal"])
-  }
+    ...mapActions(["showHelpModal"]),
+  },
 };
 </script>
 

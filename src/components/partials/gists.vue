@@ -3,11 +3,11 @@
     <h5
       v-if="
         !queryFailed &&
-          !queryActive &&
-          !authorized &&
-          !shwPublic &&
-          !user &&
-          !starred
+        !queryActive &&
+        !authorized &&
+        !shwPublic &&
+        !user &&
+        !starred
       "
     >
       Recent gists feed
@@ -35,11 +35,11 @@
       @click="$router.push({ path: '/public' })"
       v-if="
         !queryFailed &&
-          !queryActive &&
-          !shwPublic &&
-          !user &&
-          !starred &&
-          !authorized
+        !queryActive &&
+        !shwPublic &&
+        !user &&
+        !starred &&
+        !authorized
       "
     >
       <span class="wrapper">EXPLORE</span>
@@ -70,14 +70,14 @@ export default {
     starNotf,
     loadPlaceholder,
     failedRequest,
-    foot
+    foot,
   },
   props: ["user", "shwPublic", "starred", "not_found"],
   data() {
     return {
       gist_dir: "https://api.github.com/gists/public",
       pages: 1,
-      starNotf: []
+      starNotf: [],
     };
   },
   computed: {
@@ -90,7 +90,7 @@ export default {
       "gistsLength",
       "queryFailedObj",
       "queryFailed",
-      "queryActive"
+      "queryActive",
     ]),
     count() {
       let cc = 5;
@@ -102,7 +102,7 @@ export default {
     },
     gistDir() {
       return this.gist_dir;
-    }
+    },
   },
   methods: {
     ...mapActions(["updateGists"]),
@@ -118,7 +118,7 @@ export default {
       if (user && access) {
         this.$store.commit("TOKEN", {
           token_type: access.token_type,
-          access_token: atob(access.access_token)
+          access_token: atob(access.access_token),
         });
         this.$store.commit("USER", user);
       }
@@ -157,12 +157,12 @@ export default {
     refresh() {
       let link = this.apiLink();
       this.updateGists(link);
-    }
+    },
   },
   created() {
     let link = this.apiLink();
     this.updateGists(link);
-  }
+  },
 };
 </script>
 

@@ -4,9 +4,7 @@
       <div class="wrap row" @click.stop v-if="pending">
         <div class="material-icons leading">hourglass_empty</div>
         <div class="wrap" @click.stop>
-          <h3>
-            Operation pending:
-          </h3>
+          <h3>Operation pending:</h3>
           <p class="pending">
             +/- Editing {{ filename }}
             {{ $route.params.id ? `to ${$route.params.id}` : `` }}
@@ -25,9 +23,7 @@
         </div>
         <div class="material-icons leading">edit</div>
         <div class="wrap">
-          <h3>
-            Edit gist
-          </h3>
+          <h3>Edit gist</h3>
           <p class="pending" v-if="$route.params.id">
             +/- Editing {{ $route.params.id }}
           </p>
@@ -77,17 +73,17 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 export default {
   name: "modal",
   components: {
-    buttonModal
+    buttonModal,
   },
   data() {
     return {
       filename: "",
       gist: null,
-      pending: false
+      pending: false,
     };
   },
   computed: {
-    ...mapGetters(["tokenType", "token", "authorized", "files", "editGist"])
+    ...mapGetters(["tokenType", "token", "authorized", "files", "editGist"]),
   },
   methods: {
     ...mapActions([
@@ -96,7 +92,7 @@ export default {
       "newGist",
       "setHeaders",
       "saveFile",
-      "patchGist"
+      "patchGist",
     ]),
     ...mapMutations(["CHANGE_NAME", "GIST_FIRST"]),
     modifyGist() {
@@ -106,21 +102,21 @@ export default {
       const newFilename = this.$refs.newFile.value;
       if (newFilename.length > 0) {
         files[oldFilename] = {
-          filename: newFilename
+          filename: newFilename,
         };
         this.pending = true;
         this.patchGist({
           id,
           files,
-          public: this.gist.public
+          public: this.gist.public,
         }).then(() => {
           this.CHANGE_NAME({ name: oldFilename, newName: newFilename });
           this.GIST_FIRST(newFilename);
           this.$router.replace({
             path: `/edit/${this.$route.params.id || ""}`,
             query: {
-              target: newFilename
-            }
+              target: newFilename,
+            },
           });
           this.pending = false;
           this.editModal(false);
@@ -133,10 +129,10 @@ export default {
     async getGist(headers) {
       return fetch(`https://api.github.com/gists/${this.$route.params.id}`, {
         headers: await headers,
-        cache: "no-cache"
+        cache: "no-cache",
       })
-        .then(res => res.json())
-        .then(ms => {
+        .then((res) => res.json())
+        .then((ms) => {
           if (!ms.message) {
             return ms;
           } else {
@@ -144,7 +140,7 @@ export default {
             return null;
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.pending = e;
         });
     },
@@ -157,17 +153,17 @@ export default {
     },
     esc_close(e) {
       e.code === "Escape" && this.editModal(false);
-    }
+    },
   },
   mounted() {
     this.$refs.modal.addEventListener("keyup", this.esc_close);
-    this.getGist(this.setHeaders()).then(data => {
+    this.getGist(this.setHeaders()).then((data) => {
       this.gist = data;
     });
   },
   beforeDestroy() {
     this.$refs.modal.removeEventListener("keyup", this.esc_close);
-  }
+  },
 };
 </script>
 

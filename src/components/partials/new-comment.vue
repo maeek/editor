@@ -36,16 +36,16 @@ import compact from "@/components/buttons/button-compact.vue";
 export default {
   name: "newComment",
   computed: {
-    ...mapGetters(["authorized", "comments", "commentsList"])
+    ...mapGetters(["authorized", "comments", "commentsList"]),
   },
   data() {
     return {
       textComment: "",
-      selected: 0
+      selected: 0,
     };
   },
   components: {
-    compact
+    compact,
   },
   methods: {
     ...mapActions(["setRevisions", "setComments"]),
@@ -56,8 +56,8 @@ export default {
     },
     createComment() {
       this.$emit("create", this.textComment);
-    }
-  }
+    },
+  },
 };
 </script>
 

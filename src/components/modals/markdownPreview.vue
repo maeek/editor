@@ -22,11 +22,11 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "markdownPreview",
   computed: {
-    ...mapGetters(["activeFileData"])
+    ...mapGetters(["activeFileData"]),
   },
   methods: {
-    ...mapActions(["setMarkdown"])
-  }
+    ...mapActions(["setMarkdown"]),
+  },
 };
 </script>
 

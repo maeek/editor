@@ -3,9 +3,7 @@
     <div class="wrap row" @click.stop v-if="pending">
       <div class="material-icons leading">hourglass_empty</div>
       <div class="wrap">
-        <h3>
-          Operation pending:
-        </h3>
+        <h3>Operation pending:</h3>
         <p class="pending">Gist ID: {{ removeFileModal.rid }}</p>
         <p
           class="pending"
@@ -67,11 +65,11 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "removeFile",
   components: {
-    buttonModal
+    buttonModal,
   },
   data() {
     return {
-      pending: false
+      pending: false,
     };
   },
   computed: {
@@ -80,8 +78,8 @@ export default {
       "token",
       "alias",
       "authorized",
-      "removeFileModal"
-    ])
+      "removeFileModal",
+    ]),
   },
   methods: {
     ...mapActions(["rmFileModal", "closeById", "updateGists"]),
@@ -90,12 +88,12 @@ export default {
       this.closeById(id);
       let headers = this.authorized
         ? {
-            Authorization: `${this.tokenType} ${this.token}`
+            Authorization: `${this.tokenType} ${this.token}`,
           }
         : {};
       fetch(`https://api.github.com/gists/${id}`, {
         method: "DELETE",
-        headers: headers
+        headers: headers,
       })
         .then(() => {
           this.rmFileModal(false);
@@ -103,20 +101,20 @@ export default {
           let link = `https://api.github.com/users/${this.alias}/gists`;
           this.updateGists(link);
         })
-        .catch(e => {
+        .catch((e) => {
           this.pending = e;
         });
     },
     esc_close(e) {
       e.code === "Escape" && this.rmFileModal(false);
-    }
+    },
   },
   mounted() {
     document.addEventListener("keyup", this.esc_close);
   },
   beforeDestroy() {
     document.removeEventListener("keyup", this.esc_close);
-  }
+  },
 };
 </script>
 

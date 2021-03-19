@@ -12,6 +12,6 @@ export default new Vuex.Store({
     settings,
     files,
     session,
-    modals
-  }
+    modals,
+  },
 });

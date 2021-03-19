@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "bottomPanelElement"
+  name: "bottomPanelElement",
 };
 </script>
 

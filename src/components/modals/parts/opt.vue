@@ -12,8 +12,8 @@
 export default {
   name: "opt",
   props: {
-    checked: Boolean
-  }
+    checked: Boolean,
+  },
 };
 </script>
 

@@ -24,8 +24,8 @@ export default {
   name: "foot",
   computed: mapGetters(["version"]),
   props: {
-    wide: Boolean
-  }
+    wide: Boolean,
+  },
 };
 </script>
 

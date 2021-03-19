@@ -48,7 +48,7 @@ export default {
     removeFile,
     editModal,
     markdownPreview,
-    notSaved
+    notSaved,
   },
   computed: mapGetters([
     "removeFileModal",
@@ -57,15 +57,15 @@ export default {
     "helpModal",
     "editGist",
     "showMarkdown",
-    "showNotSaved"
+    "showNotSaved",
   ]),
   methods: mapActions(["showFilesDialog"]),
   mounted() {
     const $this = this;
-    window.addEventListener("click", function() {
+    window.addEventListener("click", function () {
       $this.showFilesDialog(false);
     });
-  }
+  },
 };
 </script>
 

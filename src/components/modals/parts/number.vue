@@ -13,14 +13,14 @@ export default {
   name: "numberOpt",
   data() {
     return {
-      val: ""
+      val: "",
     };
   },
   computed: mapGetters(["tabSize"]),
   methods: mapActions(["setTabSize"]),
   mounted() {
     this.val = this.tabSize;
-  }
+  },
 };
 </script>
 

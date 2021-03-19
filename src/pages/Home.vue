@@ -141,11 +141,11 @@ export default {
     gists,
     userPanel,
     landingGreeter,
-    actionsButton
+    actionsButton,
   },
   data() {
     return {
-      groups: []
+      groups: [],
     };
   },
   props: ["user", "shwPublic", "starred", "not_found"],
@@ -155,7 +155,7 @@ export default {
       return `${this.user}+${this.authorized ? "ac" : "nac"}+${
         this.shwPublic ? "yee" : "ney"
       } ${this.starred ? "yee" : "ney"}`;
-    }
+    },
   },
   methods: {
     ...mapActions(["toggleSettings", "logout", "newFileModal"]),
@@ -168,7 +168,7 @@ export default {
           this.$refs.wrapper.style["padding-top"] = "2rem";
         }
       }
-    }
+    },
   },
   updated() {
     this.resize();
@@ -180,7 +180,7 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.resize);
-  }
+  },
 };
 </script>
 

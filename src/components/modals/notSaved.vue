@@ -4,9 +4,7 @@
       <div class="wrap row" @click.stop>
         <div class="material-icons leading">hourglass_empty</div>
         <div class="wrap" @click.stop>
-          <h3>
-            You have unsaved changes!
-          </h3>
+          <h3>You have unsaved changes!</h3>
           <p class="pending">- {{ activeFile }}</p>
           <div class="options">
             <button-modal
@@ -40,12 +38,12 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "modal",
   components: {
-    buttonModal
+    buttonModal,
   },
   data() {
     return {
       filename: "",
-      pending: false
+      pending: false,
     };
   },
   computed: {
@@ -55,8 +53,8 @@ export default {
       "authorized",
       "activeFile",
       "showNotSaved",
-      "files"
-    ])
+      "files",
+    ]),
   },
   methods: {
     ...mapActions([
@@ -65,13 +63,13 @@ export default {
       "newGist",
       "setHeaders",
       "saveFile",
-      "setNotSaved"
+      "setNotSaved",
     ]),
     proceed() {
       this.$store.dispatch("activeFileData", this.$store.getters.fileData());
       this.$router.push(this.showNotSaved);
-    }
-  }
+    },
+  },
 };
 </script>
 

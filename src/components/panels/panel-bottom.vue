@@ -13,9 +13,7 @@
       </bottomButton>
       <bottomButton @click.native="goToProfile" class="interactive desktop">
         <a>
-          <i class="material-icons">
-            person
-          </i>
+          <i class="material-icons"> person </i>
           {{ user }}
         </a>
       </bottomButton>
@@ -47,7 +45,7 @@ import bottomButton from "@/components/buttons/bottom-panel-element.vue";
 export default {
   name: "barBottom",
   components: {
-    bottomButton
+    bottomButton,
   },
   computed: {
     ...mapGetters([
@@ -58,12 +56,12 @@ export default {
       "activeFile",
       "activeFileSize",
       "activeFileMediaSize",
-      "version"
+      "version",
     ]),
     displayNotSaved() {
       return !this.fileIsSaved() || this.fileIsSaved() === null;
     },
-    saveStatus: function() {
+    saveStatus: function () {
       if (this.fileIsSaved())
         return `All saved , last save - ${this.fileLastSaved()}`;
       else if (this.fileIsSaved() == null) return "No file";
@@ -76,16 +74,16 @@ export default {
       if (this.$store.getters.fileById(this.$route.params.id))
         return this.$store.getters.fileById(this.$route.params.id).owner;
       else return null;
-    }
+    },
   },
   methods: {
     goToProfile() {
       let user = this.$store.getters.fileById(this.$route.params.id).owner;
       this.$router.push({
-        path: `/user/${user}`
+        path: `/user/${user}`,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

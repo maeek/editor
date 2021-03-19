@@ -101,16 +101,16 @@ export default {
       body = body.replace(reg, `editor.eswomp.it/#/edit/$1`);
 
       return body;
-    }
+    },
   },
   components: {
-    compact
+    compact,
   },
   data() {
     return {
       edit: false,
       showEdits: false,
-      body: this.com.body
+      body: this.com.body,
     };
   },
   props: ["com"],
@@ -122,18 +122,18 @@ export default {
     editComment() {
       this.$emit("edit", {
         id: this.com.id,
-        body: this.body
+        body: this.body,
       });
     },
     closeRevs() {
       this.setComments(false);
       this.scrolled = false;
-    }
+    },
   },
   mounted() {
     const $this = this;
     console.log(this.body);
-    this.$refs.comment.addEventListener("click", function(e) {
+    this.$refs.comment.addEventListener("click", function (e) {
       if (e.target.tagName === "a") {
         console.log(e);
         if (e.target.href.includes("editor.eswomp.it")) {
@@ -142,12 +142,12 @@ export default {
             .replace(/((https|http):\/\/)?editor.eswomp.it/, "");
           e.preventDefault();
           $this.$router.push({
-            path: `${link}`
+            path: `${link}`,
           });
         }
       }
     });
-  }
+  },
 };
 </script>
 

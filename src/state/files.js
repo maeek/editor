@@ -12,7 +12,7 @@ export default {
       name: "",
       data: "",
       size: "",
-      mediaSize: ""
+      mediaSize: "",
     },
     files: [],
     publicGists: [],
@@ -21,7 +21,7 @@ export default {
     queryFailedObj: {},
     queryActive: false,
     gists: [],
-    gistLoading: true
+    gistLoading: true,
   },
   mutations: {
     SET_LOADING(state, val) {
@@ -31,7 +31,7 @@ export default {
       state.publicGists = arr;
     },
     ADD_FILE(state, data) {
-      if (!state.files.find(el => el.name == data.name)) {
+      if (!state.files.find((el) => el.name == data.name)) {
         state.files.push(data);
       }
     },
@@ -66,14 +66,14 @@ export default {
       }
     },
     CHANGE_NAME(state, obj) {
-      state.files = state.files.filter(el => {
+      state.files = state.files.filter((el) => {
         el.name = el.name == obj.name ? obj.newName : el.name;
         return el;
       });
     },
     SAVE(state) {
       if (state.activeFile.name && state.activeFile.data) {
-        let obj = state.files.find(el => el.name == state.activeFile.name);
+        let obj = state.files.find((el) => el.name == state.activeFile.name);
         obj.data = state.activeFile.data;
         let len = new TextEncoder("utf-8").encode(state.activeFile.data).length;
         obj.size = len;
@@ -81,18 +81,18 @@ export default {
       }
     },
     CHANGE_MODE(state, name, mode) {
-      state.files = state.files.filter(el => {
+      state.files = state.files.filter((el) => {
         el.mode = el.name == name ? mode : el.mode;
         return el;
       });
     },
     GIST_FIRST(state, name) {
-      const file = state.files.find(el => el.name == name);
+      const file = state.files.find((el) => el.name == name);
       file.gistFirst = name;
     },
     ACTIVE_FILE(state, name) {
       state.activeFile.name = name;
-      const el = state.files.filter(el => el.name == name)[0];
+      const el = state.files.filter((el) => el.name == name)[0];
       const data = el ? el.data : "";
       const len = el ? el.size : 0;
       const size =
@@ -109,7 +109,7 @@ export default {
       state.activeFile.data = value;
     },
     NOT_SAVED(state) {
-      let obj = state.files.find(el => el.name == state.activeFile.name);
+      let obj = state.files.find((el) => el.name == state.activeFile.name);
       obj.save.is = false;
     },
     FILES(state, files) {
@@ -127,7 +127,7 @@ export default {
     },
     QUERY_ACTIVE(state, status) {
       state.queryActive = status;
-    }
+    },
   },
   actions: {
     setLoading({ commit }, val) {
@@ -137,10 +137,10 @@ export default {
       return getters.authorized
         ? {
             "Content-type": "application/json",
-            Authorization: `${getters.tokenType} ${getters.token}`
+            Authorization: `${getters.tokenType} ${getters.token}`,
           }
         : {
-            "Content-type": "application/json"
+            "Content-type": "application/json",
           };
     },
     async newGist({ dispatch }, obj) {
@@ -152,8 +152,8 @@ export default {
         body: JSON.stringify({
           description: "Gist created with https://editor.eswomp.it/",
           public: obj.public || false,
-          files: obj.files
-        })
+          files: obj.files,
+        }),
       });
       return response;
     },
@@ -167,8 +167,8 @@ export default {
             getters.fileById(obj.id).description ||
             "Gist created with https://editor.eswomp.it/",
           public: obj.public || false,
-          files: obj.files
-        })
+          files: obj.files,
+        }),
       });
     },
     async updateGists({ dispatch }, link) {
@@ -185,15 +185,15 @@ export default {
       return fetch(obj.link, {
         method: "GET",
         headers: headers,
-        cache: "no-store"
+        cache: "no-store",
       })
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (res.message) {
             commit("QUERY_FAILED", {
               message: res.message,
               link: obj.link,
-              authorized: getters.authorized
+              authorized: getters.authorized,
             });
             commit("QUERY_ACTIVE", false);
           } else {
@@ -209,27 +209,27 @@ export default {
             commit("SET_LOADING", true);
           }
         })
-        .catch(e => {
+        .catch((e) => {
           state.queryFailed = "Failed to fetch gists";
           commit("GISTS", []);
           commit("QUERY_ACTIVE", false);
           commit("QUERY_FAILED", {
             message: e,
             link: state.gist_dir,
-            authorized: getters.authorized
+            authorized: getters.authorized,
           });
         });
     },
     addFile({ commit, getters }, newFile) {
       console.log(newFile);
-      Object.keys(newFile.files).forEach(async gist => {
+      Object.keys(newFile.files).forEach(async (gist) => {
         let fileObj = {
           name: newFile.files[gist].filename,
           mode: newFile.files[gist].type,
           public: newFile.public,
           save: {
             last: newFile.updated_at,
-            is: true
+            is: true,
           },
           data: newFile.files[gist].content,
           size: newFile.files[gist].size,
@@ -242,47 +242,47 @@ export default {
           description: newFile.description,
           gistFirst: newFile.files[Object.keys(newFile.files)[0]].filename,
           comments_url: newFile.comments_url,
-          comments: newFile.comments
+          comments: newFile.comments,
         };
         if (fileObj.data.length === 0) {
           let headers = getters.authorized
             ? {
-                Authorization: `${getters.tokenType} ${getters.token}`
+                Authorization: `${getters.tokenType} ${getters.token}`,
               }
             : {};
           fileObj.data = await (
             await fetch(newFile.files[gist].raw_url, {
-              headers: headers
+              headers: headers,
             })
           ).text();
         }
         // console.log(fileObj);
-        return new Promise(res => {
+        return new Promise((res) => {
           res(commit("ADD_FILE", fileObj));
         });
       });
     },
     async removeFile({ getters, dispatch, commit }, obj) {
       let files = await getters.files.filter(
-        el => el.gistId == obj.id && el.name != obj.name
+        (el) => el.gistId == obj.id && el.name != obj.name
       );
       let preFiles = {};
-      files.forEach(el => {
+      files.forEach((el) => {
         preFiles[el.name] = {
-          content: el.data
+          content: el.data,
         };
       });
       preFiles[obj.name] = null;
       if (getters.authorized) {
         dispatch("patchGist", {
           id: obj.id,
-          files: preFiles
+          files: preFiles,
         })
-          .then(res => res.json())
+          .then((res) => res.json())
           .then(() => {
             commit("REMOVE_FILE", obj.name);
           })
-          .catch(e => {
+          .catch((e) => {
             alert(e);
           });
       } else {
@@ -299,23 +299,23 @@ export default {
       } else {
         obj = {
           name: getters.activeFile,
-          id: getters.fileByName(getters.activeFile).gistId
+          id: getters.fileByName(getters.activeFile).gistId,
         };
         getters.files
-          .filter(el => el.gistId == obj.id && el.data)
-          .forEach(el => {
+          .filter((el) => el.gistId == obj.id && el.data)
+          .forEach((el) => {
             preFiles[el.name] = {
-              content: el.data
+              content: el.data,
             };
           });
       }
       commit("SAVE");
       preFiles[obj.name] = {
-        content: getters.fileByName(getters.activeFile).data
+        content: getters.fileByName(getters.activeFile).data,
       };
       if (!getters.authorized) {
         let file = state.files.find(
-          el => el.name == state.activeFile.name && el.gistId == obj.id
+          (el) => el.name == state.activeFile.name && el.gistId == obj.id
         );
         file.save.is = true;
         file.save.last = getTime();
@@ -324,20 +324,20 @@ export default {
           method: "PATCH",
           headers: headers,
           body: JSON.stringify({
-            files: preFiles
-          })
+            files: preFiles,
+          }),
         })
-          .then(res => res.json())
+          .then((res) => res.json())
           .then(() => {
             let file = state.files.find(
-              el => el.name == state.activeFile.name && el.gistId == obj.id
+              (el) => el.name == state.activeFile.name && el.gistId == obj.id
             );
             file.save.is = true;
             file.save.last = getTime();
           })
-          .catch(e => {
+          .catch((e) => {
             let file = state.files.find(
-              el => el.name == state.activeFile.name && el.gistId == obj.id
+              (el) => el.name == state.activeFile.name && el.gistId == obj.id
             );
             file.save.is = false;
             console.log(e);
@@ -366,7 +366,7 @@ export default {
     },
     closeById({ commit, getters }, id) {
       let files = getters.files;
-      files = files.filter(el => el.gistId != id);
+      files = files.filter((el) => el.gistId != id);
       commit("FILES", files);
       commit("ACTIVE_FILE", null);
       commit("ACTIVE_FILE_DATA", null);
@@ -376,42 +376,42 @@ export default {
       let headers = await dispatch("setHeaders");
       return await fetch(`https://api.github.com/gists/${id}/star`, {
         method: "PUT",
-        headers: headers
+        headers: headers,
       });
     },
     async unStar({ dispatch }, id) {
       let headers = await dispatch("setHeaders");
       return await fetch(`https://api.github.com/gists/${id}/star`, {
         method: "DELETE",
-        headers: headers
+        headers: headers,
       });
-    }
+    },
   },
   getters: {
-    activeFile: state => state.activeFile.name,
-    activeFileData: state => state.activeFile.data,
-    activeFileSize: state => state.activeFile.size,
-    activeFileGistId: state => state.activeFile.gist_id,
-    activeFileMediaSize: state => state.activeFile.mediaSize,
-    activeFileIndex: state => {
-      return state.files.findIndex(el => {
+    activeFile: (state) => state.activeFile.name,
+    activeFileData: (state) => state.activeFile.data,
+    activeFileSize: (state) => state.activeFile.size,
+    activeFileGistId: (state) => state.activeFile.gist_id,
+    activeFileMediaSize: (state) => state.activeFile.mediaSize,
+    activeFileIndex: (state) => {
+      return state.files.findIndex((el) => {
         return el.name == state.activeFile.name;
       });
     },
-    files: state => state.files,
-    fileNameByIndex: state => index => {
+    files: (state) => state.files,
+    fileNameByIndex: (state) => (index) => {
       return state.files[index].name || null;
     },
-    fileByIndex: state => index => {
+    fileByIndex: (state) => (index) => {
       return state.files[index] || null;
     },
-    fileByName: (state, getters) => name => {
-      return getters.files.find(el => el.name === name) || {};
+    fileByName: (state, getters) => (name) => {
+      return getters.files.find((el) => el.name === name) || {};
     },
-    fileById: getters => id => {
-      return getters.files.find(el => el.gistId === id);
+    fileById: (getters) => (id) => {
+      return getters.files.find((el) => el.gistId === id);
     },
-    fileIsSaved: (state, getters) => name => {
+    fileIsSaved: (state, getters) => (name) => {
       let saved = null;
       if (state.activeFile.name && state.activeFile.data && state.files) {
         if (
@@ -426,7 +426,7 @@ export default {
       }
       return saved;
     },
-    fileLastSaved: (state, getters) => name => {
+    fileLastSaved: (state, getters) => (name) => {
       return (state.activeFile.name && state.files) || name
         ? getters.fileByName(name ? name : state.activeFile.name).save.last
         : "never";
@@ -436,24 +436,24 @@ export default {
         ? getters.fileByName(state.activeFile.name).mode
         : "";
     },
-    fileData: (state, getters) => name => {
+    fileData: (state, getters) => (name) => {
       return getters.fileByName(name ? name : state.activeFile.name).data || "";
     },
-    fileHash: (state, getters) => name =>
+    fileHash: (state, getters) => (name) =>
       getters.fileByName(name ? name : state.activeFile.name).hash,
     fileLines: (state, getters) => {
       return state.activeFile.name && state.files
         ? getters.fileData(state.activeFile.name).split("\n").length
         : 0;
     },
-    fileStringified: (state, getters) => name =>
+    fileStringified: (state, getters) => (name) =>
       JSON.stringify(getters.fileByName(name)),
-    publicGists: state => state.publicGists,
-    gists: state => state.gists,
-    gistsLength: state => state.gists.length,
-    queryActive: state => state.queryActive,
-    queryFailed: state => state.queryFailed,
-    queryFailedObj: state => state.queryFailedObj,
-    gistLoading: state => state.gistLoading
-  }
+    publicGists: (state) => state.publicGists,
+    gists: (state) => state.gists,
+    gistsLength: (state) => state.gists.length,
+    queryActive: (state) => state.queryActive,
+    queryFailed: (state) => state.queryFailed,
+    queryFailedObj: (state) => state.queryFailedObj,
+    gistLoading: (state) => state.gistLoading,
+  },
 };

@@ -14,8 +14,8 @@ export default {
     ...mapGetters(["gistsLength", "queryFailed", "queryActive"]),
     face() {
       return faces.list[Math.floor(Math.random() * faces.list.length)];
-    }
-  }
+    },
+  },
 };
 </script>
 

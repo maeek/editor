@@ -21,7 +21,7 @@ import { mapActions } from "vuex";
 export default {
   name: "starNotf",
   props: ["list"],
-  methods: mapActions(["updateGists"])
+  methods: mapActions(["updateGists"]),
 };
 </script>
 

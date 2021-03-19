@@ -34,9 +34,7 @@
         @scrolled="scrolled = false"
       />
       <footer-component class="footer" :wide="true">
-        <compact title="Home" name="Home" class="save rev">
-          home
-        </compact>
+        <compact title="Home" name="Home" class="save rev"> home </compact>
         <compact title="Settings" name="Settings" class="save rev">
           device_hub
         </compact>
@@ -94,7 +92,7 @@ export default {
     return {
       code: "",
       scrolled: false,
-      loadedRev: null
+      loadedRev: null,
     };
   },
   components: {
@@ -104,7 +102,7 @@ export default {
     comments,
     compact,
     footerComponent,
-    user
+    user,
   },
   computed: {
     ...mapGetters([
@@ -126,7 +124,7 @@ export default {
       "showRevisions",
       "comments",
       "commentsList",
-      "showRevsList"
+      "showRevsList",
     ]),
     cmOption() {
       return {
@@ -146,7 +144,7 @@ export default {
         autoCloseBrackets: this.autoClose || false,
         showCursorWhenSelecting: true,
         theme: "base16-dark",
-        scrollPastEnd: this.scrollPastEnd || false
+        scrollPastEnd: this.scrollPastEnd || false,
       };
     },
     editor() {
@@ -165,7 +163,7 @@ export default {
       if (this.$store.getters.fileById(this.$route.params.id))
         return this.$store.getters.fileById(this.$route.params.id).owner;
       else return null;
-    }
+    },
   },
   methods: {
     ...mapActions([
@@ -176,7 +174,7 @@ export default {
       "setRevisions",
       "closeById",
       "setComments",
-      "setMarkdown"
+      "setMarkdown",
     ]),
     triggerSave(newcode) {
       this.code = newcode ? newcode : "";
@@ -190,11 +188,11 @@ export default {
     revPage(page) {
       this.fetchGist(
         `https://api.github.com/gists/${this.$route.params.id}/commits?page=${page}`
-      ).then(data => {
+      ).then((data) => {
         console.log(data);
         this.$store.commit("SET_REVS", [
           ...data.reverse(),
-          ...this.showRevsList
+          ...this.showRevsList,
         ]);
       });
     },
@@ -205,10 +203,10 @@ export default {
     async fetchGist(link) {
       return fetch(link, {
         headers: await this.$store.dispatch("setHeaders"),
-        cache: "no-cache"
+        cache: "no-cache",
       })
-        .then(res => res.json())
-        .then(ms => {
+        .then((res) => res.json())
+        .then((ms) => {
           if (!ms.message) {
             return ms;
           } else {
@@ -257,10 +255,10 @@ export default {
         files: {},
         uploaded_at: "",
         owner: {
-          login: $this.alias
+          login: $this.alias,
         },
         id: $this.$route.params.id || "",
-        description: ""
+        description: "",
       };
       if (!$this.$route.params.id && $this.authorized) {
         $this.newFileModal(true);
@@ -272,7 +270,7 @@ export default {
             filename: files[file].name,
             content: text,
             type: files[file].type,
-            size: files[file].size
+            size: files[file].size,
           };
           prepFiles.uploaded_at = new Date(files[file].lastModified)
             .toJSON()
@@ -284,8 +282,8 @@ export default {
             $this.$router.push({
               path: `/edit/${$this.$route.params.id || ""}`,
               query: {
-                target: files[file].name
-              }
+                target: files[file].name,
+              },
             });
             await $this.switchFile(files[file].name);
             $this.authorized && $this.saveFile();
@@ -306,7 +304,7 @@ export default {
         e.preventDefault();
         this.saveFile();
       }
-    }
+    },
   },
   updated() {
     const $this = this;
@@ -320,7 +318,7 @@ export default {
     const $this = this;
     if (this.gistLoading && !this.$route.params.id)
       this.$store.commit("SET_LOADING", false);
-    this.$refs.editorWrapper.addEventListener("scroll", function() {
+    this.$refs.editorWrapper.addEventListener("scroll", function () {
       if ($this.$refs.applet) {
         if (
           $this.$refs.editorWrapper.scrollTop + 70 >=
@@ -335,18 +333,18 @@ export default {
     if (this.showRevisions) {
       this.fetchGist(
         `https://api.github.com/gists/${this.$route.params.id}/commits`
-      ).then(data => {
+      ).then((data) => {
         if (data) this.$store.commit("SET_REVS", data.reverse());
       });
     }
     if (this.comments) {
       this.fetchGist(
         `https://api.github.com/gists/${this.$route.params.id}/comments`
-      ).then(data => {
+      ).then((data) => {
         if (data) this.$store.commit("SET_COMMENTS", data);
       });
     }
-  }
+  },
 };
 </script>
 

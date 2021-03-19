@@ -19,15 +19,15 @@ import { mapActions } from "vuex";
 export default {
   name: "loginButtonCompact",
   components: {
-    compact
+    compact,
   },
   props: ["hide"],
   methods: {
     ...mapActions(["authorize"]),
     login() {
       this.authorize();
-    }
-  }
+    },
+  },
 };
 </script>
 

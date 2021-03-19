@@ -10,12 +10,8 @@
     ref="panelFiles"
   >
     <div class="scroller">
-      <i class="material-icons" @click="scrollLeft">
-        keyboard_arrow_left
-      </i>
-      <i class="material-icons" @click="scrollRight">
-        keyboard_arrow_right
-      </i>
+      <i class="material-icons" @click="scrollLeft"> keyboard_arrow_left </i>
+      <i class="material-icons" @click="scrollRight"> keyboard_arrow_right </i>
       <i
         :class="{ 'material-icons': true, active: showRevisions }"
         title="Revisions"
@@ -27,7 +23,7 @@
         :class="{
           'material-icons': true,
           active: comments,
-          commentIndicator: true
+          commentIndicator: true,
         }"
         title="Comments"
         :data-comments="coms"
@@ -69,7 +65,7 @@ export default {
   name: "barFiles",
   components: {
     file,
-    moreDialog
+    moreDialog,
   },
   computed: {
     ...mapGetters([
@@ -82,14 +78,14 @@ export default {
       "filesDialog",
       "comments",
       "commentsList",
-      "showRevisions"
+      "showRevisions",
     ]),
     coms() {
       let coms = this.$store.getters.fileById(this.$route.params.id)
         ? this.$store.getters.fileById(this.$route.params.id).comments
         : 0;
       return this.commentsList.length || coms;
-    }
+    },
   },
   methods: {
     ...mapActions([
@@ -101,7 +97,7 @@ export default {
       "showFilesDialog",
       "newFileModal",
       "setComments",
-      "setRevisions"
+      "setRevisions",
     ]),
     openFile(ev, file) {
       console.log(file);
@@ -113,8 +109,8 @@ export default {
         this.$router.push({
           path: `/edit/${file.gistId}`,
           query: {
-            target: file.name
-          }
+            target: file.name,
+          },
         });
       }
       // else alert("yee");
@@ -140,7 +136,7 @@ export default {
       if (!this.comments) {
         this.fetchGist(
           `https://api.github.com/gists/${this.$route.params.id}/comments`
-        ).then(data => {
+        ).then((data) => {
           this.$store.commit("SET_COMMENTS", data);
         });
       }
@@ -151,7 +147,7 @@ export default {
       if (!this.showRevisions) {
         this.fetchGist(
           `https://api.github.com/gists/${this.$route.params.id}/commits`
-        ).then(data => {
+        ).then((data) => {
           this.$store.commit("SET_REVS", data.reverse());
         });
       }
@@ -174,10 +170,10 @@ export default {
         files: {},
         uploaded_at: "",
         owner: {
-          login: $this.alias
+          login: $this.alias,
         },
         id: $this.$route.params.id || "",
-        description: ""
+        description: "",
       };
       if (!$this.$route.params.id && $this.authorized) {
         $this.newFileModal(true);
@@ -189,7 +185,7 @@ export default {
             filename: files[file].name,
             content: text,
             type: files[file].type,
-            size: files[file].size
+            size: files[file].size,
           };
           prepFiles.uploaded_at = new Date(files[file].lastModified)
             .toJSON()
@@ -201,8 +197,8 @@ export default {
             $this.$router.push({
               path: `/edit/${$this.$route.params.id || ""}`,
               query: {
-                target: files[file].name
-              }
+                target: files[file].name,
+              },
             });
             await $this.switchFile(files[file].name);
             $this.authorized && $this.saveFile();
@@ -220,14 +216,14 @@ export default {
       this.$refs.panelFiles.scrollBy({
         top: 0,
         left: -100,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     },
     scrollRight() {
       this.$refs.panelFiles.scrollBy({
         top: 0,
         left: 100,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     },
     scrollHoriz(e) {
@@ -241,17 +237,17 @@ export default {
     async fetchGist(link) {
       return fetch(link, {
         headers: await this.$store.dispatch("setHeaders"),
-        cache: "no-cache"
+        cache: "no-cache",
       })
-        .then(res => res.json())
-        .then(ms => {
+        .then((res) => res.json())
+        .then((ms) => {
           if (!ms.message) {
             return ms;
           } else {
             return null;
           }
         });
-    }
+    },
   },
   mounted() {
     const $this = this;
@@ -267,7 +263,7 @@ export default {
         false
       );
     }
-  }
+  },
 };
 </script>
 

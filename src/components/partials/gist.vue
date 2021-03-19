@@ -57,7 +57,7 @@
           @click="rmFileModal({ rid: gist.id, files: gist.files })"
           v-if="
             (authorized && !$route.params.user && !shwPublic) ||
-              (authorized && $route.params.user == alias)
+            (authorized && $route.params.user == alias)
           "
           ><i class="material-icons trash">delete</i>Delete</span
         >
@@ -74,12 +74,12 @@ export default {
   props: {
     gist: Object,
     shwPublic: Boolean,
-    starred: Boolean
+    starred: Boolean,
   },
   data() {
     return {
       file: "",
-      star: false
+      star: false,
     };
   },
   computed: {
@@ -92,7 +92,7 @@ export default {
     },
     hasStar() {
       return this.star;
-    }
+    },
   },
   methods: {
     ...mapActions([
@@ -101,7 +101,7 @@ export default {
       "updateGists",
       "setHeaders",
       "setStar",
-      "unStar"
+      "unStar",
     ]),
     route() {
       if (this.gist.owner.login != this.alias) {
@@ -113,19 +113,19 @@ export default {
     },
     async setStarClick(id) {
       this.setStar(id)
-        .then(res => {
+        .then((res) => {
           if (res.status === 204) {
             this.star = true;
             this.$emit("starred", { status: true, id: id });
           }
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
     async unStarClick(id) {
       this.unStar(id)
-        .then(res => {
+        .then((res) => {
           if (res.status === 204) {
             this.star = false;
             this.$emit("starred", { status: false, id: id });
@@ -136,14 +136,14 @@ export default {
             );
           }
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
-    }
+    },
   },
   created() {
     const $this = this;
-    (async function() {
+    (async function () {
       let raw_link = Object.keys($this.gist.files)[0];
       $this.file = raw_link;
       $this.mime = $this.gist.files[raw_link].type;
@@ -151,7 +151,7 @@ export default {
   },
   beforeDestroy() {
     this.$el && this.$el.remove();
-  }
+  },
 };
 </script>
 

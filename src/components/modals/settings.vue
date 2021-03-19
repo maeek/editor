@@ -92,11 +92,11 @@ export default {
     compact,
     optionCheck,
     selectList,
-    number
+    number,
   },
   data() {
     return {
-      showList1: false
+      showList1: false,
     };
   },
   computed: {
@@ -108,8 +108,8 @@ export default {
       "smartIndent",
       "lineWrap",
       "lineNumbers",
-      "showPromptLeave"
-    ])
+      "showPromptLeave",
+    ]),
   },
   methods: {
     ...mapActions([
@@ -120,12 +120,12 @@ export default {
       "setScrollPast",
       "setLineWrap",
       "setTabSize",
-      "setPromptLeave"
+      "setPromptLeave",
     ]),
     shList1(val) {
       this.showList1 = val;
-    }
-  }
+    },
+  },
 };
 </script>
 

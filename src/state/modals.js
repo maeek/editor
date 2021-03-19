@@ -13,7 +13,7 @@ export default {
     comments: false,
     commentsList: [],
     markdown: false,
-    notSaved: false
+    notSaved: false,
   },
   mutations: {
     SHOW_SETTINGS(state, val) {
@@ -57,7 +57,7 @@ export default {
     },
     FILE_NOT_SAVED(state, val) {
       state.notSaved = val;
-    }
+    },
   },
   actions: {
     editModal({ commit }, val) {
@@ -100,22 +100,22 @@ export default {
     },
     setMarkdown({ commit }, val) {
       commit("MARKDOWN", val);
-    }
+    },
   },
   getters: {
-    showSettings: state => state.settingsModal,
-    newFileModal: state => state.newFile,
-    removeFileModal: state => state.rmFile,
-    moreDialog: state => state.moreDialog,
-    filesDialog: state => state.filesDialog,
-    helpModal: state => state.helpModal,
-    offline: state => state.offline,
-    editGist: state => state.editModal,
-    showRevisions: state => state.revisions,
-    showRevsList: state => state.loadedRevisions,
-    comments: state => state.comments,
-    commentsList: state => state.commentsList,
-    showMarkdown: state => state.markdown,
-    showNotSaved: state => state.notSaved
-  }
+    showSettings: (state) => state.settingsModal,
+    newFileModal: (state) => state.newFile,
+    removeFileModal: (state) => state.rmFile,
+    moreDialog: (state) => state.moreDialog,
+    filesDialog: (state) => state.filesDialog,
+    helpModal: (state) => state.helpModal,
+    offline: (state) => state.offline,
+    editGist: (state) => state.editModal,
+    showRevisions: (state) => state.revisions,
+    showRevsList: (state) => state.loadedRevisions,
+    comments: (state) => state.comments,
+    commentsList: (state) => state.commentsList,
+    showMarkdown: (state) => state.markdown,
+    showNotSaved: (state) => state.notSaved,
+  },
 };

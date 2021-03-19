@@ -4,9 +4,7 @@
       <div class="wrap row" @click.stop v-if="pending">
         <div class="material-icons leading">hourglass_empty</div>
         <div class="wrap" @click.stop>
-          <h3>
-            Operation pending:
-          </h3>
+          <h3>Operation pending:</h3>
           <p class="pending">
             + Adding {{ filename }}
             {{ $route.params.id ? `to ${$route.params.id}` : `` }}
@@ -25,9 +23,7 @@
         </div>
         <div class="material-icons leading">note_add</div>
         <div class="wrap">
-          <h3>
-            Create new gist
-          </h3>
+          <h3>Create new gist</h3>
           <p class="pending" v-if="$route.params.id">
             + Adding to {{ $route.params.id }}
           </p>
@@ -70,16 +66,16 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "modal",
   components: {
-    buttonModal
+    buttonModal,
   },
   data() {
     return {
       filename: "",
-      pending: false
+      pending: false,
     };
   },
   computed: {
-    ...mapGetters(["tokenType", "token", "authorized", "files"])
+    ...mapGetters(["tokenType", "token", "authorized", "files"]),
   },
   methods: {
     ...mapActions([
@@ -87,7 +83,7 @@ export default {
       "addFile",
       "newGist",
       "setHeaders",
-      "saveFile"
+      "saveFile",
     ]),
     createFile(pb) {
       const name = this.$refs.input.value;
@@ -96,16 +92,16 @@ export default {
         let headers = this.setHeaders;
         let files = {};
         if (this.$route.params.id) {
-          this.files.forEach(el => {
+          this.files.forEach((el) => {
             if (el.gistId == this.$route.params.id) {
               files[el.name] = {
-                content: el.data
+                content: el.data,
               };
             }
           });
         }
         files[name] = {
-          content: "// Empty"
+          content: "// Empty",
         };
         // console.log(this.$route.params.id, files);
         this.pending = true;
@@ -114,14 +110,14 @@ export default {
             ? `https://api.github.com/gists/${this.$route.params.id}`
             : "https://api.github.com/gists",
           files: files,
-          public: pb
+          public: pb,
         })
-          .then(res => res.json())
-          .then(res => {
+          .then((res) => res.json())
+          .then((res) => {
             console.log(res);
             if (!this.$route.params.id) {
               this.$router.push({
-                path: `/edit/${res.id}`
+                path: `/edit/${res.id}`,
               });
               this.pending = false;
               this.newFileModal(false);
@@ -129,7 +125,7 @@ export default {
               this.getGist(headers);
             }
           })
-          .catch(e => {
+          .catch((e) => {
             this.pending = e;
           });
       } else {
@@ -139,10 +135,10 @@ export default {
     getGist(headers) {
       return fetch(`https://api.github.com/gists/${this.$route.params.id}`, {
         headers: headers,
-        cache: "no-cache"
+        cache: "no-cache",
       })
-        .then(res => res.json())
-        .then(ms => {
+        .then((res) => res.json())
+        .then((ms) => {
           if (!ms.message) {
             console.log(ms);
             this.addFile(ms);
@@ -153,7 +149,7 @@ export default {
             this.pending = ms.message;
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.pending = e;
         });
     },
@@ -166,7 +162,7 @@ export default {
     },
     esc_close(e) {
       e.code === "Escape" && this.newFileModal(false);
-    }
+    },
   },
   mounted() {
     this.$refs.input.focus();
@@ -174,7 +170,7 @@ export default {
   },
   beforeDestroy() {
     this.$refs.modal.removeEventListener("keyup", this.esc_close);
-  }
+  },
 };
 </script>
 

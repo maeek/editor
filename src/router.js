@@ -9,60 +9,60 @@ const routes = [
   {
     path: "/",
     component: () =>
-      import(/* webpackChunkName: "home-chunk" */ "@/pages/Home.vue")
+      import(/* webpackChunkName: "home-chunk" */ "@/pages/Home.vue"),
   },
   {
     path: "/public/",
     component: () =>
       import(/* webpackChunkName: "home-chunk" */ "@/pages/Home.vue"),
     props: {
-      shwPublic: true
-    }
+      shwPublic: true,
+    },
   },
   {
     path: "/starred/",
     component: () =>
       import(/* webpackChunkName: "home-chunk" */ "@/pages/Home.vue"),
     props: {
-      starred: true
-    }
+      starred: true,
+    },
   },
   {
     path: "/user/:user",
     component: () =>
       import(/* webpackChunkName: "home-chunk" */ "@/pages/Home.vue"),
-    props: true
+    props: true,
   },
   {
     path: "/edit/:id/:ver",
     component: () =>
       import(/* webpackChunkName: "editor-chunk" */ "@/pages/Editor.vue"),
-    props: true
+    props: true,
   },
   {
     path: "/edit/:id",
     component: () =>
       import(/* webpackChunkName: "editor-chunk" */ "@/pages/Editor.vue"),
-    props: true
+    props: true,
   },
   {
     path: "/edit/",
     component: () =>
-      import(/* webpackChunkName: "editor-chunk" */ "@/pages/Editor.vue")
+      import(/* webpackChunkName: "editor-chunk" */ "@/pages/Editor.vue"),
   },
   {
     path: "*",
     component: () =>
       import(/* webpackChunkName: "home-chunk" */ "@/pages/Home.vue"),
     props: {
-      not_found: true
-    }
-  }
+      not_found: true,
+    },
+  },
 ];
 
 const router = new Router({
   mode: "hash",
-  routes: routes
+  routes: routes,
 });
 
 router.beforeEach((to, from, next) => {

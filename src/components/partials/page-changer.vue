@@ -10,9 +10,7 @@
     <div class="page" v-if="pages > 1">
       {{ pages }}
     </div>
-    <div class="next" @click="next" v-if="pages > 1">
-      NEWER
-    </div>
+    <div class="next" @click="next" v-if="pages > 1">NEWER</div>
   </div>
 </template>
 
@@ -22,7 +20,7 @@ export default {
   name: "page-changer",
   props: ["pages", "shwPublic"],
   computed: {
-    ...mapGetters(["gistsLength", "queryFailed", "queryActive"])
+    ...mapGetters(["gistsLength", "queryFailed", "queryActive"]),
   },
   methods: {
     ...mapActions(["updateGists"]),
@@ -31,8 +29,8 @@ export default {
     },
     next() {
       this.$emit("next");
-    }
-  }
+    },
+  },
 };
 </script>
 
