@@ -28,8 +28,7 @@
           {{ Object.keys(gist.files).length }}</span
         >
         <span class="stats"
-          ><i class="material-icons">comment</i>
-          {{ gist.comments }}</span
+          ><i class="material-icons">comment</i> {{ gist.comments }}</span
         >
 
         <span

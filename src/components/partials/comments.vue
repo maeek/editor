@@ -117,9 +117,7 @@ export default {
     },
     async editComment(obj) {
       fetch(
-        `https://api.github.com/gists/${this.$route.params.id}/comments/${
-          obj.id
-        }`,
+        `https://api.github.com/gists/${this.$route.params.id}/comments/${obj.id}`,
         {
           method: "PATCH",
           headers: await this.$store.dispatch("setHeaders"),

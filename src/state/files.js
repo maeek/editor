@@ -250,9 +250,11 @@ export default {
                 Authorization: `${getters.tokenType} ${getters.token}`
               }
             : {};
-          fileObj.data = await (await fetch(newFile.files[gist].raw_url, {
-            headers: headers
-          })).text();
+          fileObj.data = await (
+            await fetch(newFile.files[gist].raw_url, {
+              headers: headers
+            })
+          ).text();
         }
         // console.log(fileObj);
         return new Promise(res => {

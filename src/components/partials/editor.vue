@@ -26,7 +26,7 @@
         </codemirror>
       </error-boundary>
       <user :wide="true" :user="user" />
-      
+
       <comments
         v-if="comments"
         ref="applet"
@@ -74,7 +74,9 @@
 </template>
 
 <script>
-import(/* webpackPrefetch: true, webpackChunkName: "codemirror-modules" */ "@/editorLoader.js");
+import(
+  /* webpackPrefetch: true, webpackChunkName: "codemirror-modules" */ "@/editorLoader.js"
+);
 import { codemirror } from "vue-codemirror";
 import { mapGetters, mapActions } from "vuex";
 import errorBoundary from "@/components/error-boundary.vue";
@@ -187,9 +189,7 @@ export default {
     },
     revPage(page) {
       this.fetchGist(
-        `https://api.github.com/gists/${
-          this.$route.params.id
-        }/commits?page=${page}`
+        `https://api.github.com/gists/${this.$route.params.id}/commits?page=${page}`
       ).then(data => {
         console.log(data);
         this.$store.commit("SET_REVS", [
