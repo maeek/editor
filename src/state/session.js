@@ -84,7 +84,7 @@ export default {
         OAuth.popup("github")
           .then(async (github) => {
             const { access_token, token_type } = github;
-            console.log("GH Access token", access_token);
+            // console.log("GH Access token", access_token);
             const res = await github.me();
             await dispatch("userInfo", res);
             window.localStorage.setItem(
@@ -116,7 +116,7 @@ export default {
     },
     async userInfo({ commit }, api) {
       commit("USER", api);
-      console.log(api);
+      // console.log(api);
     },
     setPendingLogin({ commit }, status) {
       commit("PENDING_LOGIN", status);

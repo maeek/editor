@@ -2,7 +2,7 @@
 Source files for file editor web application, based on codemirror library built with Vue and integrated with gist.github.com
 
 ### Preview
-[Live preview](https://editor.eswomp.it)
+[Live preview](https://gist.suchanecki.me)
 
 ![Editor preview desktop](https://raw.githubusercontent.com/maeek/editor/master/src/assets/preview.png)
 ![Editor preview mobile](https://raw.githubusercontent.com/maeek/editor/master/src/assets/preview_m.png)

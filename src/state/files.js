@@ -144,13 +144,13 @@ export default {
           };
     },
     async newGist({ dispatch }, obj) {
-      console.log("NEWGIST", obj.url, obj.files);
+      // console.log("NEWGIST", obj.url, obj.files);
       let headers = await dispatch("setHeaders");
       let response = await fetch(obj.url, {
         method: "POST",
         headers: headers,
         body: JSON.stringify({
-          description: "Gist created with https://editor.eswomp.it/",
+          description: "Gist created with https://gist.suchanecki.me/",
           public: obj.public || false,
           files: obj.files,
         }),
@@ -165,7 +165,7 @@ export default {
         body: JSON.stringify({
           description:
             getters.fileById(obj.id).description ||
-            "Gist created with https://editor.eswomp.it/",
+            "Gist created with https://gist.suchanecki.me/",
           public: obj.public || false,
           files: obj.files,
         }),
@@ -175,7 +175,7 @@ export default {
       return await dispatch("getGists", { link: link });
     },
     async appendGists({ dispatch }, link) {
-      console.log(link);
+      // console.log(link);
       return dispatch("getGists", { link: link, append: true });
     },
     async getGists({ state, commit, dispatch, getters }, obj) {
@@ -221,7 +221,7 @@ export default {
         });
     },
     addFile({ commit, getters }, newFile) {
-      console.log(newFile);
+      // console.log(newFile);
       Object.keys(newFile.files).forEach(async (gist) => {
         let fileObj = {
           name: newFile.files[gist].filename,
@@ -256,7 +256,7 @@ export default {
             })
           ).text();
         }
-        // console.log(fileObj);
+        console.log(fileObj);
         return new Promise((res) => {
           res(commit("ADD_FILE", fileObj));
         });
@@ -340,7 +340,7 @@ export default {
               (el) => el.name == state.activeFile.name && el.gistId == obj.id
             );
             file.save.is = false;
-            console.log(e);
+            // console.log(e);
           });
       }
     },

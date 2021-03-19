@@ -95,10 +95,10 @@ export default {
       let body = this.body,
         reg = new RegExp(/gist.github.com\/(.+)\/(.+)[^/]$/gim);
 
-      body = body.replace(reg, `editor.eswomp.it/#/edit/$2`);
+      body = body.replace(reg, `gist.suchanecki.me/#/edit/$2`);
 
       reg = new RegExp(/gist.github.com\/(.+)[^/]$/gim);
-      body = body.replace(reg, `editor.eswomp.it/#/edit/$1`);
+      body = body.replace(reg, `gist.suchanecki.me/#/edit/$1`);
 
       return body;
     },
@@ -136,10 +136,10 @@ export default {
     this.$refs.comment.addEventListener("click", function (e) {
       if (e.target.tagName === "a") {
         console.log(e);
-        if (e.target.href.includes("editor.eswomp.it")) {
+        if (e.target.href.includes("gist.suchanecki.me")) {
           let link = e.target
             .getAttribute("href")
-            .replace(/((https|http):\/\/)?editor.eswomp.it/, "");
+            .replace(/((https|http):\/\/)?gist.suchanecki.me/, "");
           e.preventDefault();
           $this.$router.push({
             path: `${link}`,
